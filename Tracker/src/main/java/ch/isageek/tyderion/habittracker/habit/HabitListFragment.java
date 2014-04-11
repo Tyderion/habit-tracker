@@ -72,7 +72,6 @@ public class HabitListFragment extends ListFragment {
 
     private View mheaderView;
     private HabitAdapter adapter;
-    private HabitAdapter filteredAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -177,7 +176,7 @@ public class HabitListFragment extends ListFragment {
     }
 
     public void filter(String filter) {
-        List<Habit> habits = Database.getDaoSession(getActivity()).getHabitDao().loadAll();
+        List<Habit> habits = this.adapter.data;
         if (!filter.equals("")) {
             List<Habit> filteredData = new ArrayList<Habit>();
             for (Habit h : habits) {
@@ -186,7 +185,9 @@ public class HabitListFragment extends ListFragment {
                 }
             }
             habits = filteredData;
-        }
         setListAdapter(new HabitAdapter(getActivity(), R.layout.habit_item_row, habits));
+        } else {
+            setListAdapter(this.adapter);
+        }
     }
 }
