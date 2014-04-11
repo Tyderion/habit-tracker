@@ -67,6 +67,15 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
     }
 
 
+    public Habit getHabit(int position) {
+        if (this.data.size() > position)  {
+            return this.data.get(position);
+        } else {
+            return null;
+        }
+    }
+
+
     static class HabitHolder {
         TextView title;
         TextView description;

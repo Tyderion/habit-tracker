@@ -5,11 +5,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
+import java.util.List;
+
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.dummy.DummyContent;
+import ch.isageek.tyderion.habittracker.model.DaoSession;
+import ch.isageek.tyderion.habittracker.model.Habit;
+import ch.isageek.tyderion.habittracker.model.HabitDao;
 
 /**
  * A fragment representing a single Habit detail screen.
@@ -27,7 +34,7 @@ public class HabitDetailFragment extends Fragment {
     /**
      * The dummy content this fragment is presenting.
      */
-    private DummyContent.DummyItem mItem;
+    private Long mHabitID;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -44,7 +51,7 @@ public class HabitDetailFragment extends Fragment {
             // Load the dummy content specified by the fragment
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
-            mItem = DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
+            mHabitID = getArguments().getLong(ARG_ITEM_ID);
         }
     }
 
@@ -54,8 +61,19 @@ public class HabitDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_habit_detail, container, false);
 
         // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.habit_detail)).setText(mItem.content);
+        if (mHabitID != null) {
+            DaoSession session = Database.getDaoSession(getActivity());
+            HabitDao habitDao = session.getHabitDao();
+            Habit habit = habitDao.load(mHabitID);
+                TextView view = ((TextView) rootView.findViewById(R.id.habit_detail));
+
+            EditText occurences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
+            if (habit != null) {
+                view.setText(habit.getName());
+
+            } else {
+                view.setText("Habit not found");
+            }
         }
 
         return rootView;

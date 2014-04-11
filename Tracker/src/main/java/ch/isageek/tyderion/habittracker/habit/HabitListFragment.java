@@ -11,6 +11,7 @@ import android.widget.ListView;
 import java.util.List;
 
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.dummy.DummyContent;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
@@ -54,7 +55,7 @@ public class HabitListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(Long habitID);
     }
 
     /**
@@ -63,12 +64,13 @@ public class HabitListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(Long habit) {
         }
     };
 
 
     private View mheaderView;
+    private HabitAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,13 +83,13 @@ public class HabitListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "habits-db", null);
-        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
+
+        DaoSession session = Database.getDaoSession(getActivity());
         HabitDao habitDao = session.getHabitDao();
 
         List<Habit> habits = habitDao.loadAll();
 
-        HabitAdapter adapter = new HabitAdapter(getActivity(), R.layout.habit_item_row, habits);
+        this.adapter = new HabitAdapter(getActivity(), R.layout.habit_item_row, habits);
         setListAdapter(adapter);
 
 
@@ -135,7 +137,8 @@ public class HabitListFragment extends ListFragment {
 
         // Notify the active callbacks interface (the activity, if the
         // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+        Long est = adapter.getHabit((int)id).getId();
+        mCallbacks.onItemSelected(est);
     }
 
     @Override

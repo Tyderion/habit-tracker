@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
@@ -45,7 +46,7 @@ public class HabitListActivity extends FragmentActivity
 
 
     private static void generateData(Context context) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context, "habits-db", null);
+        DaoMaster.DevOpenHelper helper = Database.getDevOpenHelper(context);
         DaoMaster.dropAllTables( helper.getWritableDatabase(), true );
         DaoMaster.createAllTables(helper.getWritableDatabase(), true);
         DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
@@ -93,7 +94,7 @@ public class HabitListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Long habitID) {
 //        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "habits-db", null);
 //        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
 //        HabitDao habit = session.getHabitDao();
@@ -104,7 +105,7 @@ public class HabitListActivity extends FragmentActivity
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putString(HabitDetailFragment.ARG_ITEM_ID, id);
+            arguments.putLong(HabitDetailFragment.ARG_ITEM_ID, habitID);
             HabitDetailFragment fragment = new HabitDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -115,7 +116,7 @@ public class HabitListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, HabitDetailActivity.class);
-            detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_ID, habitID);
             startActivity(detailIntent);
         }
     }
