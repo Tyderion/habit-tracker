@@ -5,10 +5,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import ch.isageek.tyderion.habittracker.EditHabitFragment;
-import ch.isageek.tyderion.habittracker.OccurencesFragment;
+import ch.isageek.tyderion.habittracker.OccurrencesFragment;
 import ch.isageek.tyderion.habittracker.R;
 
 
@@ -21,8 +24,8 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class HabitDetailActivity extends FragmentActivity implements OccurencesFragment.OnFragmentInteractionListener, EditHabitFragment.OnFragmentInteractionListener {
-
+public class HabitDetailActivity extends FragmentActivity implements OccurrencesFragment.OccurenceFragmentListener {
+    private HabitDetailFragment detailFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +49,19 @@ public class HabitDetailActivity extends FragmentActivity implements OccurencesF
             Bundle arguments = new Bundle();
             arguments.putLong(HabitDetailFragment.ARG_ITEM_ID,getIntent().getLongExtra(HabitDetailFragment.ARG_ITEM_ID, 0));
             arguments.putString(HabitDetailFragment.ARG_ITEM_NAME, getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_NAME));
-            HabitDetailFragment fragment = new HabitDetailFragment();
-            fragment.setArguments(arguments);
+            this.detailFragment = new HabitDetailFragment();
+            detailFragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.habit_detail_container, fragment)
+                    .add(R.id.habit_detail_container, detailFragment)
                     .commit();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.detail_menu, menu);
+        return true;
     }
 
     @Override
@@ -68,13 +78,17 @@ public class HabitDetailActivity extends FragmentActivity implements OccurencesF
             NavUtils.navigateUpTo(this, new Intent(this, HabitListActivity.class));
             return true;
         }
+        if (id == R.id.detail_save_habit) {
+            detailFragment.toggleEditing();
+        }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void showDetails(View view) {
+        detailFragment.showDetails(view);
     }
+
 
 
 }

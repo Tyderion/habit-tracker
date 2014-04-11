@@ -2,6 +2,7 @@ package ch.isageek.tyderion.habittracker.habit;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -51,28 +52,7 @@ public class HabitListActivity extends FragmentActivity
     private HabitListFragment mfragment;
 
     private static void generateData(Context context) {
-        DaoMaster.DevOpenHelper helper = Database.getDevOpenHelper(context);
-        if (context.getResources().getBoolean(R.bool.resetDatabase)) {
-            DaoMaster.dropAllTables(helper.getWritableDatabase(), true);
-            DaoMaster.createAllTables(helper.getWritableDatabase(), true);
-            DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
-            HabitDao habit = session.getHabitDao();
-            OccurenceDao occdao = session.getOccurenceDao();
-            long nowmilis = new Date().getTime();
-            long millisInADay = 24*60*60*1000;
-            int maxOccurences = 500;
-            for (int i = 0; i < 20; i++) {
-                Habit curHabit = new Habit(null, new Date(nowmilis-(maxOccurences+1)*millisInADay), "Habit " + i, i % 2 == 0, "Description for Habit " + i);
-                habit.insert(curHabit);
-                for (int j = 0; j < maxOccurences; j++) {
-                    Occurence occ = new Occurence(null);
-                    occ.setHabit(curHabit);
-                    Date date = new Date(nowmilis-j*millisInADay);
-                    occ.setDate(date);
-                    occdao.insert(occ);
-                }
-            }
-        }
+
 
     }
 
@@ -81,8 +61,9 @@ public class HabitListActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_list);
 
-        generateData(this);
+        new DataGenerator(this).execute(20L, 500L);
 
+        getActionBar().setDisplayHomeAsUpEnabled(false);
         if (findViewById(R.id.habit_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -200,6 +181,42 @@ public class HabitListActivity extends FragmentActivity
             detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_ID, habit.getId());
             detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_NAME, habit.getName());
             startActivity(detailIntent);
+        }
+    }
+
+
+    private static class DataGenerator extends AsyncTask<Long, Void, Void> {
+        private Context context;
+
+        public DataGenerator(Context context) {
+            this.context = context;
+        }
+        @Override
+        protected Void doInBackground(Long... longs) {
+            long habitnumber = longs[0];
+            long maxOccurences = longs[1];
+            DaoMaster.DevOpenHelper helper = Database.getDevOpenHelper(context);
+            if (context.getResources().getBoolean(R.bool.resetDatabase)) {
+                DaoMaster.dropAllTables(helper.getWritableDatabase(), true);
+                DaoMaster.createAllTables(helper.getWritableDatabase(), true);
+                DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
+                HabitDao habit = session.getHabitDao();
+                OccurenceDao occdao = session.getOccurenceDao();
+                long nowmilis = new Date().getTime();
+                long millisInADay = 24*60*60*1000;
+                for (int i = 0; i < habitnumber; i++) {
+                    Habit curHabit = new Habit(null, new Date(nowmilis-(maxOccurences+1)*millisInADay), "Habit " + i, i % 2 == 0, "Description for Habit " + i);
+                    habit.insert(curHabit);
+                    for (int j = 0; j < maxOccurences; j++) {
+                        Occurence occ = new Occurence(null);
+                        occ.setHabit(curHabit);
+                        Date date = new Date(nowmilis-j*millisInADay);
+                        occ.setDate(date);
+                        occdao.insert(occ);
+                    }
+                }
+            }
+            return null;
         }
     }
 }

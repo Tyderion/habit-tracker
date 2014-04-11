@@ -26,7 +26,7 @@ public class ModelGenerator {
         Property habitID = occurence.addLongProperty("habitID").getProperty();
         occurence.addToOne(habit, habitID);
         ToMany occurencesToMany = habit.addToMany(occurence, habitID);
-        occurencesToMany.orderAsc(dateProperty);
+        occurencesToMany.orderDesc(dateProperty);
 //        occurence.addToMany(habit, habitID);
 
         new DaoGenerator().generateAll(schema, "src-gen/main/java");

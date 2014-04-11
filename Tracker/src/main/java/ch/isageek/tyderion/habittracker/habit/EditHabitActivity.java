@@ -22,7 +22,7 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class EditHabitActivity extends FragmentActivity implements EditHabitFragment.OnFragmentInteractionListener {
+public class EditHabitActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,10 +91,5 @@ public class EditHabitActivity extends FragmentActivity implements EditHabitFrag
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_habit, menu);
         return true;
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
 }

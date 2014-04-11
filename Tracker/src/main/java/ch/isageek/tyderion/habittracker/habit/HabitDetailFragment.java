@@ -7,13 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import ch.isageek.tyderion.habittracker.EditHabitFragment;
-import ch.isageek.tyderion.habittracker.OccurencesFragment;
+import ch.isageek.tyderion.habittracker.OccurrencesFragment;
 import ch.isageek.tyderion.habittracker.R;
-import ch.isageek.tyderion.habittracker.database.Database;
-import ch.isageek.tyderion.habittracker.model.Habit;
 
 /**
  * A fragment representing a single Habit detail screen.
@@ -21,7 +20,7 @@ import ch.isageek.tyderion.habittracker.model.Habit;
  * in two-pane mode (on tablets) or a {@link HabitDetailActivity}
  * on handsets.
  */
-public class HabitDetailFragment extends Fragment {
+public class HabitDetailFragment extends Fragment implements OccurrencesFragment.OccurenceFragmentListener  {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -40,7 +39,9 @@ public class HabitDetailFragment extends Fragment {
     private EditText titleText;
     private CheckBox positiveBox;
 
-    private OccurencesFragment occurencesFragment;
+    private boolean editing;
+
+    private OccurrencesFragment occurrencesFragment;
     private EditHabitFragment habitFragment;
 
     /**
@@ -73,44 +74,29 @@ public class HabitDetailFragment extends Fragment {
         this.titleText = (EditText)view.findViewById(R.id.edit_habit_title_text);
         this.positiveBox = (CheckBox)view.findViewById(R.id.edit_habit_positive);
 
-        this.occurencesFragment = (OccurencesFragment)getFragmentManager().findFragmentById(R.id.habit_detail_occurences_fragment);
-        occurencesFragment.setHabitId(mHabitID);
+        this.occurrencesFragment = (OccurrencesFragment)getFragmentManager().findFragmentById(R.id.habit_detail_occurences_fragment);
+        occurrencesFragment.setHabitId(mHabitID);
 
 
         this.habitFragment = (EditHabitFragment)getFragmentManager().findFragmentById(R.id.habit_detail_edit_fragment);
         habitFragment.setEditing(false);
+        this.editing = false;
         habitFragment.setHabitID(mHabitID);
-//                (OccurencesFragment)view.findViewById(R.id.habit_detail_occurences_fragment);
-
-//        TextView view = ((TextView) rootView.findViewById(R.id.habit_detail));
-//
-//        EditText occurrences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
-//        if (mItemName != null) {
-//            view.setText(mItemName);
-//        }else {
-//            view.setText("Habit not found");
-//        }
-//        // Show the dummy content as text in a TextView.
-//        if (mHabitID != null) {
-//            new OccurenceLoader(getActivity(), view, occurrences).execute(mHabitID);
-////            }
-//        }
-
         return view;
     }
 
-    private void updateDisplay() {
-        Database.asyncHabit(getActivity(), mHabitID, new Database.DBCallback<Habit>() {
-            @Override
-            public void onFinish(Habit argument) {
-                descriptionText.setText(argument.getDescription());
-                titleText.setText(argument.getName());
-                positiveBox.setActivated(argument.getIsPositive());
-                Bundle args = new Bundle();
-                args.putLong(OccurencesFragment.ARG_HABIT_ID, argument.getId());
-                occurencesFragment.setArguments(args);
-            }
-        });
-
+    public void toggleEditing() {
+        if (editing) {
+            habitFragment.save();
+        }
+        habitFragment.setEditing(!editing);
+        editing = !editing;
     }
+
+    @Override
+    public void showDetails(View view) {
+        occurrencesFragment.showDetails(view);
+    }
+
+
 }

@@ -146,7 +146,7 @@ public class OccurenceDao extends AbstractDao<Occurence, Long> {
         if (habit_OccurenceListQuery == null) {
             QueryBuilder<Occurence> queryBuilder = queryBuilder();
             queryBuilder.where(Properties.HabitID.eq(habitID));
-            queryBuilder.orderRaw("DATE ASC");
+            queryBuilder.orderRaw("DATE DESC");
             habit_OccurenceListQuery = queryBuilder.build();
         } else {
             habit_OccurenceListQuery.setParameter(0, habitID);

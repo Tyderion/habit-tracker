@@ -19,7 +19,7 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="ch.isageek.tyderion.habittracker.OccurencesFragment"
+        android:name="ch.isageek.tyderion.habittracker.OccurrencesFragment"
         android:id="@+id/habit_detail_occurences_fragment"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"

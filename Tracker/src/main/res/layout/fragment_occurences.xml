@@ -2,25 +2,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.isageek.tyderion.habittracker.OccurencesFragment">
+    tools:context="ch.isageek.tyderion.habittracker.OccurrencesFragment" >
 
 
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/scrollView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" >
+    <!--<ScrollView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:id="@+id/scrollView"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true" >-->
 
 
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
-            android:id="@+id/occurrence_edit_text" />
-    </ScrollView>
+        <!--<TextView-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:text="Medium Text"-->
+            <!--android:id="@+id/occurrence_edit_text" />-->
+    <!--</ScrollView>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/occurrences_count"
+        android:id="@+id/occurrences_count_title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="@dimen/margin_top" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/occurrences_count"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/occurrences_count_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/occurrences_last"
+        android:id="@+id/occurrences_last_title"
+        android:layout_below="@id/occurrences_count_title"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/occurrences_last"
+        android:layout_alignTop="@+id/occurrences_last_title"
+        android:layout_toRightOf="@id/occurrences_count_title" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/occurrences_details"
+        android:id="@+id/occurrences_detail_button"
+        android:layout_below="@+id/occurrences_last_title"
+        android:layout_alignParentStart="true"
+        android:onClick="showDetails" />
 
 </RelativeLayout>
