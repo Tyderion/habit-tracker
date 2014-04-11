@@ -1,4 +1,4 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.habit;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.Date;
 import java.util.List;
 
+import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
@@ -50,8 +51,8 @@ public class HabitListActivity extends FragmentActivity
         DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
         HabitDao habit = session.getHabitDao();
         OccurenceDao occdao = session.getOccurenceDao();
-        for (int i = 0; i < 5; i++) {
-            Habit curHabit = new Habit(null,new Date(), "Habit " + i, i%2 == 0 );
+        for (int i = 0; i < 20; i++) {
+            Habit curHabit = new Habit(null,new Date(), "Habit " + i, i%2 == 0, "Description for Habit " + i);
             habit.insert(curHabit);
             for (int j = 0; j < 5; j++) {
                 Occurence occ = new Occurence(null);
@@ -93,11 +94,11 @@ public class HabitListActivity extends FragmentActivity
      */
     @Override
     public void onItemSelected(String id) {
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "habits-db", null);
-        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
-        HabitDao habit = session.getHabitDao();
-        List<Habit> habits = habit.loadAll();
-        Log.i("TestDebug", habits.toString());
+//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "habits-db", null);
+//        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
+//        HabitDao habit = session.getHabitDao();
+//        List<Habit> habits = habit.loadAll();
+//        Log.i("TestDebug", habits.toString());
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a

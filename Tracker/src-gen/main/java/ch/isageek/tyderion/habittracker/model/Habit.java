@@ -19,8 +19,8 @@ public class Habit extends HabitBase  {
         super(id);
     }
 
-    public Habit(Long id, java.util.Date dateCreated, String name, Boolean isPositive) {
-        super(id, dateCreated, name, isPositive);
+    public Habit(Long id, java.util.Date dateCreated, String name, Boolean isPositive, String description) {
+        super(id, dateCreated, name, isPositive, description);
     }
 
     // KEEP METHODS - put your custom methods here

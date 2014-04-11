@@ -1,4 +1,4 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.habit;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,7 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
+import java.util.List;
+
+import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.dummy.DummyContent;
+import ch.isageek.tyderion.habittracker.model.DaoMaster;
+import ch.isageek.tyderion.habittracker.model.DaoSession;
+import ch.isageek.tyderion.habittracker.model.Habit;
+import ch.isageek.tyderion.habittracker.model.HabitDao;
 
 /**
  * A list fragment representing a list of Habits. This fragment
@@ -60,6 +67,9 @@ public class HabitListFragment extends ListFragment {
         }
     };
 
+
+    private View mheaderView;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -71,17 +81,26 @@ public class HabitListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "habits-db", null);
+        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
+        HabitDao habitDao = session.getHabitDao();
+
+        List<Habit> habits = habitDao.loadAll();
+
+        HabitAdapter adapter = new HabitAdapter(getActivity(), R.layout.habit_item_row, habits);
+        setListAdapter(adapter);
+
+
+        this.mheaderView = getActivity().getLayoutInflater().inflate(R.layout.habits_header_row, null);
+
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (mheaderView != null)  this.getListView().addHeaderView(mheaderView);
 
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null

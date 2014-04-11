@@ -8,7 +8,7 @@ import de.greenrobot.daogenerator.Schema;
 
 public class ModelGenerator {
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(1, "ch.isageek.tyderion.habittracker.model");
+        Schema schema = new Schema(2, "ch.isageek.tyderion.habittracker.model");
         schema.enableKeepSectionsByDefault();
 
 
@@ -17,6 +17,7 @@ public class ModelGenerator {
         habit.addDateProperty("dateCreated");
         habit.addStringProperty("name").unique();
         habit.addBooleanProperty("isPositive");
+        habit.addStringProperty("description");
 
         Entity occurence = schema.addEntity("Occurence");
         occurence.addIdProperty();

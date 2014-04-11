@@ -3,5 +3,6 @@
 
     <string name="app_name">HabitTracker</string>
     <string name="title_habit_detail">Habit Detail</string>
+    <string name="habits_title">Habits</string>
 
 </resources>

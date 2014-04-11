@@ -18,6 +18,7 @@ abstract public class HabitBase {
     protected java.util.Date dateCreated;
     protected String name;
     protected Boolean isPositive;
+    protected String description;
 
 
 
@@ -32,11 +33,12 @@ abstract public class HabitBase {
         this.id = id;
     }
 
-    public HabitBase(Long id, java.util.Date dateCreated, String name, Boolean isPositive) {
+    public HabitBase(Long id, java.util.Date dateCreated, String name, Boolean isPositive, String description) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.name = name;
         this.isPositive = isPositive;
+        this.description = description;
     }
 
     public Long getId() {
@@ -71,6 +73,14 @@ abstract public class HabitBase {
         this.isPositive = isPositive;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void updateNotNull(Habit other) {
         if(this == other) {
             return;//both came from db, no need to run this.
@@ -93,6 +103,11 @@ abstract public class HabitBase {
 
         if(other.isPositive != null) {
             this.isPositive = other.isPositive;
+        }
+
+
+        if(other.description != null) {
+            this.description = other.description;
         }
 
         // relationships
