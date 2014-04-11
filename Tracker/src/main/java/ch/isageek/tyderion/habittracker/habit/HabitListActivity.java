@@ -58,19 +58,27 @@ public class HabitListActivity extends FragmentActivity
 
     private static void generateData(Context context) {
         DaoMaster.DevOpenHelper helper = Database.getDevOpenHelper(context);
-        DaoMaster.dropAllTables( helper.getWritableDatabase(), true );
-        DaoMaster.createAllTables(helper.getWritableDatabase(), true);
-        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
-        HabitDao habit = session.getHabitDao();
-        OccurenceDao occdao = session.getOccurenceDao();
-        for (int i = 0; i < 20; i++) {
-            Habit curHabit = new Habit(null,new Date(), "Habit " + i, i%2 == 0, "Description for Habit " + i);
-            habit.insert(curHabit);
-            for (int j = 0; j < 5; j++) {
-                Occurence occ = new Occurence(null);
-                occ.setHabit(curHabit);
-                occ.setDate(new Date());
-                occdao.insert(occ);
+        if (context.getResources().getBoolean(R.bool.resetDatabase)) {
+            DaoMaster.dropAllTables(helper.getWritableDatabase(), true);
+            DaoMaster.createAllTables(helper.getWritableDatabase(), true);
+        }
+        if (context.getResources().getBoolean(R.bool.createDummyEntries)) {
+            DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
+            HabitDao habit = session.getHabitDao();
+            OccurenceDao occdao = session.getOccurenceDao();
+            long nowmilis = new Date().getTime();
+            long millisInADay = 24*60*60*1000;
+            int maxOccurences = 500;
+            for (int i = 0; i < 20; i++) {
+                Habit curHabit = new Habit(null, new Date(nowmilis-(maxOccurences+1)*millisInADay), "Habit " + i, i % 2 == 0, "Description for Habit " + i);
+                habit.insert(curHabit);
+                for (int j = 0; j < maxOccurences; j++) {
+                    Occurence occ = new Occurence(null);
+                    occ.setHabit(curHabit);
+                    Date date = new Date(nowmilis-j*millisInADay);
+                    occ.setDate(date);
+                    occdao.insert(occ);
+                }
             }
         }
 
@@ -140,6 +148,8 @@ public class HabitListActivity extends FragmentActivity
             case R.id.action_settings:
                 Toast.makeText(this, "Settings Selected", Toast.LENGTH_SHORT).show();
                 return true;
+            case R.id.action_habit_add:
+                Toast.makeText(this, "Add Habit", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -152,13 +162,14 @@ public class HabitListActivity extends FragmentActivity
      * indicating that the item with the given ID was selected.
      */
     @Override
-    public void onItemSelected(Long habitID) {
+    public void onItemSelected(Habit habit) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putLong(HabitDetailFragment.ARG_ITEM_ID, habitID);
+            arguments.putLong(HabitDetailFragment.ARG_ITEM_ID, habit.getId());
+            arguments.putString(HabitDetailFragment.ARG_ITEM_NAME, habit.getName());
             HabitDetailFragment fragment = new HabitDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -169,7 +180,8 @@ public class HabitListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, HabitDetailActivity.class);
-            detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_ID, habitID);
+            detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_ID, habit.getId());
+            detailIntent.putExtra(HabitDetailFragment.ARG_ITEM_NAME, habit.getName());
             startActivity(detailIntent);
         }
     }

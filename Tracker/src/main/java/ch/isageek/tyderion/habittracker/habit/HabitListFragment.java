@@ -56,7 +56,7 @@ public class HabitListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(Long habitID);
+        public void onItemSelected(Habit habit);
     }
 
     /**
@@ -65,7 +65,7 @@ public class HabitListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(Long habit) {
+        public void onItemSelected(Habit habit) {
         }
     };
 
@@ -136,12 +136,15 @@ public class HabitListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
+        if ( id >= 0) {
+            super.onListItemClick(listView, view, position, id);
 
-        // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
-        Long est = adapter.getHabit((int)id).getId();
-        mCallbacks.onItemSelected(est);
+
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+//            Long est = adapter.getHabit((int) id).getId();
+            mCallbacks.onItemSelected(adapter.getHabit((int) id));
+        }
     }
 
     @Override

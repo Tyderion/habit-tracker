@@ -1,5 +1,7 @@
 package ch.isageek.tyderion.habittracker.habit;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -31,11 +35,13 @@ public class HabitDetailFragment extends Fragment {
      * represents.
      */
     public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_ITEM_NAME = "item_name";
 
     /**
      * The dummy content this fragment is presenting.
      */
     private Long mHabitID;
+    private String mItemName;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,6 +59,7 @@ public class HabitDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mHabitID = getArguments().getLong(ARG_ITEM_ID);
+            mItemName = getArguments().getString(ARG_ITEM_NAME);
         }
     }
 
@@ -60,27 +67,64 @@ public class HabitDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_habit_detail, container, false);
-
+        TextView view = ((TextView) rootView.findViewById(R.id.habit_detail));
+        EditText occurrences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
+        if (mItemName != null) {
+            view.setText(mItemName);
+        }else {
+            view.setText("Habit not found");
+        }
         // Show the dummy content as text in a TextView.
         if (mHabitID != null) {
-            DaoSession session = Database.getDaoSession(getActivity());
-            HabitDao habitDao = session.getHabitDao();
-            Habit habit = habitDao.load(mHabitID);
-                TextView view = ((TextView) rootView.findViewById(R.id.habit_detail));
-
-            EditText occurences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
-            if (habit != null) {
-                view.setText(habit.getName());
-                StringBuilder builder = new StringBuilder("");
-                for (Occurence occ : habit.getOccurenceList()) {
-                    builder.append(occ.toString()+"\n");
-                }
-                occurences.setText(builder.toString());
-            } else {
-                view.setText("Habit not found");
-            }
+            new OccurenceLoader(getActivity(), view, occurrences).execute(mHabitID);
+//            }
         }
 
         return rootView;
+    }
+
+
+    private static class OccurenceLoader extends AsyncTask<Long,Void,List<Occurence>> {
+        private EditText editText;
+        private TextView titleView;
+        private Context context;
+
+        private HabitDao habitDao;
+
+
+        public OccurenceLoader(Context context, TextView titleView, EditText text) {
+            this.editText = text;
+            this.titleView = titleView;
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            DaoSession session = Database.getDaoSession(context);
+            habitDao = session.getHabitDao();
+        }
+
+        @Override
+        protected List<Occurence> doInBackground(Long... longs) {
+            Long habitID = longs[0];
+            Habit habit = habitDao.load(habitID);
+            List<Occurence> occurrences = null;
+            if (habit != null) {
+                titleView.setText(habit.getName());
+                occurrences = habit.getOccurenceList();
+            }
+            return occurrences;
+        }
+
+        @Override
+        protected void onPostExecute(List<Occurence> occurences) {
+            super.onPostExecute(occurences);
+            StringBuilder builder = new StringBuilder("");
+            for (Occurence occ : occurences) {
+                builder.append(occ.toString() + "\n");
+            }
+            editText.setText(builder.toString());
+        }
     }
 }

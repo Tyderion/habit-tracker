@@ -42,6 +42,7 @@ public class HabitDetailActivity extends FragmentActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putLong(HabitDetailFragment.ARG_ITEM_ID,getIntent().getLongExtra(HabitDetailFragment.ARG_ITEM_ID, 0));
+            arguments.putString(HabitDetailFragment.ARG_ITEM_NAME,getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_NAME));
             HabitDetailFragment fragment = new HabitDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()

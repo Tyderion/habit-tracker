@@ -85,6 +85,9 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
     }
 
     public Habit getHabit(int position) {
+        if (position < 0) {
+            return null;
+        }
         if (this.data.size() > position)  {
             return this.data.get(position);
         } else {

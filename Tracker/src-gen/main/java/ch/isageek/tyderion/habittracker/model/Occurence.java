@@ -7,9 +7,6 @@ package ch.isageek.tyderion.habittracker.model;
 // KEEP INCLUDES - put your custom includes here
 import java.text.SimpleDateFormat;
 // KEEP INCLUDES END
-
-
-
 /**
  * Entity mapped to table OCCURENCE.
  */
@@ -34,8 +31,6 @@ public class Occurence extends OccurenceBase  {
     public String toString() {
         return "Occurrence: " + Occurence.dateFormatter.format(this.date);
     }
-
-
     // KEEP METHODS END
 
 }

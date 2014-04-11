@@ -5,6 +5,7 @@ import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
+import de.greenrobot.daogenerator.ToMany;
 
 public class ModelGenerator {
     public static void main(String args[]) throws Exception {
@@ -21,10 +22,11 @@ public class ModelGenerator {
 
         Entity occurence = schema.addEntity("Occurence");
         occurence.addIdProperty();
-        occurence.addDateProperty("date");
+        Property dateProperty = occurence.addDateProperty("date").getProperty();
         Property habitID = occurence.addLongProperty("habitID").getProperty();
         occurence.addToOne(habit, habitID);
-        habit.addToMany(occurence, habitID);
+        ToMany occurencesToMany = habit.addToMany(occurence, habitID);
+        occurencesToMany.orderAsc(dateProperty);
 //        occurence.addToMany(habit, habitID);
 
         new DaoGenerator().generateAll(schema, "src-gen/main/java");
