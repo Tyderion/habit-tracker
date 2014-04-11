@@ -1,11 +1,14 @@
 package ch.isageek.tyderion.habittracker.habit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
+import ch.isageek.tyderion.habittracker.EditHabitFragment;
+import ch.isageek.tyderion.habittracker.OccurencesFragment;
 import ch.isageek.tyderion.habittracker.R;
 
 
@@ -18,7 +21,7 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class HabitDetailActivity extends FragmentActivity {
+public class HabitDetailActivity extends FragmentActivity implements OccurencesFragment.OnFragmentInteractionListener, EditHabitFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class HabitDetailActivity extends FragmentActivity {
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putLong(HabitDetailFragment.ARG_ITEM_ID,getIntent().getLongExtra(HabitDetailFragment.ARG_ITEM_ID, 0));
-            arguments.putString(HabitDetailFragment.ARG_ITEM_NAME,getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_NAME));
+            arguments.putString(HabitDetailFragment.ARG_ITEM_NAME, getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_NAME));
             HabitDetailFragment fragment = new HabitDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -67,4 +70,11 @@ public class HabitDetailActivity extends FragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+
 }

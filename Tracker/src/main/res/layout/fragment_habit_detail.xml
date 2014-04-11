@@ -5,27 +5,29 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     tools:context="ch.isageek.tyderion.habittracker.habit.HabitDetailFragment" >
-    <TextView
-    android:id="@+id/habit_detail"
-    android:layout_width="match_parent"
-    android:layout_height="30dp"
-    android:textSize="22sp"
-        android:text="test"
-    android:textIsSelectable="true"
-    android:textColor="#FFF"
-    android:textAlignment="viewStart" />
 
-    <EditText
+    <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/habit_detail_occurrences"
-        android:layout_below="@+id/habit_detail"
+        android:name="ch.isageek.tyderion.habittracker.EditHabitFragment"
+        android:id="@+id/habit_detail_edit_fragment"
+        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="76dp"
+        android:layout_alignParentEnd="true"
+        tools:layout="@layout/fragment_edit_habit" />
+
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="ch.isageek.tyderion.habittracker.OccurencesFragment"
+        android:id="@+id/habit_detail_occurences_fragment"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/habit_detail_edit_fragment"
+        tools:layout="@layout/fragment_occurences" />
+
+
 
 
 </RelativeLayout>

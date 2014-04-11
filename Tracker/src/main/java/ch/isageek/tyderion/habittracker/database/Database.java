@@ -4,10 +4,13 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 
+import java.util.List;
+
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.HabitDao;
+import ch.isageek.tyderion.habittracker.model.Occurence;
 import de.greenrobot.dao.AbstractDao;
 import retrofit.Callback;
 
@@ -29,9 +32,35 @@ public class Database {
         new HabitLoader(context, cb).execute(id);
     }
 
+    public static void asyncOccurrences(Context context, Long habiId, DBCallback<List<Occurence>> cb) {
+        new OccurenceLoader(context, cb).execute(habiId);
+    }
+
 
     public static interface DBCallback<T> {
         public void onFinish(T argument);
+    }
+
+
+
+    private static class OccurenceLoader extends AsyncTask<Long,Void,List<Occurence>> {
+        private DBCallback<List<Occurence>> callback;
+        private Context context;
+
+        public OccurenceLoader(Context context, DBCallback<List<Occurence>> callback) {
+            this.context = context;
+            this.callback = callback;
+        }
+
+        @Override
+        protected List<Occurence> doInBackground(Long... longs) {
+            return Database.getDaoSession(context).getHabitDao().load(longs[0]).getOccurenceList();
+        }
+
+        @Override
+        protected void onPostExecute(List<Occurence> occurrences) {
+            callback.onFinish(occurrences);
+        }
     }
 
 

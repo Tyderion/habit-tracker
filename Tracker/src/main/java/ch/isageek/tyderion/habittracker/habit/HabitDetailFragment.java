@@ -1,27 +1,19 @@
 package ch.isageek.tyderion.habittracker.habit;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
 
-import org.w3c.dom.Text;
-
-import java.util.List;
-
+import ch.isageek.tyderion.habittracker.EditHabitFragment;
+import ch.isageek.tyderion.habittracker.OccurencesFragment;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
-import ch.isageek.tyderion.habittracker.dummy.DummyContent;
-import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
-import ch.isageek.tyderion.habittracker.model.HabitDao;
-import ch.isageek.tyderion.habittracker.model.Occurence;
 
 /**
  * A fragment representing a single Habit detail screen.
@@ -42,6 +34,14 @@ public class HabitDetailFragment extends Fragment {
      */
     private Long mHabitID;
     private String mItemName;
+
+
+    private EditText descriptionText;
+    private EditText titleText;
+    private CheckBox positiveBox;
+
+    private OccurencesFragment occurencesFragment;
+    private EditHabitFragment habitFragment;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -66,65 +66,51 @@ public class HabitDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_habit_detail, container, false);
-        TextView view = ((TextView) rootView.findViewById(R.id.habit_detail));
-        EditText occurrences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
-        if (mItemName != null) {
-            view.setText(mItemName);
-        }else {
-            view.setText("Habit not found");
-        }
-        // Show the dummy content as text in a TextView.
-        if (mHabitID != null) {
-            new OccurenceLoader(getActivity(), view, occurrences).execute(mHabitID);
-//            }
-        }
+        View view = inflater.inflate(R.layout.fragment_habit_detail, container, false);
 
-        return rootView;
+
+        this.descriptionText = (EditText)view.findViewById(R.id.edit_habit_description_text);
+        this.titleText = (EditText)view.findViewById(R.id.edit_habit_title_text);
+        this.positiveBox = (CheckBox)view.findViewById(R.id.edit_habit_positive);
+
+        this.occurencesFragment = (OccurencesFragment)getFragmentManager().findFragmentById(R.id.habit_detail_occurences_fragment);
+        occurencesFragment.setHabitId(mHabitID);
+
+
+        this.habitFragment = (EditHabitFragment)getFragmentManager().findFragmentById(R.id.habit_detail_edit_fragment);
+        habitFragment.setEditing(false);
+        habitFragment.setHabitID(mHabitID);
+//                (OccurencesFragment)view.findViewById(R.id.habit_detail_occurences_fragment);
+
+//        TextView view = ((TextView) rootView.findViewById(R.id.habit_detail));
+//
+//        EditText occurrences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
+//        if (mItemName != null) {
+//            view.setText(mItemName);
+//        }else {
+//            view.setText("Habit not found");
+//        }
+//        // Show the dummy content as text in a TextView.
+//        if (mHabitID != null) {
+//            new OccurenceLoader(getActivity(), view, occurrences).execute(mHabitID);
+////            }
+//        }
+
+        return view;
     }
 
-
-    private static class OccurenceLoader extends AsyncTask<Long,Void,List<Occurence>> {
-        private EditText editText;
-        private TextView titleView;
-        private Context context;
-
-        private HabitDao habitDao;
-
-
-        public OccurenceLoader(Context context, TextView titleView, EditText text) {
-            this.editText = text;
-            this.titleView = titleView;
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            DaoSession session = Database.getDaoSession(context);
-            habitDao = session.getHabitDao();
-        }
-
-        @Override
-        protected List<Occurence> doInBackground(Long... longs) {
-            Long habitID = longs[0];
-            Habit habit = habitDao.load(habitID);
-            List<Occurence> occurrences = null;
-            if (habit != null) {
-                titleView.setText(habit.getName());
-                occurrences = habit.getOccurenceList();
+    private void updateDisplay() {
+        Database.asyncHabit(getActivity(), mHabitID, new Database.DBCallback<Habit>() {
+            @Override
+            public void onFinish(Habit argument) {
+                descriptionText.setText(argument.getDescription());
+                titleText.setText(argument.getName());
+                positiveBox.setActivated(argument.getIsPositive());
+                Bundle args = new Bundle();
+                args.putLong(OccurencesFragment.ARG_HABIT_ID, argument.getId());
+                occurencesFragment.setArguments(args);
             }
-            return occurrences;
-        }
+        });
 
-        @Override
-        protected void onPostExecute(List<Occurence> occurences) {
-            super.onPostExecute(occurences);
-            StringBuilder builder = new StringBuilder("");
-            for (Occurence occ : occurences) {
-                builder.append(occ.toString() + "\n");
-            }
-            editText.setText(builder.toString());
-        }
     }
 }

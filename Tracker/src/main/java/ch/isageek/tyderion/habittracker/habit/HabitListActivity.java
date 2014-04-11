@@ -1,25 +1,18 @@
 package ch.isageek.tyderion.habittracker.habit;
 
-import android.app.SearchManager;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.Date;
-import java.util.List;
 
-import ch.isageek.tyderion.habittracker.EditHabit;
+import ch.isageek.tyderion.habittracker.EditHabitFragment;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
@@ -161,9 +154,9 @@ public class HabitListActivity extends FragmentActivity
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle arguments = new Bundle();
-//            arguments.putLong(EditHabit.ARG_HABIT_ID, id);
-//            arguments.putString(EditHabit.ARG_HABIT_NAME, "");
-            EditHabit fragment = new EditHabit();
+//            arguments.putLong(EditHabitFragment.ARG_HABIT_ID, id);
+//            arguments.putString(EditHabitFragment.ARG_HABIT_NAME, "");
+            EditHabitFragment fragment = new EditHabitFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.habit_detail_container, fragment)
@@ -173,8 +166,8 @@ public class HabitListActivity extends FragmentActivity
             // In single-pane mode, simply start the detail activity
             // for the selected item ID.
             Intent detailIntent = new Intent(this, EditHabitActivity.class);
-//            detailIntent.putExtra(EditHabit.ARG_HABIT_ID, id);
-//            detailIntent.putExtra(EditHabit.ARG_HABIT_NAME, "");
+//            detailIntent.putExtra(EditHabitFragment.ARG_HABIT_ID, id);
+//            detailIntent.putExtra(EditHabitFragment.ARG_HABIT_NAME, "");
             startActivity(detailIntent);
         }
     }

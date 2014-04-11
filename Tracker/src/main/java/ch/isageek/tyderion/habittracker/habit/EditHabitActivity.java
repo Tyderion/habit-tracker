@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import ch.isageek.tyderion.habittracker.EditHabit;
+import ch.isageek.tyderion.habittracker.EditHabitFragment;
 import ch.isageek.tyderion.habittracker.R;
 
 
@@ -22,7 +22,7 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class EditHabitActivity extends FragmentActivity implements EditHabit.OnFragmentInteractionListener {
+public class EditHabitActivity extends FragmentActivity implements EditHabitFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +45,9 @@ public class EditHabitActivity extends FragmentActivity implements EditHabit.OnF
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
 //            Bundle arguments = new Bundle();
-//            arguments.putLong(EditHabit.ARG_HABIT_ID,getIntent().getLongExtra(EditHabit.ARG_HABIT_ID, 0));
-//            arguments.putString(EditHabit.ARG_HABIT_NAME,getIntent().getStringExtra(EditHabit.ARG_HABIT_NAME));
-//            EditHabit fragment = new EditHabit();
+//            arguments.putLong(EditHabitFragment.ARG_HABIT_ID,getIntent().getLongExtra(EditHabitFragment.ARG_HABIT_ID, 0));
+//            arguments.putString(EditHabitFragment.ARG_HABIT_NAME,getIntent().getStringExtra(EditHabitFragment.ARG_HABIT_NAME));
+//            EditHabitFragment fragment = new EditHabitFragment();
 //            fragment.setArguments(arguments);
 //            getSupportFragmentManager().beginTransaction()
 //                    .replace(R.id.edit_fragment, fragment)
@@ -55,11 +55,11 @@ public class EditHabitActivity extends FragmentActivity implements EditHabit.OnF
         }
     }
 
-    private EditHabit mfragment;
+    private EditHabitFragment mfragment;
 
-    private EditHabit getFragment() {
+    private EditHabitFragment getFragment() {
         if (mfragment == null) {
-            mfragment = (EditHabit) getSupportFragmentManager()
+            mfragment = (EditHabitFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.edit_fragment);
         }
         return mfragment;
