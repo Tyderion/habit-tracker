@@ -20,7 +20,7 @@ import ch.isageek.tyderion.habittracker.R;
  * in two-pane mode (on tablets) or a {@link HabitDetailActivity}
  * on handsets.
  */
-public class HabitDetailFragment extends Fragment implements OccurrencesFragment.OccurenceFragmentListener  {
+public class HabitDetailFragment extends Fragment  {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -93,7 +93,6 @@ public class HabitDetailFragment extends Fragment implements OccurrencesFragment
         editing = !editing;
     }
 
-    @Override
     public void showDetails(View view) {
         occurrencesFragment.showDetails(view);
     }

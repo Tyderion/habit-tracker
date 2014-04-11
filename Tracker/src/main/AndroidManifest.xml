@@ -32,6 +32,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.isageek.tyderion.habittracker.HabitListActivity" />
         </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.occurrence.OccurenceDetailActivity"
+            android:label="@string/title_activity_occurence_detail" >
+        </activity>
     </application>
 
 </manifest>

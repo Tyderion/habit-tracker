@@ -24,7 +24,7 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class HabitDetailActivity extends FragmentActivity implements OccurrencesFragment.OccurenceFragmentListener {
+public class HabitDetailActivity extends FragmentActivity {
     private HabitDetailFragment detailFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,6 @@ public class HabitDetailActivity extends FragmentActivity implements Occurrences
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
     public void showDetails(View view) {
         detailFragment.showDetails(view);
     }

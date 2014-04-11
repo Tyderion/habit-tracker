@@ -1,7 +1,7 @@
 package ch.isageek.tyderion.habittracker;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +14,8 @@ import java.util.List;
 
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Occurence;
+import ch.isageek.tyderion.habittracker.occurrence.OccurenceDetailActivity;
+import ch.isageek.tyderion.habittracker.occurrence.OccurencesDetailFragment;
 
 
 /**
@@ -57,11 +59,11 @@ public class OccurrencesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mHabitID = getArguments().getLong(ARG_HABIT_ID);
-            getOccurrences();
+            loadOccurrences();
         }
     }
 
-    private void getOccurrences() {
+    private void loadOccurrences() {
         Database.asyncOccurrences(getActivity(), mHabitID, new Database.DBCallback<List<Occurence>>() {
             @Override
             public void onFinish(List<Occurence> argument) {
@@ -71,9 +73,12 @@ public class OccurrencesFragment extends Fragment {
         });
     }
 
+    public List<Occurence> getOccerrences() {
+        return this.occurrenceList;
+    }
     public void setHabitId(Long habitID) {
         this.mHabitID = habitID;
-        getOccurrences();
+        loadOccurrences();
     }
 
     @Override
@@ -109,6 +114,10 @@ public class OccurrencesFragment extends Fragment {
 
 
     public void showDetails(View view) {
+        Intent detailIntent = new Intent(getActivity(), OccurenceDetailActivity.class);
+        detailIntent.putExtra(OccurenceDetailActivity.ARG_HABIT_ID, mHabitID);
+        startActivity(detailIntent);
         Toast.makeText(getActivity(), "Show Details", Toast.LENGTH_SHORT).show();
     }
+
 }

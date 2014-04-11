@@ -26,8 +26,6 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
     private Context context;
     private int layoutResourceId;
     public List<Habit> data;
-    private String filter = "";
-//    private List<Habit> filteredData;
 
 
     public HabitAdapter(Context context, int resource, List<Habit> objects) {
@@ -35,10 +33,6 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
         this.data = objects;
         this.layoutResourceId = resource;
         this.context = context;
-//        this.filteredData = new ArrayList<Habit>(this.data.size());
-//        for (Habit h : this.data) {
-//            this.filteredData.add(h);
-//        }
     }
 
     public HabitAdapter(Context context, int resource, int textViewResourceId, Habit[] objects) {
@@ -64,18 +58,11 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
         } else {
             holder = (HabitHolder) row.getTag();
         }
-//        if (position < filteredData.size()) {
-//            holder.title.setText("");
-//            holder.description.setText("");
-//            holder.image.setBackgroundColor(this.context.getResources().getColor(android.R.color.transparent));
-//            return row;
-//        }
         Habit habit = data.get(position);
         holder.title.setText( habit.getName());
         holder.description.setText(habit.getDescription());
         int color = this.context.getResources().getColor(habit.getIsPositive() ? R.color.green : R.color.red);
         holder.image.setBackgroundColor(color);
-//        holder.description.setBackgroundColor(color);
         return row;
     }
 
@@ -94,16 +81,6 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
             return null;
         }
     }
-//
-//    public void filter(String filter) {
-//        this.filteredData = new ArrayList<Habit>();
-//        for (Habit h : this.data) {
-//            if (h.getName().contains(filter)) {
-//                this.filteredData.add(h);
-//            }
-//        }
-//
-//    }
 
 
     static class HabitHolder {

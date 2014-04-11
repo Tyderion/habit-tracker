@@ -21,5 +21,6 @@
     <string name="occurrences_last">Last:</string>
     <string name="occurrences_details">Details</string>
     <string name="never">Never</string>
+    <string name="title_activity_occurence_detail">OccurenceDetailActivity</string>
 
 </resources>
