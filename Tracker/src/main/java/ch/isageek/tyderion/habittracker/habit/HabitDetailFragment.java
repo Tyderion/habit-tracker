@@ -17,6 +17,7 @@ import ch.isageek.tyderion.habittracker.dummy.DummyContent;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.HabitDao;
+import ch.isageek.tyderion.habittracker.model.Occurence;
 
 /**
  * A fragment representing a single Habit detail screen.
@@ -70,7 +71,11 @@ public class HabitDetailFragment extends Fragment {
             EditText occurences = (EditText)rootView.findViewById(R.id.habit_detail_occurrences);
             if (habit != null) {
                 view.setText(habit.getName());
-
+                StringBuilder builder = new StringBuilder("");
+                for (Occurence occ : habit.getOccurenceList()) {
+                    builder.append(occ.toString()+"\n");
+                }
+                occurences.setText(builder.toString());
             } else {
                 view.setText("Habit not found");
             }

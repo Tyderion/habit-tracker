@@ -1,6 +1,5 @@
 package ch.isageek.tyderion.habittracker.model;
 
-import java.util.List;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -34,7 +33,6 @@ abstract public class OccurenceBase {
     protected Habit habit;
     protected Long habit__resolvedKey;
 
-    protected List<Habit> habitList;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -101,23 +99,6 @@ abstract public class OccurenceBase {
         habit__resolvedKey = habitID;
     }
 
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public synchronized List<Habit> getHabitList() {
-        if (habitList == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            HabitDao targetDao = daoSession.getHabitDao();
-            habitList = targetDao._queryOccurence_HabitList(id);
-        }
-        return habitList;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetHabitList() {
-        habitList = null;
-    }
-
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
     public void delete() {
         if (myDao == null) {
@@ -164,9 +145,6 @@ abstract public class OccurenceBase {
         // relationships
         if(other.getHabit() != null) {
             this.setHabit(other.getHabit());
-        }
-        if(other.getHabitList() != null) {
-            habitList = (other.getHabitList());
         }
     }
 

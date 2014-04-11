@@ -1,5 +1,9 @@
 package ch.isageek.tyderion.habittracker.model;
 
+import java.util.List;
+import ch.isageek.tyderion.habittracker.model.DaoSession;
+import de.greenrobot.dao.DaoException;
+
 
 
 
@@ -23,6 +27,14 @@ abstract public class HabitBase {
 
 
 
+    /** Used to resolve relations */
+    protected transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    protected transient HabitDao myDao;
+
+    protected List<Occurence> occurenceList;
+
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
@@ -39,6 +51,12 @@ abstract public class HabitBase {
         this.name = name;
         this.isPositive = isPositive;
         this.description = description;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getHabitDao() : null;
     }
 
     public Long getId() {
@@ -81,6 +99,47 @@ abstract public class HabitBase {
         this.description = description;
     }
 
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public synchronized List<Occurence> getOccurenceList() {
+        if (occurenceList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            OccurenceDao targetDao = daoSession.getOccurenceDao();
+            occurenceList = targetDao._queryHabit_OccurenceList(id);
+        }
+        return occurenceList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetOccurenceList() {
+        occurenceList = null;
+    }
+
+    /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete((Habit)this);
+    }
+
+    /** Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context. */
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update((Habit)this);
+    }
+
+    /** Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context. */
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh((Habit)this);
+    }
+
     public void updateNotNull(Habit other) {
         if(this == other) {
             return;//both came from db, no need to run this.
@@ -111,6 +170,9 @@ abstract public class HabitBase {
         }
 
         // relationships
+        if(other.getOccurenceList() != null) {
+            occurenceList = (other.getOccurenceList());
+        }
     }
 
 

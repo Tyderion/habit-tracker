@@ -10,6 +10,8 @@ import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.DaoConfig;
 import de.greenrobot.dao.Property;
 import de.greenrobot.dao.SqlUtils;
+import de.greenrobot.dao.Query;
+import de.greenrobot.dao.QueryBuilder;
 
 import ch.isageek.tyderion.habittracker.model.Occurence;
 
@@ -33,6 +35,7 @@ public class OccurenceDao extends AbstractDao<Occurence, Long> {
 
     private DaoSession daoSession;
 
+    private Query<Occurence> habit_OccurenceListQuery;
 
     public OccurenceDao(DaoConfig config) {
         super(config);
@@ -136,6 +139,18 @@ public class OccurenceDao extends AbstractDao<Occurence, Long> {
     @Override
     protected boolean isEntityUpdateable() {
         return true;
+    }
+
+    /** Internal query to resolve the "occurenceList" to-many relationship of Habit. */
+    public synchronized List<Occurence> _queryHabit_OccurenceList(Long habitID) {
+        if (habit_OccurenceListQuery == null) {
+            QueryBuilder<Occurence> queryBuilder = queryBuilder();
+            queryBuilder.where(Properties.HabitID.eq(habitID));
+            habit_OccurenceListQuery = queryBuilder.build();
+        } else {
+            habit_OccurenceListQuery.setParameter(0, habitID);
+        }
+        return habit_OccurenceListQuery.list();
     }
 
     private String selectDeep;
