@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.List;
 
+import ch.isageek.tyderion.habittracker.EditHabit;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
@@ -61,8 +62,6 @@ public class HabitListActivity extends FragmentActivity
         if (context.getResources().getBoolean(R.bool.resetDatabase)) {
             DaoMaster.dropAllTables(helper.getWritableDatabase(), true);
             DaoMaster.createAllTables(helper.getWritableDatabase(), true);
-        }
-        if (context.getResources().getBoolean(R.bool.createDummyEntries)) {
             DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
             HabitDao habit = session.getHabitDao();
             OccurenceDao occdao = session.getOccurenceDao();
@@ -149,9 +148,34 @@ public class HabitListActivity extends FragmentActivity
                 Toast.makeText(this, "Settings Selected", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.action_habit_add:
+                this.showEditHabit();
                 Toast.makeText(this, "Add Habit", Toast.LENGTH_SHORT).show();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showEditHabit() {
+        if (mTwoPane) {
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            Bundle arguments = new Bundle();
+//            arguments.putLong(EditHabit.ARG_HABIT_ID, id);
+//            arguments.putString(EditHabit.ARG_HABIT_NAME, "");
+            EditHabit fragment = new EditHabit();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.habit_detail_container, fragment)
+                    .commit();
+
+        } else {
+            // In single-pane mode, simply start the detail activity
+            // for the selected item ID.
+            Intent detailIntent = new Intent(this, EditHabitActivity.class);
+//            detailIntent.putExtra(EditHabit.ARG_HABIT_ID, id);
+//            detailIntent.putExtra(EditHabit.ARG_HABIT_NAME, "");
+            startActivity(detailIntent);
         }
     }
 

@@ -8,20 +8,25 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".habit.HabitListActivity"
+            android:name="ch.isageek.tyderion.habittracker.habit.HabitListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".habit.HabitDetailActivity"
+            android:name="ch.isageek.tyderion.habittracker.habit.HabitDetailActivity"
             android:label="@string/title_habit_detail"
-            android:parentActivityName=".habit.HabitListActivity" >
+            android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.isageek.tyderion.habittracker.HabitListActivity" />
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.habit.EditHabitActivity"
+            android:label="@string/title_activity_edit_habit" >
         </activity>
     </application>
 
