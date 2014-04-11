@@ -54,8 +54,7 @@ public class HabitListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
 
-    private SearchView searchView;
-    private String filter = "";
+    private HabitListFragment mfragment;
 
     private static void generateData(Context context) {
         DaoMaster.DevOpenHelper helper = Database.getDevOpenHelper(context);
@@ -93,55 +92,44 @@ public class HabitListActivity extends FragmentActivity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((HabitListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.habit_list))
-                    .setActivateOnItemClick(true);
+
+            getFragment().setActivateOnItemClick(true);
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
-        handleIntent(getIntent());
     }
 
-    private void handleIntent(Intent intent) {
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search your data somehow
-            ((HabitListFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.habit_list)).filter(query);
-
-            filter = query;
+    private HabitListFragment getFragment() {
+        if (mfragment == null) {
+            mfragment = (HabitListFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.habit_list);
         }
+        return mfragment;
     }
+
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView =
+        SearchView searchView =
                 (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
+        if (searchView != null) {
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
 
-       searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-           @Override
-           public boolean onQueryTextSubmit(String s) {
-               return false;
-           }
-
-           @Override
-           public boolean onQueryTextChange(String s) {
-               ((HabitListFragment) getSupportFragmentManager()
-                       .findFragmentById(R.id.habit_list)).filter(s);
-
-               return true;
-           }
-       });
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    getFragment().filter(s);
+                    return true;
+                }
+            });
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -165,11 +153,6 @@ public class HabitListActivity extends FragmentActivity
      */
     @Override
     public void onItemSelected(Long habitID) {
-//        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, "habits-db", null);
-//        DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
-//        HabitDao habit = session.getHabitDao();
-//        List<Habit> habits = habit.loadAll();
-//        Log.i("TestDebug", habits.toString());
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
