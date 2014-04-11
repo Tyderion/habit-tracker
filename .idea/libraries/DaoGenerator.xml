@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="DaoGenerator">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ModelGenerator/libs/DaoGenerator.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

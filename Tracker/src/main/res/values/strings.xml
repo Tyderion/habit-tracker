@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HabitTracker</string>
+    <string name="title_habit_detail">Habit Detail</string>
+
+</resources>
