@@ -4,5 +4,8 @@
     <string name="app_name">HabitTracker</string>
     <string name="title_habit_detail">Habit Detail</string>
     <string name="habits_title">Habits</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_hint">Habit name</string>
 
 </resources>

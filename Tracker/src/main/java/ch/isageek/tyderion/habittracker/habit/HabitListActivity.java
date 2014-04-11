@@ -1,10 +1,20 @@
 package ch.isageek.tyderion.habittracker.habit;
 
+import android.app.SearchManager;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
@@ -44,6 +54,8 @@ public class HabitListActivity extends FragmentActivity
      */
     private boolean mTwoPane;
 
+    private SearchView searchView;
+    private String filter = "";
 
     private static void generateData(Context context) {
         DaoMaster.DevOpenHelper helper = Database.getDevOpenHelper(context);
@@ -87,7 +99,65 @@ public class HabitListActivity extends FragmentActivity
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
+        handleIntent(getIntent());
     }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            //use the query to search your data somehow
+            ((HabitListFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.habit_list)).filter(query);
+
+            filter = query;
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+       searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+           @Override
+           public boolean onQueryTextSubmit(String s) {
+               return false;
+           }
+
+           @Override
+           public boolean onQueryTextChange(String s) {
+               ((HabitListFragment) getSupportFragmentManager()
+                       .findFragmentById(R.id.habit_list)).filter(s);
+
+               return true;
+           }
+       });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Toast.makeText(this, "Settings Selected", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 
     /**
      * Callback method from {@link HabitListFragment.Callbacks}

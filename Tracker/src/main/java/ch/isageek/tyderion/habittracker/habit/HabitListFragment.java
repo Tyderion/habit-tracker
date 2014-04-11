@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.isageek.tyderion.habittracker.R;
@@ -71,6 +72,7 @@ public class HabitListFragment extends ListFragment {
 
     private View mheaderView;
     private HabitAdapter adapter;
+    private HabitAdapter filteredAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -94,6 +96,8 @@ public class HabitListFragment extends ListFragment {
 
 
         this.mheaderView = getActivity().getLayoutInflater().inflate(R.layout.habits_header_row, null);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
 
 
     }
@@ -170,5 +174,19 @@ public class HabitListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    public void filter(String filter) {
+        List<Habit> habits = Database.getDaoSession(getActivity()).getHabitDao().loadAll();
+        if (!filter.equals("")) {
+            List<Habit> filteredData = new ArrayList<Habit>();
+            for (Habit h : habits) {
+                if (h.getName().contains(filter)) {
+                    filteredData.add(h);
+                }
+            }
+            habits = filteredData;
+        }
+        setListAdapter(new HabitAdapter(getActivity(), R.layout.habit_item_row, habits));
     }
 }
