@@ -26,7 +26,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignBottom="@+id/habit_item_text_description"
         android:layout_alignTop="@id/habit_item_text_title"
-        android:background="@color/red"
         android:paddingTop="5dp"
         android:paddingRight="5dp"
         android:paddingLeft="5dp"

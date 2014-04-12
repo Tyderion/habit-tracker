@@ -27,5 +27,6 @@
     <string name="delete">Delete</string>
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
+    <string name="action_occurrence_add">Add Occurrence</string>
 
 </resources>

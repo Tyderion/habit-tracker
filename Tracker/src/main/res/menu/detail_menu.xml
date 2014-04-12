@@ -10,4 +10,8 @@
         android:title="@string/save_habit"
         android:icon="@drawable/ic_action_content_save"
         android:showAsAction="always" />
+    <item android:id="@+id/action_occurrence_add"
+        android:title="@string/action_occurrence_add"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_content_new"/>
 </menu>

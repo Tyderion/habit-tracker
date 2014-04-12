@@ -61,8 +61,8 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
         Habit habit = data.get(position);
         holder.title.setText( habit.getName());
         holder.description.setText(habit.getDescription());
-        int color = this.context.getResources().getColor(habit.getIsPositive() ? R.color.green : R.color.red);
-        holder.image.setBackgroundColor(color);
+//        int color = this.context.getResources().getColor(habit.getIsPositive() ? R.color.green : R.color.red);
+//        holder.image.setBackgroundColor(color);
         return row;
     }
 

@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
@@ -33,6 +34,15 @@ public class Database {
 
     public static void asyncOccurrences(Context context, Long habiId, DBCallback<List<Occurrence>> cb) {
         new OccurenceLoader(context, cb).execute(habiId);
+    }
+
+    public static Occurrence createOccurrence(Context context, Date date, long habitID) {
+        if (habitID != 0 && date != null) {
+            Occurrence occurrence = new Occurrence(null, date, habitID);
+            getDaoSession(context).getOccurrenceDao().insert(occurrence);
+            return occurrence;
+        }
+        return null;
     }
 
 

@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
  */
 public class Occurrence extends OccurrenceBase  {
     // KEEP FIELDS - put your custom fields here
-    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+    private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     // KEEP FIELDS END
     public Occurrence() {
     }
