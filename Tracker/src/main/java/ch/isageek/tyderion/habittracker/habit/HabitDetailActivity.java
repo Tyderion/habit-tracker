@@ -58,6 +58,7 @@ public class HabitDetailActivity extends FragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.detail_menu, menu);
+        this.setIcon(false, menu.findItem(R.id.detail_save_habit));
         return true;
     }
 
@@ -65,7 +66,9 @@ public class HabitDetailActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.detail_save_habit) {
-            detailFragment.toggleEditing();
+            boolean editing = detailFragment.toggleEditing();
+            this.setIcon(editing, item);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -73,6 +76,12 @@ public class HabitDetailActivity extends FragmentActivity {
     public void showDetails(View view) {
         if (detailFragment!= null) {
             detailFragment.showDetails(view);
+        }
+    }
+
+    private void setIcon(boolean editing, MenuItem item) {
+        if (item != null) {
+            item.setIcon(editing ? R.drawable.ic_action_content_save : R.drawable.ic_action_content_edit);
         }
     }
 

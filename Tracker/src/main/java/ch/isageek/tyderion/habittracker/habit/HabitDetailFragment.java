@@ -89,12 +89,17 @@ public class HabitDetailFragment extends Fragment {
         return view;
     }
 
-    public void toggleEditing() {
+    public boolean getEditing() {
+        return editing;
+    }
+
+    public boolean toggleEditing() {
         if (editing) {
             habitFragment.save();
         }
         habitFragment.setEditing(!editing);
         editing = !editing;
+        return editing;
     }
 
     public void showDetails(View view) {
