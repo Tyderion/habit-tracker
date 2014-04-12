@@ -1,7 +1,9 @@
 package ch.isageek.tyderion.habittracker.occurrence;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -115,5 +117,4 @@ public class OccurrencesFragment extends Fragment {
 
         Toast.makeText(getActivity(), "Show Details", Toast.LENGTH_SHORT).show();
     }
-
 }

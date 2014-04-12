@@ -23,5 +23,9 @@
     <string name="never">Never</string>
     <string name="title_activity_occurence_detail">OccurenceDetailActivity</string>
     <string name="title_activity_occurrence_list">OccurrenceListActivity</string>
+    <string name="delete_occurrence">Do you want delete this occurrence?</string>
+    <string name="delete">Delete</string>
+    <string name="yes">YES</string>
+    <string name="cancel">CANCEL</string>
 
 </resources>

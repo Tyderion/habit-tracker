@@ -1,9 +1,12 @@
 package ch.isageek.tyderion.habittracker.occurrence;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 
@@ -26,6 +29,7 @@ public class OccurenceListFragment extends ListFragment {
     private Long mHabitID;
 
     private OccurrenceAdapter mAdapter;
+    private List<Occurence> occurenceList;
 
     public static OccurenceListFragment newInstance(Long habitID) {
         OccurenceListFragment fragment = new OccurenceListFragment();
@@ -50,10 +54,10 @@ public class OccurenceListFragment extends ListFragment {
             mHabitID = getArguments().getLong(ARG_HABIT_ID);
 
 
-
             Database.asyncOccurrences(getActivity(), mHabitID, new Database.DBCallback<List<Occurence>>() {
                 @Override
                 public void onFinish(List<Occurence> argument) {
+                    occurenceList = argument;
                     mAdapter = new OccurrenceAdapter(getActivity(), R.layout.occerrences_detail_list_item_row, argument);
                     setListAdapter(mAdapter);
                 }
@@ -63,7 +67,49 @@ public class OccurenceListFragment extends ListFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ListView view = getListView();
+        if (view != null) {
+            view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    removeItemFromList(position);
+                    return true;
+                }
+            });
+        }
+    }
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+    }
+
+    protected void removeItemFromList(int position) {
+        final int deletePosition = position;
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+        alert.setTitle(getResources().getString(R.string.delete));
+        alert.setMessage(getResources().getString(R.string.delete_occurrence));
+        alert.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Occurence removed = occurenceList.remove(deletePosition);
+                removed.delete();
+                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetInvalidated();
+            }
+        });
+        alert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+
     }
 }
