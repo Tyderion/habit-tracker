@@ -12,6 +12,7 @@
         android:showAsAction="never" />
     <item android:id="@+id/action_habit_add"
         android:title="@string/action_habit_add"
-        android:showAsAction="always"/>
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_content_new"/>
 
 </menu>
