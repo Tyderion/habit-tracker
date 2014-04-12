@@ -1,6 +1,5 @@
 package ch.isageek.tyderion.habittracker.occurrence;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListFragment;
 import android.content.DialogInterface;
@@ -22,7 +21,7 @@ import ch.isageek.tyderion.habittracker.model.Occurence;
  * <p />
  * <p />
  */
-public class OccurenceListFragment extends ListFragment {
+public class OccurrenceListFragment extends ListFragment {
 
     public static final String ARG_HABIT_ID = "habit_id";
 
@@ -31,8 +30,8 @@ public class OccurenceListFragment extends ListFragment {
     private OccurrenceAdapter mAdapter;
     private List<Occurence> occurenceList;
 
-    public static OccurenceListFragment newInstance(Long habitID) {
-        OccurenceListFragment fragment = new OccurenceListFragment();
+    public static OccurrenceListFragment newInstance(Long habitID) {
+        OccurrenceListFragment fragment = new OccurrenceListFragment();
         Bundle args = new Bundle();
         args.putLong(ARG_HABIT_ID, habitID);
         fragment.setArguments(args);
@@ -43,7 +42,7 @@ public class OccurenceListFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public OccurenceListFragment() {
+    public OccurrenceListFragment() {
     }
 
     @Override

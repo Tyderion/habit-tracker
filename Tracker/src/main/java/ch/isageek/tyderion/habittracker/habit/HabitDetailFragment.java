@@ -1,9 +1,6 @@
 package ch.isageek.tyderion.habittracker.habit;
 
 import android.app.Fragment;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 
-import ch.isageek.tyderion.habittracker.occurrence.OccurenceListFragment;
+import ch.isageek.tyderion.habittracker.occurrence.OccurrenceListFragment;
 import ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity;
 import ch.isageek.tyderion.habittracker.occurrence.OccurrencesFragment;
 import ch.isageek.tyderion.habittracker.R;
@@ -104,7 +101,7 @@ public class HabitDetailFragment extends Fragment {
 
     public void showDetails(View view) {
         Intent detailIntent = new Intent(getActivity(), OccurrenceListActivity.class);
-        detailIntent.putExtra(OccurenceListFragment.ARG_HABIT_ID, mHabitID);
+        detailIntent.putExtra(OccurrenceListFragment.ARG_HABIT_ID, mHabitID);
         startActivity(detailIntent);
     }
 

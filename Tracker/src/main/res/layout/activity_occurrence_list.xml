@@ -9,7 +9,7 @@
     tools:context="ch.isageek.tyderion.habittracker.habit.OccurrenceListActivity">
 
     <fragment
-        android:name="ch.isageek.tyderion.habittracker.occurrence.OccurenceListFragment"
+        android:name="ch.isageek.tyderion.habittracker.occurrence.OccurrenceListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/occurrence_list_fragment"

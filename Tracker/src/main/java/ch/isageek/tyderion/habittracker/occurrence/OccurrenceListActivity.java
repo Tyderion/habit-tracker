@@ -1,17 +1,13 @@
 package ch.isageek.tyderion.habittracker.occurrence;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.view.MenuItem;
 
 import ch.isageek.tyderion.habittracker.R;
 
 public class OccurrenceListActivity extends Activity {
 
-    private OccurenceListFragment mListFragment;
+    private OccurrenceListFragment mListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +19,8 @@ public class OccurrenceListActivity extends Activity {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            arguments.putLong(OccurenceListFragment.ARG_HABIT_ID, getIntent().getLongExtra(OccurenceListFragment.ARG_HABIT_ID, 0));
-            this.mListFragment = new OccurenceListFragment();
+            arguments.putLong(OccurrenceListFragment.ARG_HABIT_ID, getIntent().getLongExtra(OccurrenceListFragment.ARG_HABIT_ID, 0));
+            this.mListFragment = new OccurrenceListFragment();
             mListFragment.setArguments(arguments);
             getFragmentManager().beginTransaction().add(R.id.occurrence_list_fragment, mListFragment)
                     .commit();
