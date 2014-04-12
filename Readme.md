@@ -10,19 +10,22 @@ With this simple Application you can track your habits.
 * Create Habits
 * Add Occurrences
 * Trigger your habits with nfc tags (select write tag from the details)
+* Long Press on habit (or occurrence in details list) to delete.
 
 
 
 ## Future
 
-- Delete habits
 - Graphs
 - Data Export
 
-## Used Libraries:
+## Used Libraries and Tools:
 
 ### GreenDAO
 A self compiled version of [Greendao](http://greendao-orm.com/) with the source from here [path-greendao](https://github.com/path/greenDAO).
 
 ### DateTimePicker
-The nice [dateTimePicker](https://github.com/flavienlaurent/datetimepicker) library from @flavientlaurent. If you can compile the [version](https://github.com/ciotto/datetimepicker) from @ciotto [Link] please tell me how.
+The nice [dateTimePicker](https://github.com/flavienlaurent/datetimepicker) library from @flavienlaurent. If you can compile the [version](https://github.com/ciotto/datetimepicker) from @ciotto [Link] please tell me how.
+
+### Android Asset Studio
+[Android Asset Studio](http://android-ui-utils.googlecode.com/hg/asset-studio/dist/index.html) is awesome to generate icons for your app.

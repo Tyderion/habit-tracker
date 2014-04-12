@@ -1,10 +1,14 @@
 package ch.isageek.tyderion.habittracker.habit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.HabitDao;
+import ch.isageek.tyderion.habittracker.model.Occurrence;
 
 /**
  * A list fragment representing a list of Habits. This fragment
@@ -189,5 +194,52 @@ public class HabitListFragment extends ListFragment {
         } else {
             setListAdapter(this.adapter);
         }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ListView view = getListView();
+        if (view != null) {
+            view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    if (position > 0) {
+                        removeItemFromList(position-1);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+    }
+    protected void removeItemFromList(int position) {
+        final int deletePosition = position;
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+        alert.setTitle(getResources().getString(R.string.delete));
+        alert.setMessage(getResources().getString(R.string.delete_habit_dialog));
+        alert.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Habit removed = adapter.data.remove(deletePosition);
+                adapter.notifyDataSetChanged();
+                adapter.notifyDataSetInvalidated();
+                Database.asyncDeleteHabit(getActivity(), removed.getId(), new Database.DBCallback<Habit>() {
+                    @Override
+                    public void onFinish(Habit argument) {
+                        Toast.makeText(getActivity(), "Deleted Habit " + argument.getName() + " and all occurrences", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        alert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
     }
 }

@@ -85,7 +85,7 @@ public class OccurrenceListFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
     }
 
-    protected void removeItemFromList(int position) {
+    protected void removeItemFromList(final int position) {
         final int deletePosition = position;
 
         AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
@@ -95,7 +95,7 @@ public class OccurrenceListFragment extends ListFragment {
         alert.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Occurrence removed = occurrenceList.remove(deletePosition);
+                Occurrence removed = occurrenceList.remove(deletePosition - 1);
                 removed.delete();
                 mAdapter.notifyDataSetChanged();
                 mAdapter.notifyDataSetInvalidated();
