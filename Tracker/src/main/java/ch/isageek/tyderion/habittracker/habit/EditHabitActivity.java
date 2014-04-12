@@ -1,10 +1,14 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.habit;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import ch.isageek.tyderion.habittracker.R;
 
 
 /**
@@ -16,12 +20,12 @@ import android.view.MenuItem;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class HabitDetailActivity extends FragmentActivity {
+public class EditHabitActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_habit_detail);
+        setContentView(R.layout.activity_edit_habit);
 
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -38,15 +42,25 @@ public class HabitDetailActivity extends FragmentActivity {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            Bundle arguments = new Bundle();
-            arguments.putString(HabitDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_ID));
-            HabitDetailFragment fragment = new HabitDetailFragment();
-            fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.habit_detail_container, fragment)
-                    .commit();
+//            Bundle arguments = new Bundle();
+//            arguments.putLong(EditHabitFragment.ARG_HABIT_ID,getIntent().getLongExtra(EditHabitFragment.ARG_HABIT_ID, 0));
+//            arguments.putString(EditHabitFragment.ARG_HABIT_NAME,getIntent().getStringExtra(EditHabitFragment.ARG_HABIT_NAME));
+//            EditHabitFragment fragment = new EditHabitFragment();
+//            fragment.setArguments(arguments);
+//            getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.edit_fragment, fragment)
+//                    .commit();
         }
+    }
+
+    private EditHabitFragment mfragment;
+
+    private EditHabitFragment getFragment() {
+        if (mfragment == null) {
+            mfragment = (EditHabitFragment) getFragmentManager()
+                    .findFragmentById(R.id.edit_fragment);
+        }
+        return mfragment;
     }
 
     @Override
@@ -63,6 +77,17 @@ public class HabitDetailActivity extends FragmentActivity {
             NavUtils.navigateUpTo(this, new Intent(this, HabitListActivity.class));
             return true;
         }
+        if (id == R.id.save_habit) {
+            this.getFragment().save();
+            NavUtils.navigateUpTo(this, new Intent(this, HabitListActivity.class));
+        }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_habit, menu);
+        return true;
     }
 }

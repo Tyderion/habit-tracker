@@ -3,5 +3,5 @@
     android:id="@+id/habit_detail_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.isageek.tyderion.habittracker.HabitDetailActivity"
+    tools:context="ch.isageek.tyderion.habittracker.habit.HabitDetailActivity"
     tools:ignore="MergeRootFrame" />

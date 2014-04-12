@@ -1,6 +1,5 @@
 package ch.isageek.tyderion.habittracker.model;
 
-import java.util.List;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import de.greenrobot.dao.DaoException;
 
@@ -14,9 +13,9 @@ import de.greenrobot.dao.DaoException;
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
 /**
- * Entity mapped to table OCCURENCE.
+ * Entity mapped to table OCCURRENCE.
  */
-abstract public class OccurenceBase {
+abstract public class OccurrenceBase {
 
     protected Long id;
     protected java.util.Date date;
@@ -29,24 +28,23 @@ abstract public class OccurenceBase {
     protected transient DaoSession daoSession;
 
     /** Used for active entity operations. */
-    protected transient OccurenceDao myDao;
+    protected transient OccurrenceDao myDao;
 
     protected Habit habit;
     protected Long habit__resolvedKey;
 
-    protected List<Habit> habitList;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
 
-    public OccurenceBase() {
+    public OccurrenceBase() {
     }
 
-    public OccurenceBase(Long id) {
+    public OccurrenceBase(Long id) {
         this.id = id;
     }
 
-    public OccurenceBase(Long id, java.util.Date date, Long habitID) {
+    public OccurrenceBase(Long id, java.util.Date date, Long habitID) {
         this.id = id;
         this.date = date;
         this.habitID = habitID;
@@ -55,7 +53,7 @@ abstract public class OccurenceBase {
     /** called by internal mechanisms, do not call yourself. */
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
-        myDao = daoSession != null ? daoSession.getOccurenceDao() : null;
+        myDao = daoSession != null ? daoSession.getOccurrenceDao() : null;
     }
 
     public Long getId() {
@@ -101,29 +99,12 @@ abstract public class OccurenceBase {
         habit__resolvedKey = habitID;
     }
 
-    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public synchronized List<Habit> getHabitList() {
-        if (habitList == null) {
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            HabitDao targetDao = daoSession.getHabitDao();
-            habitList = targetDao._queryOccurence_HabitList(id);
-        }
-        return habitList;
-    }
-
-    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetHabitList() {
-        habitList = null;
-    }
-
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
     public void delete() {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
         }
-        myDao.delete((Occurence)this);
+        myDao.delete((Occurrence)this);
     }
 
     /** Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context. */
@@ -131,7 +112,7 @@ abstract public class OccurenceBase {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
         }
-        myDao.update((Occurence)this);
+        myDao.update((Occurrence)this);
     }
 
     /** Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context. */
@@ -139,10 +120,10 @@ abstract public class OccurenceBase {
         if (myDao == null) {
             throw new DaoException("Entity is detached from DAO context");
         }
-        myDao.refresh((Occurence)this);
+        myDao.refresh((Occurrence)this);
     }
 
-    public void updateNotNull(Occurence other) {
+    public void updateNotNull(Occurrence other) {
         if(this == other) {
             return;//both came from db, no need to run this.
         }
@@ -164,9 +145,6 @@ abstract public class OccurenceBase {
         // relationships
         if(other.getHabit() != null) {
             this.setHabit(other.getHabit());
-        }
-        if(other.getHabitList() != null) {
-            habitList = (other.getHabitList());
         }
     }
 

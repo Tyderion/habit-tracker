@@ -3,5 +3,36 @@
 
     <string name="app_name">HabitTracker</string>
     <string name="title_habit_detail">Habit Detail</string>
+    <string name="habits_title">Habits</string>
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="search_hint">Habit name</string>
+    <string name="action_habit_add">Add Habit</string>
+    <string name="title_activity_edit_habit">EditHabit</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="edit_habit_title">Title:</string>
+    <string name="edit_habit_title_hint">The name of the habit</string>
+    <string name="edit_habit_description">Description:</string>
+    <string name="edit_habit_description_hint">A short description</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save_habit">Save Habit</string>
+    <string name="edit_habit_positive_title">Positive</string>
+    <string name="occurrences_count">Count:</string>
+    <string name="occurrences_last">Last:</string>
+    <string name="occurrences_details">Details</string>
+    <string name="never">Never</string>
+    <string name="title_activity_occurence_detail">OccurenceDetailActivity</string>
+    <string name="title_activity_occurrence_list">OccurrenceListActivity</string>
+    <string name="delete_occurrence">Do you want delete this occurrence?</string>
+    <string name="delete">Delete</string>
+    <string name="yes">YES</string>
+    <string name="cancel">CANCEL</string>
+    <string name="action_occurrence_add">Add Occurrence</string>
+    <string name="title_activity_quick_add_occurrence">QuickAddOccurrenceActivity</string>
+    <string name="title_activity_add_occurrence_tag">AddOccurrenceTag</string>
+    <string name="write_tag_text">Write Tag for this Habit: </string>
+    <string name="write_tag">Write</string>
+    <string name="add_occurrence_tag_text">Write Tag</string>
+    <string name="write_tag_description_text">Move the phone to the tag you want to trigger this habit.</string>
 
 </resources>

@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="ch.isageek.tyderion.habittracker.HabitListActivity"
+            android:name="ch.isageek.tyderion.habittracker.habit.HabitListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,13 +17,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ch.isageek.tyderion.habittracker.HabitDetailActivity"
+            android:name="ch.isageek.tyderion.habittracker.habit.HabitDetailActivity"
             android:label="@string/title_habit_detail"
-            android:parentActivityName="ch.isageek.tyderion.habittracker.HabitListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.isageek.tyderion.habittracker.HabitListActivity" />
+            android:launchMode="singleTop"
+            android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitListActivity" >
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.habit.EditHabitActivity"
+            android:label="@string/title_activity_edit_habit"
+            android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitListActivity" >
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity"
+            android:label="@string/title_activity_occurrence_list"
+            android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitDetailActivity" >
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.occurrence.QuickAddOccurrenceActivity"
+            android:label="@string/title_activity_quick_add_occurrence" >
+
+             <intent-filter>
+             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+             <category android:name="android.intent.category.DEFAULT"/>
+             <data android:mimeType="application/ch.isageek.tyderion.habittracker.occurrence.add" />
+             </intent-filter>
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.occurrence.AddOccurrenceTag"
+            android:launchMode="singleTop"
+            android:label="@string/title_activity_add_occurrence_tag" >
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
 </manifest>

@@ -8,7 +8,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context="ch.isageek.tyderion.habittracker.HabitListActivity">
+    tools:context="ch.isageek.tyderion.habittracker.habit.HabitListActivity">
 
     <!--
     This layout is a two-pane layout for the Habits
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/habit_list"
-        android:name="ch.isageek.tyderion.habittracker.HabitListFragment"
+        android:name="ch.isageek.tyderion.habittracker.habit.HabitListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"

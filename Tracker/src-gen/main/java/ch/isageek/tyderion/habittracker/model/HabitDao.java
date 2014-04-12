@@ -1,6 +1,5 @@
 package ch.isageek.tyderion.habittracker.model;
 
-import java.util.List;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -8,8 +7,6 @@ import android.database.sqlite.SQLiteStatement;
 import de.greenrobot.dao.AbstractDao;
 import de.greenrobot.dao.DaoConfig;
 import de.greenrobot.dao.Property;
-import de.greenrobot.dao.Query;
-import de.greenrobot.dao.QueryBuilder;
 
 import ch.isageek.tyderion.habittracker.model.Habit;
 
@@ -30,10 +27,12 @@ public class HabitDao extends AbstractDao<Habit, Long> {
         public final static Property DateCreated =new Property(1, java.util.Date.class , "dateCreated", false, "DATE_CREATED");
         public final static Property Name =new Property(2, String.class , "name", false, "NAME");
         public final static Property IsPositive =new Property(3, Boolean.class , "isPositive", false, "IS_POSITIVE");
-        public final static Property HabitID =new Property(4, Long.class , "habitID", false, "HABIT_ID");
+        public final static Property Description =new Property(4, String.class , "description", false, "DESCRIPTION");
+        public final static Property Uuid =new Property(5, String.class , "uuid", false, "UUID");
     };
 
-    private Query<Habit> occurence_HabitListQuery;
+    private DaoSession daoSession;
+
 
     public HabitDao(DaoConfig config) {
         super(config);
@@ -41,6 +40,7 @@ public class HabitDao extends AbstractDao<Habit, Long> {
 
     public HabitDao(DaoConfig config, DaoSession daoSession) {
         super(config, daoSession);
+        this.daoSession = daoSession;
     }
 
     /** Creates the underlying database table. */
@@ -51,7 +51,8 @@ public class HabitDao extends AbstractDao<Habit, Long> {
                 "'DATE_CREATED' INTEGER," + // 1: dateCreated
                 "'NAME' TEXT UNIQUE ," + // 2: name
                 "'IS_POSITIVE' INTEGER," + // 3: isPositive
-                "'HABIT_ID' INTEGER);"); // 4: habitID
+                "'DESCRIPTION' TEXT," + // 4: description
+                "'UUID' TEXT);"); // 5: uuid
     }
 
     /** Drops the underlying database table. */
@@ -89,6 +90,24 @@ public class HabitDao extends AbstractDao<Habit, Long> {
             stmt.bindLong(4, isPositive ? 1l: 0l);
 
         }
+ 
+        String description = entity.getDescription();
+        if (description != null) {
+            stmt.bindString(5, description);
+
+        }
+ 
+        String uuid = entity.getUuid();
+        if (uuid != null) {
+            stmt.bindString(6, uuid);
+
+        }
+    }
+
+    @Override
+    protected void attachEntity(Habit entity) {
+        super.attachEntity(entity);
+        entity.__setDaoSession(daoSession);
     }
 
     /** @inheritdoc */
@@ -105,7 +124,9 @@ public class HabitDao extends AbstractDao<Habit, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0) , // id
             cursor.isNull(offset + 1) ? null : new java.util.Date( cursor.getLong(offset + 1) ) , // dateCreated
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) , // name
-            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0 // isPositive
+            cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0 , // isPositive
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) , // description
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // uuid
         );
         return entity;
     }
@@ -117,6 +138,8 @@ public class HabitDao extends AbstractDao<Habit, Long> {
         entity.setDateCreated(cursor.isNull(offset + 1) ? null : new java.util.Date( cursor.getLong(offset + 1) ) );
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) );
         entity.setIsPositive(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0 );
+        entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) );
+        entity.setUuid(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) );
      }
 
     /** @inheritdoc */
@@ -140,18 +163,6 @@ public class HabitDao extends AbstractDao<Habit, Long> {
     @Override
     protected boolean isEntityUpdateable() {
         return true;
-    }
-
-    /** Internal query to resolve the "habitList" to-many relationship of Occurence. */
-    public synchronized List<Habit> _queryOccurence_HabitList(Long habitID) {
-        if (occurence_HabitListQuery == null) {
-            QueryBuilder<Habit> queryBuilder = queryBuilder();
-            queryBuilder.where(Properties.HabitID.eq(habitID));
-            occurence_HabitListQuery = queryBuilder.build();
-        } else {
-            occurence_HabitListQuery.setParameter(0, habitID);
-        }
-        return occurence_HabitListQuery.list();
     }
 
 }

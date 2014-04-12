@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/detail_action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never" />
+
+    <item android:id="@+id/detail_save_habit"
+        android:title="@string/save_habit"
+        android:icon="@drawable/ic_action_content_save"
+        android:showAsAction="always" />
+    <item android:id="@+id/action_occurrence_add"
+        android:title="@string/action_occurrence_add"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_content_new"/>
+</menu>

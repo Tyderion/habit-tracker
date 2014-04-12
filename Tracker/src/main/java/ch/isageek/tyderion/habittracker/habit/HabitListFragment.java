@@ -1,14 +1,20 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.habit;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-import ch.isageek.tyderion.habittracker.dummy.DummyContent;
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.Database;
+import ch.isageek.tyderion.habittracker.model.DaoSession;
+import ch.isageek.tyderion.habittracker.model.Habit;
+import ch.isageek.tyderion.habittracker.model.HabitDao;
 
 /**
  * A list fragment representing a list of Habits. This fragment
@@ -47,7 +53,7 @@ public class HabitListFragment extends ListFragment {
         /**
          * Callback for when an item has been selected.
          */
-        public void onItemSelected(String id);
+        public void onItemSelected(Habit habit);
     }
 
     /**
@@ -56,9 +62,13 @@ public class HabitListFragment extends ListFragment {
      */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
-        public void onItemSelected(String id) {
+        public void onItemSelected(Habit habit) {
         }
     };
+
+
+    private View mheaderView;
+    private HabitAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -71,17 +81,28 @@ public class HabitListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO: replace with a real list adapter.
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                DummyContent.ITEMS));
+
+        DaoSession session = Database.getDaoSession(getActivity());
+        HabitDao habitDao = session.getHabitDao();
+
+        List<Habit> habits = habitDao.loadAll();
+
+        this.adapter = new HabitAdapter(getActivity(), R.layout.habit_item_row, habits);
+        setListAdapter(adapter);
+
+
+        this.mheaderView = getActivity().getLayoutInflater().inflate(R.layout.habits_header_row, null);
+
+        getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (mheaderView != null)  this.getListView().addHeaderView(mheaderView);
 
         // Restore the previously serialized activated item position.
         if (savedInstanceState != null
@@ -112,11 +133,15 @@ public class HabitListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
-        super.onListItemClick(listView, view, position, id);
+        if ( id >= 0) {
+            super.onListItemClick(listView, view, position, id);
 
-        // Notify the active callbacks interface (the activity, if the
-        // fragment is attached to one) that an item has been selected.
-        mCallbacks.onItemSelected(DummyContent.ITEMS.get(position).id);
+
+            // Notify the active callbacks interface (the activity, if the
+            // fragment is attached to one) that an item has been selected.
+//            Long est = adapter.getHabit((int) id).getId();
+            mCallbacks.onItemSelected(adapter.getHabit((int) id));
+        }
     }
 
     @Override
@@ -148,5 +173,21 @@ public class HabitListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+    }
+
+    public void filter(String filter) {
+        List<Habit> habits = this.adapter.data;
+        if (!filter.equals("")) {
+            List<Habit> filteredData = new ArrayList<Habit>();
+            for (Habit h : habits) {
+                if (h.getName().contains(filter)) {
+                    filteredData.add(h);
+                }
+            }
+            habits = filteredData;
+        setListAdapter(new HabitAdapter(getActivity(), R.layout.habit_item_row, habits));
+        } else {
+            setListAdapter(this.adapter);
+        }
     }
 }

@@ -1,5 +1,9 @@
 package ch.isageek.tyderion.habittracker.model;
 
+import java.util.List;
+import ch.isageek.tyderion.habittracker.model.DaoSession;
+import de.greenrobot.dao.DaoException;
+
 
 
 
@@ -18,9 +22,19 @@ abstract public class HabitBase {
     protected java.util.Date dateCreated;
     protected String name;
     protected Boolean isPositive;
+    protected String description;
+    protected String uuid;
 
 
 
+
+    /** Used to resolve relations */
+    protected transient DaoSession daoSession;
+
+    /** Used for active entity operations. */
+    protected transient HabitDao myDao;
+
+    protected List<Occurrence> occurrenceList;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -32,11 +46,19 @@ abstract public class HabitBase {
         this.id = id;
     }
 
-    public HabitBase(Long id, java.util.Date dateCreated, String name, Boolean isPositive) {
+    public HabitBase(Long id, java.util.Date dateCreated, String name, Boolean isPositive, String description, String uuid) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.name = name;
         this.isPositive = isPositive;
+        this.description = description;
+        this.uuid = uuid;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getHabitDao() : null;
     }
 
     public Long getId() {
@@ -71,6 +93,63 @@ abstract public class HabitBase {
         this.isPositive = isPositive;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
+    public synchronized List<Occurrence> getOccurrenceList() {
+        if (occurrenceList == null) {
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            OccurrenceDao targetDao = daoSession.getOccurrenceDao();
+            occurrenceList = targetDao._queryHabit_OccurrenceList(id);
+        }
+        return occurrenceList;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    public synchronized void resetOccurrenceList() {
+        occurrenceList = null;
+    }
+
+    /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete((Habit)this);
+    }
+
+    /** Convenient call for {@link AbstractDao#update(Object)}. Entity must attached to an entity context. */
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update((Habit)this);
+    }
+
+    /** Convenient call for {@link AbstractDao#refresh(Object)}. Entity must attached to an entity context. */
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh((Habit)this);
+    }
+
     public void updateNotNull(Habit other) {
         if(this == other) {
             return;//both came from db, no need to run this.
@@ -95,7 +174,20 @@ abstract public class HabitBase {
             this.isPositive = other.isPositive;
         }
 
+
+        if(other.description != null) {
+            this.description = other.description;
+        }
+
+
+        if(other.uuid != null) {
+            this.uuid = other.uuid;
+        }
+
         // relationships
+        if(other.getOccurrenceList() != null) {
+            occurrenceList = (other.getOccurrenceList());
+        }
     }
 
 
