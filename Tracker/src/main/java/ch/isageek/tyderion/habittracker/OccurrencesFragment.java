@@ -14,8 +14,6 @@ import java.util.List;
 
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Occurence;
-import ch.isageek.tyderion.habittracker.occurrence.OccurenceDetailActivity;
-import ch.isageek.tyderion.habittracker.occurrence.OccurencesDetailFragment;
 
 
 /**
@@ -42,7 +40,6 @@ public class OccurrencesFragment extends Fragment {
      * @param habitID the Habit ID of the occurences
      * @return A new instance of fragment OccurrencesFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static OccurrencesFragment newInstance(Long habitID) {
         OccurrencesFragment fragment = new OccurrencesFragment();
         Bundle args = new Bundle();
@@ -114,9 +111,9 @@ public class OccurrencesFragment extends Fragment {
 
 
     public void showDetails(View view) {
-        Intent detailIntent = new Intent(getActivity(), OccurenceDetailActivity.class);
-        detailIntent.putExtra(OccurenceDetailActivity.ARG_HABIT_ID, mHabitID);
-        startActivity(detailIntent);
+//        Intent detailIntent = new Intent(getActivity(), OccurenceDetailActivity.class);
+//        detailIntent.putExtra(OccurenceDetailActivity.ARG_HABIT_ID, mHabitID);
+//        startActivity(detailIntent);
         Toast.makeText(getActivity(), "Show Details", Toast.LENGTH_SHORT).show();
     }
 
