@@ -101,18 +101,6 @@ public class HabitDetailFragment extends Fragment {
         Intent detailIntent = new Intent(getActivity(), OccurrenceListActivity.class);
         detailIntent.putExtra(OccurenceListFragment.ARG_HABIT_ID, mHabitID);
         startActivity(detailIntent);
-
-//        PendingIntent pendingIntent =
-//                TaskStackBuilder.create(getActivity())
-//                        // add all of DetailsActivity's parents to the stack,
-//                        // followed by DetailsActivity itself
-//                        .addNextIntentWithParentStack(detailIntent)
-//                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-
-//        Notification.Builder builder = new Notification.Builder(getActivity());
-//        builder.setContentIntent(pendingIntent);
-
-//        occurrencesFragment.showDetails(view);
     }
 
 

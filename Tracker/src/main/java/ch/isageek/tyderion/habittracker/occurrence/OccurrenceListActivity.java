@@ -2,6 +2,7 @@ package ch.isageek.tyderion.habittracker.occurrence;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
@@ -29,13 +30,4 @@ public class OccurrenceListActivity extends Activity {
                     .commit();
         }
     }
-
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == android.R.id.home) {
-//            NavUtils.navigateUpFromSameTask(this);
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 }
