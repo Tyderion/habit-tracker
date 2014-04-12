@@ -19,6 +19,8 @@ With this simple Application you can track your habits.
 - Delete habits
 - Graphs
 - Data Export
+- Sync
+
 
 ## Used Libraries:
 
