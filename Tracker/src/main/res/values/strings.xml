@@ -28,5 +28,11 @@
     <string name="yes">YES</string>
     <string name="cancel">CANCEL</string>
     <string name="action_occurrence_add">Add Occurrence</string>
+    <string name="title_activity_quick_add_occurrence">QuickAddOccurrenceActivity</string>
+    <string name="title_activity_add_occurrence_tag">AddOccurrenceTag</string>
+    <string name="write_tag_text">Write Tag for this Habit: </string>
+    <string name="write_tag">Write</string>
+    <string name="add_occurrence_tag_text">Write Tag</string>
+    <string name="write_tag_description_text">Move the phone to the tag you want to trigger this habit.</string>
 
 </resources>

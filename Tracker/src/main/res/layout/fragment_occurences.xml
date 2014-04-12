@@ -68,4 +68,14 @@
         android:layout_alignParentStart="true"
         android:onClick="showDetails" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_occurrence_tag_text"
+        android:id="@+id/add_occurrence_tag"
+        android:layout_below="@id/occurrences_detail_button"
+        android:layout_alignParentStart="true"
+        android:onClick="writeTag" />
+
 </RelativeLayout>

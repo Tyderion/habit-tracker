@@ -1,5 +1,6 @@
 package ch.isageek.tyderion.habittracker.habit;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +21,7 @@ import java.util.Date;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Occurrence;
+import ch.isageek.tyderion.habittracker.occurrence.AddOccurrenceTag;
 
 
 /**
@@ -160,5 +162,12 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
         Occurrence occ = Database.createOccurrence(this, date, habitID);
 
         Toast.makeText(this, "New date: " +occ.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void writeTag(View view) {
+        Intent intent = new Intent(this, AddOccurrenceTag.class);
+        intent.putExtra(AddOccurrenceTag.ARG_HABIT_ID, this.habitID);
+        startActivity(intent);
     }
 }
