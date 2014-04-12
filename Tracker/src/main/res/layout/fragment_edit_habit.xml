@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="20dp"
     android:layout_marginRight="20dp"
-    tools:context="ch.isageek.tyderion.habittracker.EditHabitFragment">
+    tools:context="ch.isageek.tyderion.habittracker.habit.EditHabitFragment">
 
 
 

@@ -1,7 +1,6 @@
 package ch.isageek.tyderion.habittracker.habit;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
@@ -10,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import ch.isageek.tyderion.habittracker.EditHabitFragment;
-import ch.isageek.tyderion.habittracker.OccurrencesFragment;
 import ch.isageek.tyderion.habittracker.R;
 
 
@@ -51,7 +48,7 @@ public class HabitDetailActivity extends FragmentActivity {
             arguments.putString(HabitDetailFragment.ARG_ITEM_NAME, getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_NAME));
             this.detailFragment = new HabitDetailFragment();
             detailFragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.habit_detail_container, detailFragment)
                     .commit();
         }
@@ -85,7 +82,9 @@ public class HabitDetailActivity extends FragmentActivity {
     }
 
     public void showDetails(View view) {
-        detailFragment.showDetails(view);
+        if (detailFragment!= null) {
+            detailFragment.showDetails(view);
+        }
     }
 
 

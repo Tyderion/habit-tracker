@@ -1,15 +1,13 @@
 package ch.isageek.tyderion.habittracker.habit;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import ch.isageek.tyderion.habittracker.EditHabitFragment;
 import ch.isageek.tyderion.habittracker.R;
 
 
@@ -22,7 +20,7 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class EditHabitActivity extends FragmentActivity {
+public class EditHabitActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +57,7 @@ public class EditHabitActivity extends FragmentActivity {
 
     private EditHabitFragment getFragment() {
         if (mfragment == null) {
-            mfragment = (EditHabitFragment) getSupportFragmentManager()
+            mfragment = (EditHabitFragment) getFragmentManager()
                     .findFragmentById(R.id.edit_fragment);
         }
         return mfragment;

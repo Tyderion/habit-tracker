@@ -1,9 +1,9 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.occurrence;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Occurence;
 
@@ -111,9 +112,7 @@ public class OccurrencesFragment extends Fragment {
 
 
     public void showDetails(View view) {
-//        Intent detailIntent = new Intent(getActivity(), OccurenceDetailActivity.class);
-//        detailIntent.putExtra(OccurenceDetailActivity.ARG_HABIT_ID, mHabitID);
-//        startActivity(detailIntent);
+
         Toast.makeText(getActivity(), "Show Details", Toast.LENGTH_SHORT).show();
     }
 

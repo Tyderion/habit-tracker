@@ -1,17 +1,21 @@
 package ch.isageek.tyderion.habittracker.habit;
 
+import android.app.Fragment;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
 
 
-import ch.isageek.tyderion.habittracker.EditHabitFragment;
-import ch.isageek.tyderion.habittracker.OccurrencesFragment;
+import ch.isageek.tyderion.habittracker.occurrence.OccurenceListFragment;
+import ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity;
+import ch.isageek.tyderion.habittracker.occurrence.OccurrencesFragment;
 import ch.isageek.tyderion.habittracker.R;
 
 /**
@@ -20,7 +24,7 @@ import ch.isageek.tyderion.habittracker.R;
  * in two-pane mode (on tablets) or a {@link HabitDetailActivity}
  * on handsets.
  */
-public class HabitDetailFragment extends Fragment  {
+public class HabitDetailFragment extends Fragment {
     /**
      * The fragment argument representing the item ID that this fragment
      * represents.
@@ -94,7 +98,21 @@ public class HabitDetailFragment extends Fragment  {
     }
 
     public void showDetails(View view) {
-        occurrencesFragment.showDetails(view);
+        Intent detailIntent = new Intent(getActivity(), OccurrenceListActivity.class);
+        detailIntent.putExtra(OccurenceListFragment.ARG_HABIT_ID, mHabitID);
+        startActivity(detailIntent);
+
+//        PendingIntent pendingIntent =
+//                TaskStackBuilder.create(getActivity())
+//                        // add all of DetailsActivity's parents to the stack,
+//                        // followed by DetailsActivity itself
+//                        .addNextIntentWithParentStack(detailIntent)
+//                        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+//        Notification.Builder builder = new Notification.Builder(getActivity());
+//        builder.setContentIntent(pendingIntent);
+
+//        occurrencesFragment.showDetails(view);
     }
 
 

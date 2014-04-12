@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import java.util.Date;
 
-import ch.isageek.tyderion.habittracker.EditHabitFragment;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
@@ -139,7 +138,7 @@ public class HabitListActivity extends FragmentActivity
 //            arguments.putString(EditHabitFragment.ARG_HABIT_NAME, "");
             EditHabitFragment fragment = new EditHabitFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .replace(R.id.habit_detail_container, fragment)
                     .commit();
 
@@ -170,7 +169,7 @@ public class HabitListActivity extends FragmentActivity
             arguments.putString(HabitDetailFragment.ARG_ITEM_NAME, habit.getName());
             HabitDetailFragment fragment = new HabitDetailFragment();
             fragment.setArguments(arguments);
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .replace(R.id.habit_detail_container, fragment)
                     .commit();
 

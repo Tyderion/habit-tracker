@@ -20,21 +20,17 @@
             android:name="ch.isageek.tyderion.habittracker.habit.HabitDetailActivity"
             android:label="@string/title_habit_detail"
             android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.isageek.tyderion.habittracker.HabitListActivity" />
         </activity>
         <activity
             android:name="ch.isageek.tyderion.habittracker.habit.EditHabitActivity"
             android:label="@string/title_activity_edit_habit"
             android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitListActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.isageek.tyderion.habittracker.HabitListActivity" />
         </activity>
+
         <activity
-            android:name="ch.isageek.tyderion.habittracker.occurrence.OccurenceDetailActivity"
-            android:label="@string/title_activity_occurence_detail" >
+            android:name="ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity"
+            android:label="@string/title_activity_occurrence_list"
+            android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitDetailActivity" >
         </activity>
     </application>
 

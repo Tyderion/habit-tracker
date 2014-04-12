@@ -2,8 +2,10 @@ package ch.isageek.tyderion.habittracker.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
@@ -46,6 +48,7 @@ public class Database {
     private static class OccurenceLoader extends AsyncTask<Long,Void,List<Occurence>> {
         private DBCallback<List<Occurence>> callback;
         private Context context;
+        private HabitDao dao;
 
         public OccurenceLoader(Context context, DBCallback<List<Occurence>> callback) {
             this.context = context;
@@ -53,14 +56,30 @@ public class Database {
         }
 
         @Override
+        protected void onPreExecute() {
+            dao = Database.getDaoSession(context).getHabitDao();
+            super.onPreExecute();
+        }
+
+        @Override
         protected List<Occurence> doInBackground(Long... longs) {
-            return Database.getDaoSession(context).getHabitDao().load(longs[0]).getOccurenceList();
+            if (longs.length == 1) {
+                Habit habit = dao.load(longs[0]);
+                if (habit != null) {
+                    return habit.getOccurenceList();
+                }
+            }
+            return new ArrayList<Occurence>(0);
         }
 
         @Override
         protected void onPostExecute(List<Occurence> occurrences) {
-            callback.onFinish(occurrences);
+            if (callback != null) {
+                callback.onFinish(occurrences);
+            }
         }
+
+
     }
 
 
