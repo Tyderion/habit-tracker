@@ -1,10 +1,10 @@
-## Habit Tracker
-
+# Habit Tracker
+## Information
 * Version: 0.1b
 * Author: Tyderion
-* Licence: MIT (see [Licence.md](licence.md))
+* Licence: MIT (see [Licence.md](license.md))
 
-
+## What it does
 With this simple Application you can track your habits.
 
 * Create Habits
@@ -13,6 +13,16 @@ With this simple Application you can track your habits.
 
 
 
-Future
+## Future
+
+- Delete habits
 - Graphs
 - Data Export
+
+## Used Libraries:
+
+### GreenDAO
+A self compiled version of [Greendao](http://greendao-orm.com/) with the source from here [path-greendao](https://github.com/path/greenDAO).
+
+### DateTimePicker
+The nice [dateTimePicker](https://github.com/flavienlaurent/datetimepicker) library from @flavientlaurent. If you can compile the [version](https://github.com/ciotto/datetimepicker) from @ciotto [Link] please tell me how.
