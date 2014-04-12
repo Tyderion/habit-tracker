@@ -36,5 +36,6 @@
     <string name="write_tag_description_text">Move the phone to the tag you want to trigger this habit.</string>
     <string name="delete_habit">Delete Habit</string>
     <string name="delete_habit_dialog">Are you sure you want to delete this habit?</string>
+    <string name="mimeTypeNdef">application/ch.isageek.tyderion.habittracker.occurrence.add</string>
 
 </resources>

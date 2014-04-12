@@ -1,8 +1,7 @@
 package ch.isageek.tyderion.habittracker.habit;
 
-import android.content.Intent;
+import android.nfc.NdefRecord;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -15,13 +14,15 @@ import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
+import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
+import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.Occurrence;
-import ch.isageek.tyderion.habittracker.occurrence.AddOccurrenceTag;
+import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity;
 
 
 /**
@@ -44,6 +45,7 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
 
 
     private Long habitID;
+    private Habit habit;
 
     private int year;
     private int month;
@@ -81,6 +83,15 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
             // using a fragment transaction.
             Bundle arguments = new Bundle();
             this.habitID = getIntent().getLongExtra(HabitDetailFragment.ARG_ITEM_ID, 0);
+            if (habitID != 0L) {
+                Database.asyncHabit(this, habitID, new Database.DBCallback<Habit>() {
+                    @Override
+                    public void onFinish(Habit argument) {
+                        habit = argument;
+                    }
+                });
+            }
+
             arguments.putLong(HabitDetailFragment.ARG_ITEM_ID,habitID);
             arguments.putString(HabitDetailFragment.ARG_ITEM_NAME, getIntent().getStringExtra(HabitDetailFragment.ARG_ITEM_NAME));
             this.detailFragment = new HabitDetailFragment();
@@ -166,8 +177,15 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
 
 
     public void writeTag(View view) {
-        Intent intent = new Intent(this, AddOccurrenceTag.class);
-        intent.putExtra(AddOccurrenceTag.ARG_HABIT_ID, this.habitID);
-        startActivity(intent);
+        if (this.habit != null) {
+            NdefRecord mimeRecord = NdefRecord.createMime(getString(R.string.mimeTypeNdef),
+                    this.habit.getUuid().getBytes(Charset.forName("US-ASCII")));
+            NFCWriterActivity.writeRecords(this, mimeRecord);
+        } else {
+            Toast.makeText(this, "Not a valid habit", Toast.LENGTH_SHORT).show();
+        }
+//        Intent intent = new Intent(this, AddOccurrenceTag.class);
+//        intent.putExtra(AddOccurrenceTag.ARG_HABIT_ID, this.habitID);
+//        startActivity(intent);
     }
 }
