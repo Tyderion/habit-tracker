@@ -16,10 +16,11 @@ With this simple Application you can track your habits.
 
 ## Future
 
+- Delete habits
 - Graphs
 - Data Export
 
-## Used Libraries and Tools:
+## Used Libraries:
 
 ### GreenDAO
 A self compiled version of [Greendao](http://greendao-orm.com/) with the source from here [path-greendao](https://github.com/path/greenDAO).
