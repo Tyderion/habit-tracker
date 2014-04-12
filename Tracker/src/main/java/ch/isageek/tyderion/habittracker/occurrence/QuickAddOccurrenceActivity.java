@@ -82,7 +82,7 @@ public class QuickAddOccurrenceActivity extends Activity {
             }
             if (habit != null) {
                 Occurrence occ = Database.createOccurrence(context, new Date(), habit.getId());
-                result =  "Created : " + occ.toString() + " for habit " + habit.getName();
+                result =  "Created " + occ.toString() + " for habit " + habit.getName();
             } else {
                 result = "Could not find Habit associated with this NFC Tag.";
             }
