@@ -25,4 +25,4 @@ With this simple Application you can track your habits.
 A self compiled version of [Greendao](http://greendao-orm.com/) with the source from here [path-greendao](https://github.com/path/greenDAO).
 
 ### DateTimePicker
-The nice [dateTimePicker](https://github.com/flavienlaurent/datetimepicker) library from @flavientlaurent. If you can compile the [version](https://github.com/ciotto/datetimepicker) from @ciotto [Link] please tell me how.
+The nice [dateTimePicker](https://github.com/flavienlaurent/datetimepicker) library from [flavienlaurent](https://github.com/flavienlaurent/). If you can compile the [version](https://github.com/ciotto/datetimepicker) from [ciotto](https://github.com/ciotto/) please tell me how.
