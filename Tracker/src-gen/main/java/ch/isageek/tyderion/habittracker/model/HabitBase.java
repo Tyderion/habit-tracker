@@ -23,6 +23,7 @@ abstract public class HabitBase {
     protected String name;
     protected Boolean isPositive;
     protected String description;
+    protected String uuid;
 
 
 
@@ -45,12 +46,13 @@ abstract public class HabitBase {
         this.id = id;
     }
 
-    public HabitBase(Long id, java.util.Date dateCreated, String name, Boolean isPositive, String description) {
+    public HabitBase(Long id, java.util.Date dateCreated, String name, Boolean isPositive, String description, String uuid) {
         this.id = id;
         this.dateCreated = dateCreated;
         this.name = name;
         this.isPositive = isPositive;
         this.description = description;
+        this.uuid = uuid;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -97,6 +99,14 @@ abstract public class HabitBase {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
@@ -167,6 +177,11 @@ abstract public class HabitBase {
 
         if(other.description != null) {
             this.description = other.description;
+        }
+
+
+        if(other.uuid != null) {
+            this.uuid = other.uuid;
         }
 
         // relationships

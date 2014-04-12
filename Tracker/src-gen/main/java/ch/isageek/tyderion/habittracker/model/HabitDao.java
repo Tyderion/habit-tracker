@@ -28,6 +28,7 @@ public class HabitDao extends AbstractDao<Habit, Long> {
         public final static Property Name =new Property(2, String.class , "name", false, "NAME");
         public final static Property IsPositive =new Property(3, Boolean.class , "isPositive", false, "IS_POSITIVE");
         public final static Property Description =new Property(4, String.class , "description", false, "DESCRIPTION");
+        public final static Property Uuid =new Property(5, String.class , "uuid", false, "UUID");
     };
 
     private DaoSession daoSession;
@@ -50,7 +51,8 @@ public class HabitDao extends AbstractDao<Habit, Long> {
                 "'DATE_CREATED' INTEGER," + // 1: dateCreated
                 "'NAME' TEXT UNIQUE ," + // 2: name
                 "'IS_POSITIVE' INTEGER," + // 3: isPositive
-                "'DESCRIPTION' TEXT);"); // 4: description
+                "'DESCRIPTION' TEXT," + // 4: description
+                "'UUID' TEXT);"); // 5: uuid
     }
 
     /** Drops the underlying database table. */
@@ -94,6 +96,12 @@ public class HabitDao extends AbstractDao<Habit, Long> {
             stmt.bindString(5, description);
 
         }
+ 
+        String uuid = entity.getUuid();
+        if (uuid != null) {
+            stmt.bindString(6, uuid);
+
+        }
     }
 
     @Override
@@ -117,7 +125,8 @@ public class HabitDao extends AbstractDao<Habit, Long> {
             cursor.isNull(offset + 1) ? null : new java.util.Date( cursor.getLong(offset + 1) ) , // dateCreated
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) , // name
             cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0 , // isPositive
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // description
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) , // description
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // uuid
         );
         return entity;
     }
@@ -130,6 +139,7 @@ public class HabitDao extends AbstractDao<Habit, Long> {
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) );
         entity.setIsPositive(cursor.isNull(offset + 3) ? null : cursor.getShort(offset + 3) != 0 );
         entity.setDescription(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) );
+        entity.setUuid(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) );
      }
 
     /** @inheritdoc */

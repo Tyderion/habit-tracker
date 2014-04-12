@@ -29,7 +29,7 @@ public class Occurrence extends OccurrenceBase  {
 
     @Override
     public String toString() {
-        return "Occurrence: " + Occurrence.dateFormatter.format(this.date);
+        return "Occurrence at " + Occurrence.dateFormatter.format(this.date);
     }
     // KEEP METHODS END
 

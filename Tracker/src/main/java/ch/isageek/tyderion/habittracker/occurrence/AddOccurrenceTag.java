@@ -42,6 +42,8 @@ public class AddOccurrenceTag extends Activity {
 
     private Long habitID = 1L;
 
+    private Habit habit;
+
     private TextView view;
 
     @Override
@@ -60,6 +62,13 @@ public class AddOccurrenceTag extends Activity {
             });
         }
 
+
+        Database.asyncHabit(this, habitID, new Database.DBCallback<Habit>() {
+            @Override
+            public void onFinish(Habit argument) {
+                habit = argument;
+            }
+        });
 
         context = getApplicationContext();
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -202,7 +211,7 @@ public class AddOccurrenceTag extends Activity {
 
     private NdefMessage getTagAsNdef() {
         NdefRecord mimeRecord = NdefRecord.createMime("application/ch.isageek.tyderion.habittracker.occurrence.add",
-                this.habitID.toString().getBytes(Charset.forName("US-ASCII")));
+                this.habit.getUuid().getBytes(Charset.forName("US-ASCII")));
             return new NdefMessage(new NdefRecord[] {
                     mimeRecord});
     }
