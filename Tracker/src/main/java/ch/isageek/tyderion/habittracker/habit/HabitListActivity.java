@@ -19,8 +19,8 @@ import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.HabitDao;
-import ch.isageek.tyderion.habittracker.model.Occurence;
-import ch.isageek.tyderion.habittracker.model.OccurenceDao;
+import ch.isageek.tyderion.habittracker.model.Occurrence;
+import ch.isageek.tyderion.habittracker.model.OccurrenceDao;
 
 
 /**
@@ -200,14 +200,14 @@ public class HabitListActivity extends FragmentActivity
                 DaoMaster.createAllTables(helper.getWritableDatabase(), true);
                 DaoSession session = new DaoMaster(helper.getWritableDatabase()).newSession();
                 HabitDao habit = session.getHabitDao();
-                OccurenceDao occdao = session.getOccurenceDao();
+                OccurrenceDao occdao = session.getOccurrenceDao();
                 long nowmilis = new Date().getTime();
                 long millisInADay = 24*60*60*1000;
                 for (int i = 0; i < habitnumber; i++) {
                     Habit curHabit = new Habit(null, new Date(nowmilis-(maxOccurences+1)*millisInADay), "Habit " + i, i % 2 == 0, "Description for Habit " + i);
                     habit.insert(curHabit);
                     for (int j = 0; j < maxOccurences; j++) {
-                        Occurence occ = new Occurence(null);
+                        Occurrence occ = new Occurrence(null);
                         occ.setHabit(curHabit);
                         Date date = new Date(nowmilis-j*millisInADay);
                         occ.setDate(date);

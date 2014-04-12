@@ -14,7 +14,7 @@ import java.util.List;
 
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
-import ch.isageek.tyderion.habittracker.model.Occurence;
+import ch.isageek.tyderion.habittracker.model.Occurrence;
 
 /**
  * A fragment representing a list of Items.
@@ -28,7 +28,7 @@ public class OccurrenceListFragment extends ListFragment {
     private Long mHabitID;
 
     private OccurrenceAdapter mAdapter;
-    private List<Occurence> occurenceList;
+    private List<Occurrence> occurrenceList;
 
     public static OccurrenceListFragment newInstance(Long habitID) {
         OccurrenceListFragment fragment = new OccurrenceListFragment();
@@ -53,16 +53,16 @@ public class OccurrenceListFragment extends ListFragment {
             mHabitID = getArguments().getLong(ARG_HABIT_ID);
 
 
-            Database.asyncOccurrences(getActivity(), mHabitID, new Database.DBCallback<List<Occurence>>() {
+            Database.asyncOccurrences(getActivity(), mHabitID, new Database.DBCallback<List<Occurrence>>() {
                 @Override
-                public void onFinish(List<Occurence> argument) {
-                    occurenceList = argument;
+                public void onFinish(List<Occurrence> argument) {
+                    occurrenceList = argument;
                     mAdapter = new OccurrenceAdapter(getActivity(), R.layout.occerrences_detail_list_item_row, argument);
                     setListAdapter(mAdapter);
                 }
             });
         }
-        setListAdapter(new OccurrenceAdapter(getActivity(), R.layout.occerrences_detail_list_item_row, new ArrayList<Occurence>(0)));
+        setListAdapter(new OccurrenceAdapter(getActivity(), R.layout.occerrences_detail_list_item_row, new ArrayList<Occurrence>(0)));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class OccurrenceListFragment extends ListFragment {
         alert.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Occurence removed = occurenceList.remove(deletePosition);
+                Occurrence removed = occurrenceList.remove(deletePosition);
                 removed.delete();
                 mAdapter.notifyDataSetChanged();
                 mAdapter.notifyDataSetInvalidated();

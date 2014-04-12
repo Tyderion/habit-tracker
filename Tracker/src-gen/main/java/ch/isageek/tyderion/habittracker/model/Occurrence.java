@@ -8,20 +8,20 @@ package ch.isageek.tyderion.habittracker.model;
 import java.text.SimpleDateFormat;
 // KEEP INCLUDES END
 /**
- * Entity mapped to table OCCURENCE.
+ * Entity mapped to table OCCURRENCE.
  */
-public class Occurence extends OccurenceBase  {
+public class Occurrence extends OccurrenceBase  {
     // KEEP FIELDS - put your custom fields here
     private static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
     // KEEP FIELDS END
-    public Occurence() {
+    public Occurrence() {
     }
 
-    public Occurence(Long id) {
+    public Occurrence(Long id) {
         super(id);
     }
 
-    public Occurence(Long id, java.util.Date date, Long habitID) {
+    public Occurrence(Long id, java.util.Date date, Long habitID) {
         super(id, date, habitID);
     }
 
@@ -29,7 +29,7 @@ public class Occurence extends OccurenceBase  {
 
     @Override
     public String toString() {
-        return "Occurrence: " + Occurence.dateFormatter.format(this.date);
+        return "Occurrence: " + Occurrence.dateFormatter.format(this.date);
     }
     // KEEP METHODS END
 

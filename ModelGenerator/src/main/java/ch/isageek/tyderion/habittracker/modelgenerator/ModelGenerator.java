@@ -9,7 +9,7 @@ import de.greenrobot.daogenerator.ToMany;
 
 public class ModelGenerator {
     public static void main(String args[]) throws Exception {
-        Schema schema = new Schema(3, "ch.isageek.tyderion.habittracker.model");
+        Schema schema = new Schema(4, "ch.isageek.tyderion.habittracker.model");
         schema.enableKeepSectionsByDefault();
 
 
@@ -20,12 +20,12 @@ public class ModelGenerator {
         habit.addBooleanProperty("isPositive");
         habit.addStringProperty("description");
 
-        Entity occurence = schema.addEntity("Occurence");
-        occurence.addIdProperty();
-        Property dateProperty = occurence.addDateProperty("date").getProperty();
-        Property habitID = occurence.addLongProperty("habitID").getProperty();
-        occurence.addToOne(habit, habitID);
-        ToMany occurencesToMany = habit.addToMany(occurence, habitID);
+        Entity occurrence = schema.addEntity("Occurrence");
+        occurrence.addIdProperty();
+        Property dateProperty = occurrence.addDateProperty("date").getProperty();
+        Property habitID = occurrence.addLongProperty("habitID").getProperty();
+        occurrence.addToOne(habit, habitID);
+        ToMany occurencesToMany = habit.addToMany(occurrence, habitID);
         occurencesToMany.orderDesc(dateProperty);
 //        occurence.addToMany(habit, habitID);
 

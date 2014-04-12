@@ -2,7 +2,6 @@ package ch.isageek.tyderion.habittracker.database;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -12,9 +11,7 @@ import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.HabitDao;
-import ch.isageek.tyderion.habittracker.model.Occurence;
-import de.greenrobot.dao.AbstractDao;
-import retrofit.Callback;
+import ch.isageek.tyderion.habittracker.model.Occurrence;
 
 /**
  * Created by Archie on 11.04.2014.
@@ -34,7 +31,7 @@ public class Database {
         new HabitLoader(context, cb).execute(id);
     }
 
-    public static void asyncOccurrences(Context context, Long habiId, DBCallback<List<Occurence>> cb) {
+    public static void asyncOccurrences(Context context, Long habiId, DBCallback<List<Occurrence>> cb) {
         new OccurenceLoader(context, cb).execute(habiId);
     }
 
@@ -45,12 +42,12 @@ public class Database {
 
 
 
-    private static class OccurenceLoader extends AsyncTask<Long,Void,List<Occurence>> {
-        private DBCallback<List<Occurence>> callback;
+    private static class OccurenceLoader extends AsyncTask<Long,Void,List<Occurrence>> {
+        private DBCallback<List<Occurrence>> callback;
         private Context context;
         private HabitDao dao;
 
-        public OccurenceLoader(Context context, DBCallback<List<Occurence>> callback) {
+        public OccurenceLoader(Context context, DBCallback<List<Occurrence>> callback) {
             this.context = context;
             this.callback = callback;
         }
@@ -62,18 +59,18 @@ public class Database {
         }
 
         @Override
-        protected List<Occurence> doInBackground(Long... longs) {
+        protected List<Occurrence> doInBackground(Long... longs) {
             if (longs.length == 1) {
                 Habit habit = dao.load(longs[0]);
                 if (habit != null) {
-                    return habit.getOccurenceList();
+                    return habit.getOccurrenceList();
                 }
             }
-            return new ArrayList<Occurence>(0);
+            return new ArrayList<Occurrence>(0);
         }
 
         @Override
-        protected void onPostExecute(List<Occurence> occurrences) {
+        protected void onPostExecute(List<Occurrence> occurrences) {
             if (callback != null) {
                 callback.onFinish(occurrences);
             }

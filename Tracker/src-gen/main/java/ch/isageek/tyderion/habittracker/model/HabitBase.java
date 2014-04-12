@@ -33,7 +33,7 @@ abstract public class HabitBase {
     /** Used for active entity operations. */
     protected transient HabitDao myDao;
 
-    protected List<Occurence> occurenceList;
+    protected List<Occurrence> occurrenceList;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -100,20 +100,20 @@ abstract public class HabitBase {
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */
-    public synchronized List<Occurence> getOccurenceList() {
-        if (occurenceList == null) {
+    public synchronized List<Occurrence> getOccurrenceList() {
+        if (occurrenceList == null) {
             if (daoSession == null) {
                 throw new DaoException("Entity is detached from DAO context");
             }
-            OccurenceDao targetDao = daoSession.getOccurenceDao();
-            occurenceList = targetDao._queryHabit_OccurenceList(id);
+            OccurrenceDao targetDao = daoSession.getOccurrenceDao();
+            occurrenceList = targetDao._queryHabit_OccurrenceList(id);
         }
-        return occurenceList;
+        return occurrenceList;
     }
 
     /** Resets a to-many relationship, making the next get call to query for a fresh result. */
-    public synchronized void resetOccurenceList() {
-        occurenceList = null;
+    public synchronized void resetOccurrenceList() {
+        occurrenceList = null;
     }
 
     /** Convenient call for {@link AbstractDao#delete(Object)}. Entity must attached to an entity context. */
@@ -170,8 +170,8 @@ abstract public class HabitBase {
         }
 
         // relationships
-        if(other.getOccurenceList() != null) {
-            occurenceList = (other.getOccurenceList());
+        if(other.getOccurrenceList() != null) {
+            occurrenceList = (other.getOccurrenceList());
         }
     }
 

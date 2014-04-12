@@ -1,10 +1,7 @@
 package ch.isageek.tyderion.habittracker.occurrence;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +13,7 @@ import java.util.List;
 
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
-import ch.isageek.tyderion.habittracker.model.Occurence;
+import ch.isageek.tyderion.habittracker.model.Occurrence;
 
 
 /**
@@ -34,7 +31,7 @@ public class OccurrencesFragment extends Fragment {
     private TextView count;
     private TextView last;
 
-    private List<Occurence> occurrenceList;
+    private List<Occurrence> occurrenceList;
 
     /**
      * Use this factory method to create a new instance of
@@ -64,16 +61,16 @@ public class OccurrencesFragment extends Fragment {
     }
 
     private void loadOccurrences() {
-        Database.asyncOccurrences(getActivity(), mHabitID, new Database.DBCallback<List<Occurence>>() {
+        Database.asyncOccurrences(getActivity(), mHabitID, new Database.DBCallback<List<Occurrence>>() {
             @Override
-            public void onFinish(List<Occurence> argument) {
+            public void onFinish(List<Occurrence> argument) {
                 occurrenceList = argument;
                 updateView();
             }
         });
     }
 
-    public List<Occurence> getOccerrences() {
+    public List<Occurrence> getOccerrences() {
         return this.occurrenceList;
     }
     public void setHabitId(Long habitID) {
