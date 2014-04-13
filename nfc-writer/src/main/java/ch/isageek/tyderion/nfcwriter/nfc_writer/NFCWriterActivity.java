@@ -1,25 +1,14 @@
 package ch.isageek.tyderion.nfcwriter.nfc_writer;
 
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.Ndef;
-import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /**
  * Most of this code is taken from:
@@ -29,9 +18,20 @@ public class NFCWriterActivity extends Activity {
     private NfcAdapter mNfcAdapter;
     private static NFCWriter writer;
 
+    /**
+     * Dedicated helper to write protected NFC Records.
+     * @param context the current context (used to launch intent)
+     * @param records the records to write.
+     */
     public static void writeProtectedRecords(Context context, NdefRecord... records) {
         writeRecords(context, true, records);
     }
+
+    /**
+     * Dedicated helper to write NFC Records
+     * @param context the current context (used to launch intent)
+     * @param records the records to write.
+     */
     public static void writeRecords(Context context, NdefRecord... records) {
         writeRecords(context, false, records);
     }

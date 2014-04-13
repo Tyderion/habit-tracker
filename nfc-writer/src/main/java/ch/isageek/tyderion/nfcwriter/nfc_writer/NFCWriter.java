@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
@@ -14,11 +15,15 @@ import android.util.Log;
 import java.io.IOException;
 
 /**
- * Most of this code is taken from:
+ * Most of this code is taken from this tutorial and changed to suit my needs:
  * http://tapintonfc.blogspot.ch/2012/07/the-above-footage-from-our-nfc-workshop.html
+ *
  */
 public class NFCWriter {
 
+    /**
+     * The callback which is called when the tag is written successfully.
+     */
     public OnTagWrittenCallback onTagWritten;
 
     private Notifier notifier;
@@ -28,6 +33,25 @@ public class NFCWriter {
     private PendingIntent pendingIntent;
     private IntentFilter[] filters;
 
+    /**
+     * Dedicated helper to write protected NFC Records.
+     * @param context the current context (used to launch intent)
+     * @param records the records to write.
+     */
+    public static void writeProtectedRecords(Context context, NdefRecord... records) {
+        NFCWriterActivity.writeProtectedRecords(context, records);
+    }
+
+    /**
+     * Dedicated helper to write NFC Records
+     * @param context the current context (used to launch intent)
+     * @param records the records to write.
+     */
+    public static void writeRecords(Context context, NdefRecord... records) {
+        NFCWriterActivity.writeRecords(context, records);
+    }
+
+
     public interface OnTagWrittenCallback {
         public void tagWritten();
     }
@@ -35,11 +59,22 @@ public class NFCWriter {
         public void notifiy(String msg);
     }
 
+    /**
+     * Primary constructor of the NFCWriter. You have to call configure before using it.
+     * @param writeProtect true if the written NFC-Tag should be protected
+     * @param message the NDefMessage to write
+     */
     public NFCWriter(boolean writeProtect, NdefMessage message) {
         this.writeProtect = writeProtect;
         this.tagToWrite = message;
     }
 
+
+    /**
+     * Configures the NFC writer.
+     * @param context The context in which the NFC Writer gets the strings
+     * @param notifier This callback gets used to notify the user of errors/success
+     */
     public void configure(Context context, Notifier notifier) {
         this.context = context;
         this.notifier = notifier;
@@ -54,14 +89,26 @@ public class NFCWriter {
         return new IntentFilter[]{discovery};
     }
 
+    /**
+     * PendingIntent for the activity to use
+     * @return the pending NFC-Intent
+     */
     public PendingIntent getPendingIntent() {
         return pendingIntent;
     }
 
+    /**
+     * The intent filters for the activity to filter for
+     * @return the array of intent filters
+     */
     public IntentFilter[] getIntentFilters() {
         return filters;
     }
 
+    /**
+     * Handles the intent which gets filtered by the intentfilters and the pending intent.
+     * @param intent
+     */
     public void handleIntent(Intent intent) {
         if (context == null || notifier == null) {
             Log.e("NFCWriter", "Please configure NFCWriter before use");
