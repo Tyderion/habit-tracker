@@ -42,11 +42,6 @@
              <data android:mimeType="application/ch.isageek.tyderion.habittracker.occurrence.add" />
              </intent-filter>
         </activity>
-        <activity
-            android:name="ch.isageek.tyderion.habittracker.occurrence.AddOccurrenceTag"
-            android:launchMode="singleTop"
-            android:label="@string/title_activity_add_occurrence_tag" >
-        </activity>
     </application>
 
     <uses-permission android:name="android.permission.NFC" />

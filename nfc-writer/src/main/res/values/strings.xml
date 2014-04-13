@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NFCWriter</string>
+    <string name="no_records_to_write">No records to write. Please start Activity with NFCWriterActivity.writeRecords</string>
+    <string name="tag_not_writable">This tag is not writable</string>
+    <string name="tag_type_not_supported">This tag type is not supported</string>
+    <string name="tag_read_only">Tag is read-only</string>
+    <string name="tag_capacity_too_small">Tag capacity is %1$d bytes but messages is %2$d bytes.</string>
+    <string name="tag_write_success">Wrote message to pre-formatted tag.</string>
+    <string name="tag_format_and_write_success">Formatted tag and wrote message</string>
+    <string name="tag_format_fail">Failed to format tag.</string>
+    <string name="tag_no_ndef">Tag doesn\'t support NDEF.</string>
+    <string name="tag_write_failed">Failed to write tag</string>
+    <string name="tag_read_failed">Failed to read tag</string>
+    <string name="enable_nfc">Please enable nfc</string>
+    <string name="no_nfc_found">Sorry, No NFC Adapter found.</string>
+    <string name="tag_success">Success: %1$s</string>
+    <string name="tag_failure">Failure: %1$s</string>
+    <string name="move_phone_to_tag">Please move the phone to the tag you want to write</string>
+</resources>

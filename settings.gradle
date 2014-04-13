@@ -1,1 +1,1 @@
-include ':Tracker', ':ModelGenerator'
+include ':Tracker', ':ModelGenerator', ':nfc-writer', 'nfc-writer'
