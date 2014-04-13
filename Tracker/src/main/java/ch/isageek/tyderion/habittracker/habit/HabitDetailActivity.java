@@ -22,6 +22,7 @@ import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.Occurrence;
+import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCRecordHelper;
 import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriter;
 import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity;
 
@@ -173,9 +174,7 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
 
     public void writeTag(View view) {
         if (this.habit != null) {
-            NdefRecord mimeRecord = NdefRecord.createMime(getString(R.string.mimeTypeNdef),
-                    this.habit.getUuid().getBytes(Charset.forName("US-ASCII")));
-            NFCWriter.writeRecords(this, mimeRecord);
+            NFCWriter.writeRecords(this, NFCRecordHelper.createMime(getString(R.string.mimeTypeNdef), habit.getUuid()));
         } else {
             Toast.makeText(this, getString(R.string.not_valid_habit), Toast.LENGTH_SHORT).show();
         }
