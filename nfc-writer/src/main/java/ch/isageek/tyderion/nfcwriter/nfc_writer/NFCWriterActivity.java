@@ -19,7 +19,7 @@ public class NFCWriterActivity extends Activity {
     private static NFCWriter writer;
 
     /**
-     * Dedicated helper to write protected NFC Records.
+     * Simple way to write protected NFC Records
      * @param context the current context (used to launch intent)
      * @param records the records to write.
      */
@@ -28,7 +28,7 @@ public class NFCWriterActivity extends Activity {
     }
 
     /**
-     * Dedicated helper to write NFC Records
+     * Simple way to write NFC Records
      * @param context the current context (used to launch intent)
      * @param records the records to write.
      */

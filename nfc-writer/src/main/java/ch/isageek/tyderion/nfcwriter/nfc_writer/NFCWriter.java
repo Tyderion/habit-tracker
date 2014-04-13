@@ -34,7 +34,7 @@ public class NFCWriter {
     private IntentFilter[] filters;
 
     /**
-     * Dedicated helper to write protected NFC Records.
+     * Simple way to write protected NFC Records
      * @param context the current context (used to launch intent)
      * @param records the records to write.
      */
@@ -43,7 +43,7 @@ public class NFCWriter {
     }
 
     /**
-     * Dedicated helper to write NFC Records
+     * Simple way to write NFC Records
      * @param context the current context (used to launch intent)
      * @param records the records to write.
      */
