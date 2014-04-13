@@ -20,32 +20,30 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-
+/**
+ * Most of this code is taken from:
+ * http://tapintonfc.blogspot.ch/2012/07/the-above-footage-from-our-nfc-workshop.html
+ */
 public class NFCWriterActivity extends Activity {
-
-
-    public static final String ARG_HABIT_ID = "habit_id";
-
-    private static final String TAG = "NFCWriteTag";
     private NfcAdapter mNfcAdapter;
     private IntentFilter[] mWriteTagFilters;
     private PendingIntent mNfcPendingIntent;
-    private boolean silent = false;
-    private boolean writeProtect = false;
     private Context context;
 
-    private Long habitID = 1L;
-
-
-    private TextView view;
-
-
     private static NdefRecord[] recordsToWrite;
+    private static boolean writeProtect = false;
 
+    public static void writeProtectedRecords(Context context, NdefRecord... records) {
+        writeRecords(context, true, records);
+    }
     public static void writeRecords(Context context, NdefRecord... records) {
+        writeRecords(context, false, records);
+    }
+
+    private static void writeRecords(Context context, boolean writeProtection,  NdefRecord... records) {
         recordsToWrite = records;
-        Intent startme = new Intent(context, NFCWriterActivity.class);
-        context.startActivity(startme);
+        writeProtect = writeProtection;
+        context.startActivity(new Intent(context, NFCWriterActivity.class));
     }
 
     @Override
@@ -53,7 +51,7 @@ public class NFCWriterActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         if (recordsToWrite == null || recordsToWrite.length == 0) {
-            Toast.makeText(this, "No records to write. Please start Activity with NFCWriterActivity.writeRecords", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_records_to_write), Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -64,11 +62,7 @@ public class NFCWriterActivity extends Activity {
                 getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP), 0);
         IntentFilter discovery = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-        IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        IntentFilter techDetected = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
-        // Intent filters for writing to a tag
         mWriteTagFilters = new IntentFilter[]{discovery};
-
     }
 
 
@@ -92,34 +86,32 @@ public class NFCWriterActivity extends Activity {
                     String message = (wr.getStatus() == 1 ? "Success: " : "Failed: ") + wr.getMessage();
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context, "This tag is not writable", Toast.LENGTH_SHORT).show();
-//                    Sounds.PlayFailed(context, silent);
+                    Toast.makeText(context, getString(R.string.tag_not_writable), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(context, "This tag type is not supported", Toast.LENGTH_SHORT).show();
-//                Sounds.PlayFailed(context, silent);
+                Toast.makeText(context, getString(R.string.tag_type_not_supported), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     public WriteResponse writeTag(NdefMessage message, Tag tag) {
         int size = message.toByteArray().length;
-        String mess = "";
+        String mess;
         try {
             Ndef ndef = Ndef.get(tag);
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                    return new WriteResponse(0, "Tag is read-only");
+                    return new WriteResponse(0, getString(R.string.tag_read_only));
                 }
                 if (ndef.getMaxSize() < size) {
-                    mess = "Tag capacity is " + ndef.getMaxSize() + " bytes, message is " + size
-                            + " bytes.";
+                    mess = getString(R.string.tag_capacity_too_small);
+                    mess = String.format(mess, ndef.getMaxSize(), size);
                     return new WriteResponse(0, mess);
                 }
                 ndef.writeNdefMessage(message);
                 if (writeProtect) ndef.makeReadOnly();
-                mess = "Wrote message to pre-formatted tag.";
+                mess = getString(R.string.tag_write_success);
                 return new WriteResponse(1, mess);
             } else {
                 NdefFormatable format = NdefFormatable.get(tag);
@@ -127,19 +119,19 @@ public class NFCWriterActivity extends Activity {
                     try {
                         format.connect();
                         format.format(message);
-                        mess = "Formatted tag and wrote message";
+                        mess = getString(R.string.tag_format_and_write_success);
                         return new WriteResponse(1, mess);
                     } catch (IOException e) {
-                        mess = "Failed to format tag.";
+                        mess = getString(R.string.tag_format_fail);
                         return new WriteResponse(0, mess);
                     }
                 } else {
-                    mess = "Tag doesn't support NDEF.";
+                    mess = getString(R.string.tag_no_ndef);
                     return new WriteResponse(0, mess);
                 }
             }
         } catch (Exception e) {
-            mess = "Failed to write tag";
+            mess = getString(R.string.tag_write_failed);
             return new WriteResponse(0, mess);
         }
     }
@@ -184,7 +176,7 @@ public class NFCWriterActivity extends Activity {
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                    Toast.makeText(context, "Tag is read-only.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.tag_read_only), Toast.LENGTH_SHORT).show();
                     ndef.close();
                     return false;
                 }
@@ -192,7 +184,7 @@ public class NFCWriterActivity extends Activity {
                 return true;
             }
         } catch (Exception e) {
-            Toast.makeText(context, "Failed to read tag", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getString(R.string.tag_read_failed), Toast.LENGTH_SHORT).show();
         }
         return false;
     }
@@ -206,32 +198,12 @@ public class NFCWriterActivity extends Activity {
         super.onResume();
         if (mNfcAdapter != null) {
             if (!mNfcAdapter.isEnabled()) {
-                Toast.makeText(context, "Please enable nfc", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.enable_nfc), Toast.LENGTH_SHORT).show();
             } else {
                 mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
             }
         } else {
-            Toast.makeText(context, "Sorry, No NFC Adapter found.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, getString(R.string.no_nfc_found), Toast.LENGTH_SHORT).show();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.nfcwriter, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }

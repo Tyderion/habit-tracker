@@ -1,6 +1,5 @@
 package ch.isageek.tyderion.habittracker.modelgenerator;
 
-import de.greenrobot.daogenerator.Annotation;
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
 import de.greenrobot.daogenerator.Property;
