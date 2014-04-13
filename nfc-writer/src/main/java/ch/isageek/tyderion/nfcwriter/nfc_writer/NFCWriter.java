@@ -9,6 +9,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -19,9 +20,10 @@ import java.io.IOException;
  */
 public class NFCWriter {
 
-
-    private Context context;
     public OnTagWrittenCallback onTagWritten;
+
+    private Notifier notifier;
+    private Context context;
     private boolean writeProtect;
     private NdefMessage tagToWrite;
     private PendingIntent pendingIntent;
@@ -30,14 +32,18 @@ public class NFCWriter {
     public interface OnTagWrittenCallback {
         public void tagWritten();
     }
+    public interface Notifier {
+        public void notifiy(String msg);
+    }
 
     public NFCWriter(boolean writeProtect, NdefMessage message) {
         this.writeProtect = writeProtect;
         this.tagToWrite = message;
     }
 
-    public void setContext(Context context) {
+    public void configure(Context context, Notifier notifier) {
         this.context = context;
+        this.notifier = notifier;
         this.filters = this.createIntentFilters();
     }
 
@@ -58,6 +64,10 @@ public class NFCWriter {
     }
 
     public void handleIntent(Intent intent) {
+        if (context == null || notifier == null) {
+            Log.e("NFCWriter", "Please configure NFCWriter before use");
+            return;
+        }
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
             // validate that this tag can be written
             Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
@@ -81,7 +91,7 @@ public class NFCWriter {
         }
     }
 
-    public static boolean supportedTechs(String[] techs) {
+    private static boolean supportedTechs(String[] techs) {
         boolean ultralight = false;
         boolean nfcA = false;
         boolean ndef = false;
@@ -97,7 +107,7 @@ public class NFCWriter {
         return ultralight && nfcA && ndef;
     }
 
-    public WriteResponse writeTag(NdefMessage message, Tag tag) {
+    private WriteResponse writeTag(NdefMessage message, Tag tag) {
         int size = message.toByteArray().length;
         String mess;
         try {
@@ -159,10 +169,10 @@ public class NFCWriter {
     }
 
     private void showToast(String msg) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        notifier.notifiy(msg);
     }
 
-    public static class WriteResponse {
+    private static class WriteResponse {
         int status;
         String message;
 

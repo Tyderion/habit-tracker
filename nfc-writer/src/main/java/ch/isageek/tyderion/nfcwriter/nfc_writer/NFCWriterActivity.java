@@ -55,7 +55,12 @@ public class NFCWriterActivity extends Activity {
             notifyNoRecords(this);
             finish();
         }
-        writer.setContext(this);
+        writer.configure(this,new NFCWriter.Notifier() {
+            @Override
+            public void notifiy(String msg) {
+                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+            }
+        });
         writer.onTagWritten = new NFCWriter.OnTagWrittenCallback() {
             @Override
             public void tagWritten() {
