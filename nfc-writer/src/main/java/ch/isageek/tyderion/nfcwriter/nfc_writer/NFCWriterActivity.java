@@ -40,7 +40,7 @@ public class NFCWriterActivity extends Activity {
         if (records.length == 0) {
             notifyNoRecords(context);
         }
-        writer = new NFCWriter(context, writeProtection, new NdefMessage(records));
+        writer = new NFCWriter(writeProtection, new NdefMessage(records));
         context.startActivity(new Intent(context, NFCWriterActivity.class));
     }
 
@@ -55,6 +55,13 @@ public class NFCWriterActivity extends Activity {
             notifyNoRecords(this);
             finish();
         }
+        writer.setContext(this);
+        writer.onTagWritten = new NFCWriter.OnTagWrittenCallback() {
+            @Override
+            public void tagWritten() {
+                finish();
+            }
+        };
         setContentView(R.layout.activity_nfcwriter);
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
     }

@@ -21,15 +21,23 @@ public class NFCWriter {
 
 
     private Context context;
+    public OnTagWrittenCallback onTagWritten;
     private boolean writeProtect;
     private NdefMessage tagToWrite;
     private PendingIntent pendingIntent;
     private IntentFilter[] filters;
 
-    public NFCWriter(Context context, boolean writeProtect, NdefMessage message) {
-        this.context = context;
+    public interface OnTagWrittenCallback {
+        public void tagWritten();
+    }
+
+    public NFCWriter(boolean writeProtect, NdefMessage message) {
         this.writeProtect = writeProtect;
         this.tagToWrite = message;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
         this.filters = this.createIntentFilters();
     }
 
@@ -66,6 +74,9 @@ public class NFCWriter {
                 }
             } else {
                 showToast(context.getString(R.string.tag_type_not_supported));
+            }
+            if (this.onTagWritten != null) {
+                this.onTagWritten.tagWritten();
             }
         }
     }
