@@ -10,7 +10,6 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -78,12 +77,12 @@ public class NFCWriter {
                     NFCWriter.WriteResponse wr = writeTag(tagToWrite, detectedTag);
                     String message = context.getString(wr.getStatus() == 1 ? R.string.tag_success :  R.string.tag_failure );
                     message = String.format(message,  wr.getMessage());
-                    showToast(message);
+                    notifier.notifiy(message);
                 } else {
-                    showToast(context.getString(R.string.tag_not_writable));
+                    notifier.notifiy(context.getString(R.string.tag_not_writable));
                 }
             } else {
-                showToast(context.getString(R.string.tag_type_not_supported));
+                notifier.notifiy(context.getString(R.string.tag_type_not_supported));
             }
             if (this.onTagWritten != null) {
                 this.onTagWritten.tagWritten();
@@ -155,7 +154,7 @@ public class NFCWriter {
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                   showToast(context.getString(R.string.tag_read_only));
+                    notifier.notifiy(context.getString(R.string.tag_read_only));
                     ndef.close();
                     return false;
                 }
@@ -163,13 +162,9 @@ public class NFCWriter {
                 return true;
             }
         } catch (Exception e) {
-            showToast(context.getString(R.string.tag_read_failed));
+            notifier.notifiy(context.getString(R.string.tag_read_failed));
         }
         return false;
-    }
-
-    private void showToast(String msg) {
-        notifier.notifiy(msg);
     }
 
     private static class WriteResponse {
