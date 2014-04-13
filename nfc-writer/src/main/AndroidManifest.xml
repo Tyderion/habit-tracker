@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ch.isageek.tyderion.nfcwriter.nfc_writer" >
+    package="com.github.tyderion.nfcwriter" >
     <application
         android:label="@string/app_name" >
         <activity
-            android:name="ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity"
+            android:name="com.github.tyderion.nfcwriter.NFCWriterActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.Transparent">
         </activity>

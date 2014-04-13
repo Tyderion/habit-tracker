@@ -1,6 +1,5 @@
 package ch.isageek.tyderion.habittracker.habit;
 
-import android.nfc.NdefRecord;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextThemeWrapper;
@@ -14,7 +13,6 @@ import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
-import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -22,9 +20,8 @@ import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.Occurrence;
-import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCRecordHelper;
-import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriter;
-import ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity;
+import com.github.tyderion.nfcwriter.NFCRecordHelper;
+import  com.github.tyderion.nfcwriter.NFCWriter;
 
 
 /**
