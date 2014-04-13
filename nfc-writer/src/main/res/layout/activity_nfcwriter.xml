@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity">
-
-
     <TextView
-        android:background="@android:color/holo_red_dark"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="@dimen/layout_width"
-        android:layout_height="@dimen/layout_height"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/layout_bg"
+        android:padding="@dimen/padding"
+        android:text="@string/move_phone_to_tag"
         android:layout_gravity="center"/>
-
-
 </FrameLayout>

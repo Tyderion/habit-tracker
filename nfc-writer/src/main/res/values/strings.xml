@@ -16,4 +16,5 @@
     <string name="no_nfc_found">Sorry, No NFC Adapter found.</string>
     <string name="tag_success">Success: %1$s</string>
     <string name="tag_failure">Failure: %1$s</string>
+    <string name="move_phone_to_tag">Please move the phone to the tag you want to write</string>
 </resources>
