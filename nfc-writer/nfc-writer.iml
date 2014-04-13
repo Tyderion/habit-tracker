@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.path="C:\Users\Archie\AndroidStudioProjects\HabitTracker\Tracker" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="HabitTracker" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+<module external.linked.project.path="G:\Documents\Programming\android Studio\NFCWriterSample\nfc-writer" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" external.system.module.group="NFCWriterSample" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
-        <option name="GRADLE_PROJECT_PATH" value=":Tracker" />
+        <option name="GRADLE_PROJECT_PATH" value=":nfc-writer" />
       </configuration>
     </facet>
     <facet type="android" name="Android">
@@ -18,6 +18,7 @@
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
         <option name="RES_FOLDERS_RELATIVE_PATH" value="file://$MODULE_DIR$/src/main/res" />
         <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/src/main/assets" />
+        <option name="LIBRARY_PROJECT" value="true" />
       </configuration>
     </facet>
   </component>
@@ -47,7 +48,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/aidl" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/assets" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src-gen/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
@@ -71,11 +71,6 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
-    <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
-    <orderEntry type="library" exported="" name="library-0.0.1" level="project" />
-    <orderEntry type="library" exported="" name="greendao" level="project" />
-    <orderEntry type="module" module-name="nfc-writer" exported="" />
   </component>
 </module>
 
