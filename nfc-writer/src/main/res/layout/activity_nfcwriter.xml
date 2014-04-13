@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity">
+    tools:context="ch.isageek.tyderion.nfcwriter.nfc_writer.NFCWriterActivity"
+    android:onClick="closeDialog">
     <TextView
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_width="@dimen/layout_width"

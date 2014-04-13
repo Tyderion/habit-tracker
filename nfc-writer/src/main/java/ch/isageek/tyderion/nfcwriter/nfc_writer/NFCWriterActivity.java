@@ -14,6 +14,7 @@ import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -135,6 +136,10 @@ public class NFCWriterActivity extends Activity {
             mess = getString(R.string.tag_write_failed);
             return new WriteResponse(0, mess);
         }
+    }
+
+    public void closeDialog(View view) {
+        finish();
     }
 
     private class WriteResponse {
