@@ -27,12 +27,7 @@ import java.nio.charset.Charset;
  */
 public class NFCWriterActivity extends Activity {
     private NfcAdapter mNfcAdapter;
-    private IntentFilter[] mWriteTagFilters;
-    private PendingIntent mNfcPendingIntent;
-    private Context context;
-
-    private static NdefRecord[] recordsToWrite;
-    private static boolean writeProtect = false;
+    private static NFCWriter writer;
 
     public static void writeProtectedRecords(Context context, NdefRecord... records) {
         writeRecords(context, true, records);
@@ -42,30 +37,27 @@ public class NFCWriterActivity extends Activity {
     }
 
     private static void writeRecords(Context context, boolean writeProtection,  NdefRecord... records) {
-        recordsToWrite = records;
-        writeProtect = writeProtection;
+        if (records.length == 0) {
+            notifyNoRecords(context);
+        }
+        writer = new NFCWriter(context, writeProtection, new NdefMessage(records));
         context.startActivity(new Intent(context, NFCWriterActivity.class));
+    }
+
+    private static void notifyNoRecords(Context context) {
+        Toast.makeText(context, context.getString(R.string.no_records_to_write), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (recordsToWrite == null || recordsToWrite.length == 0) {
-            Toast.makeText(this, getString(R.string.no_records_to_write), Toast.LENGTH_SHORT).show();
+        if (writer == null) {
+            notifyNoRecords(this);
             finish();
         }
-
         setContentView(R.layout.activity_nfcwriter);
-        context = getApplicationContext();
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-                | Intent.FLAG_ACTIVITY_CLEAR_TOP), 0);
-        IntentFilter discovery = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-        mWriteTagFilters = new IntentFilter[]{discovery};
     }
-
 
     @Override
     protected void onPause() {
@@ -76,127 +68,7 @@ public class NFCWriterActivity extends Activity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())) {
-            // validate that this tag can be written
-            Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            if (supportedTechs(detectedTag.getTechList())) {
-                // check if tag is writable (to the extent that we can
-                if (writableTag(detectedTag)) {
-                    //writeTag here
-                    WriteResponse wr = writeTag(getTagAsNdef(), detectedTag);
-                    String message = getString(wr.getStatus() == 1 ? R.string.tag_success :  R.string.tag_failure );
-                    message = String.format(message,  wr.getMessage());
-                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(context, getString(R.string.tag_not_writable), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(context, getString(R.string.tag_type_not_supported), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public WriteResponse writeTag(NdefMessage message, Tag tag) {
-        int size = message.toByteArray().length;
-        String mess;
-        try {
-            Ndef ndef = Ndef.get(tag);
-            if (ndef != null) {
-                ndef.connect();
-                if (!ndef.isWritable()) {
-                    return new WriteResponse(0, getString(R.string.tag_read_only));
-                }
-                if (ndef.getMaxSize() < size) {
-                    mess = getString(R.string.tag_capacity_too_small);
-                    mess = String.format(mess, ndef.getMaxSize(), size);
-                    return new WriteResponse(0, mess);
-                }
-                ndef.writeNdefMessage(message);
-                if (writeProtect) ndef.makeReadOnly();
-                mess = getString(R.string.tag_write_success);
-                return new WriteResponse(1, mess);
-            } else {
-                NdefFormatable format = NdefFormatable.get(tag);
-                if (format != null) {
-                    try {
-                        format.connect();
-                        format.format(message);
-                        mess = getString(R.string.tag_format_and_write_success);
-                        return new WriteResponse(1, mess);
-                    } catch (IOException e) {
-                        mess = getString(R.string.tag_format_fail);
-                        return new WriteResponse(0, mess);
-                    }
-                } else {
-                    mess = getString(R.string.tag_no_ndef);
-                    return new WriteResponse(0, mess);
-                }
-            }
-        } catch (Exception e) {
-            mess = getString(R.string.tag_write_failed);
-            return new WriteResponse(0, mess);
-        }
-    }
-
-    public void closeDialog(View view) {
-        finish();
-    }
-
-    private class WriteResponse {
-        int status;
-        String message;
-
-        WriteResponse(int Status, String Message) {
-            this.status = Status;
-            this.message = Message;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-    }
-
-    public static boolean supportedTechs(String[] techs) {
-        boolean ultralight = false;
-        boolean nfcA = false;
-        boolean ndef = false;
-        for (String tech : techs) {
-            if (tech.equals("android.nfc.tech.MifareUltralight")) {
-                ultralight = true;
-            } else if (tech.equals("android.nfc.tech.NfcA")) {
-                nfcA = true;
-            } else if (tech.equals("android.nfc.tech.Ndef") || tech.equals("android.nfc.tech.NdefFormatable")) {
-                ndef = true;
-            }
-        }
-        return ultralight && nfcA && ndef;
-    }
-
-    private boolean writableTag(Tag tag) {
-        try {
-            Ndef ndef = Ndef.get(tag);
-            if (ndef != null) {
-                ndef.connect();
-                if (!ndef.isWritable()) {
-                    Toast.makeText(context, getString(R.string.tag_read_only), Toast.LENGTH_SHORT).show();
-                    ndef.close();
-                    return false;
-                }
-                ndef.close();
-                return true;
-            }
-        } catch (Exception e) {
-            Toast.makeText(context, getString(R.string.tag_read_failed), Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
-    private NdefMessage getTagAsNdef() {
-        return new NdefMessage(recordsToWrite);
+        writer.handleIntent(intent);
     }
 
     @Override
@@ -204,12 +76,16 @@ public class NFCWriterActivity extends Activity {
         super.onResume();
         if (mNfcAdapter != null) {
             if (!mNfcAdapter.isEnabled()) {
-                Toast.makeText(context, getString(R.string.enable_nfc), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.enable_nfc), Toast.LENGTH_SHORT).show();
             } else {
-                mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
+                mNfcAdapter.enableForegroundDispatch(this, writer.getPendingIntent(), writer.getIntentFilters(), null);
             }
         } else {
-            Toast.makeText(context, getString(R.string.no_nfc_found), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_nfc_found), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void closeDialog(View view) {
+        finish();
     }
 }
