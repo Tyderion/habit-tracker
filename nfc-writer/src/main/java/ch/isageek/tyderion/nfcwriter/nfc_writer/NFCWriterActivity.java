@@ -83,7 +83,8 @@ public class NFCWriterActivity extends Activity {
                 if (writableTag(detectedTag)) {
                     //writeTag here
                     WriteResponse wr = writeTag(getTagAsNdef(), detectedTag);
-                    String message = (wr.getStatus() == 1 ? "Success: " : "Failed: ") + wr.getMessage();
+                    String message = getString(wr.getStatus() == 1 ? R.string.tag_success :  R.string.tag_failure );
+                    message = String.format(message,  wr.getMessage());
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, getString(R.string.tag_not_writable), Toast.LENGTH_SHORT).show();

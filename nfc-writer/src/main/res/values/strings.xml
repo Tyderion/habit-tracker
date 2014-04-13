@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">NFCWriter</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="no_records_to_write">No records to write. Please start Activity with NFCWriterActivity.writeRecords</string>
     <string name="tag_not_writable">This tag is not writable</string>
     <string name="tag_type_not_supported">This tag type is not supported</string>
@@ -17,5 +14,6 @@
     <string name="tag_read_failed">Failed to read tag</string>
     <string name="enable_nfc">Please enable nfc</string>
     <string name="no_nfc_found">Sorry, No NFC Adapter found.</string>
-
+    <string name="tag_success">Success: %1$s</string>
+    <string name="tag_failure">Failure: %1$s</string>
 </resources>
