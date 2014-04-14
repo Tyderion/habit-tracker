@@ -125,6 +125,7 @@ public class DataExportActivity extends Activity {
 
     @OnClick(R.id.backup_pick_file_button)
     public void pick(View view) {
+        //TODO: User cannot pick existing file.
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.setType("text/json");
         intent.addCategory(Intent.CATEGORY_OPENABLE);

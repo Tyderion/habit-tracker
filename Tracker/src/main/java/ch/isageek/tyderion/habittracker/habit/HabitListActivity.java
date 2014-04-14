@@ -76,8 +76,6 @@ public class HabitListActivity extends FragmentActivity
 
             getFragment().setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
 
