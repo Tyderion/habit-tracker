@@ -79,8 +79,7 @@ public class DataExportActivity extends Activity {
         context = getApplicationContext();
     }
 
-
-    private class DateSerializer implements JsonSerializer<Date>, JsonDeserializer<Date>  {
+    private static class DateSerializer implements JsonSerializer<Date>, JsonDeserializer<Date>  {
         private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZZZ");
         @Override
         public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -88,7 +87,7 @@ public class DataExportActivity extends Activity {
             try {
                 date = format.parse(json.toString().replace("\"", ""));
             } catch (ParseException e) {
-                throw new JsonParseException("BLABLABLABLA");
+                throw new JsonParseException(e);
             }
             return date;
         }
@@ -98,7 +97,6 @@ public class DataExportActivity extends Activity {
             return new JsonPrimitive(format.format(src));
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,20 +160,17 @@ public class DataExportActivity extends Activity {
                     } catch (IOException e) {
                         Log.d("TRACKER_BACKUP_IMPORT", e.toString());
                         e.printStackTrace();
-
                         error = true;
                     }
                     catch (JsonSyntaxException e) {
                         error = true;
                         Log.d("TRACKER_BACKUP_IMPORT", e.toString());
                         e.printStackTrace();
-
                     }
                     catch (JsonIOException e) {
                         error = true;
                         Log.d("TRACKER_BACKUP_IMPORT", e.toString());
                         e.printStackTrace();
-
                     }
                     if (!error) {
                         DaoSession session = Database.getDaoSession(context);
@@ -199,7 +194,6 @@ public class DataExportActivity extends Activity {
             }.execute();
         }
     }
-
 
     @OnClick(R.id.backup_export_button)
     public void exportData(View view) {
@@ -254,6 +248,13 @@ public class DataExportActivity extends Activity {
 
 
     private static class HabitBackupObject {
+        public java.util.Date dateCreated;
+        public String name;
+        public Boolean isPositive;
+        public String description;
+        public String uuid;
+        public List<Date> occurrences;
+
         public HabitBackupObject(Habit habit) {
             this.dateCreated = habit.getDateCreated();
             this.name = habit.getName();
@@ -268,13 +269,6 @@ public class DataExportActivity extends Activity {
             }
         }
 
-        public java.util.Date dateCreated;
-        public String name;
-        public Boolean isPositive;
-        public String description;
-        public String uuid;
-        public List<Date> occurrences;
-
         public void insert(HabitDao habitdao, OccurrenceDao occurrenceDao) {
             Habit h  = new Habit(null, dateCreated, name, isPositive, description, uuid);
             try {
@@ -286,23 +280,16 @@ public class DataExportActivity extends Activity {
             } catch (SQLiteConstraintException e) {
                 Log.d("BACKUP_IMPORT_INSERT_HABIT", "Habit already exists");
             }
-
         }
-
-
     }
 
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-
-
         Activity activity;
-
         public PlaceholderFragment() {
         }
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
