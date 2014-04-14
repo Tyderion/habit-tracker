@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.Date;
 
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.DataExportActivity;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
@@ -123,6 +124,9 @@ public class HabitListActivity extends FragmentActivity
             case R.id.action_habit_add:
                 this.showEditHabit();
                 Toast.makeText(this, "Add Habit", Toast.LENGTH_SHORT).show();
+            case R.id.action_export_data:
+                Toast.makeText(this, "Export data...", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, DataExportActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
         }

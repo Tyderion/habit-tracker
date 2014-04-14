@@ -1,6 +1,7 @@
 package ch.isageek.tyderion.habittracker.database;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ch.isageek.tyderion.habittracker.habit.HabitListActivity;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
@@ -47,6 +49,12 @@ public class Database {
             return occurrence;
         }
         return null;
+    }
+
+    public static void export(Context context) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("text/json");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
     }
 
 

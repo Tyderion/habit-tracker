@@ -35,12 +35,17 @@
         <activity
             android:name="ch.isageek.tyderion.habittracker.occurrence.QuickAddOccurrenceActivity"
             android:label="@string/title_activity_quick_add_occurrence" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
-             <intent-filter>
-             <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
-             <category android:name="android.intent.category.DEFAULT"/>
-             <data android:mimeType="application/ch.isageek.tyderion.habittracker.occurrence.add" />
-             </intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/ch.isageek.tyderion.habittracker.occurrence.add" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.database.DataExportActivity"
+            android:label="@string/title_activity_data_export" >
         </activity>
     </application>
 
