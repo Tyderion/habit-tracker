@@ -2,17 +2,13 @@ package ch.isageek.tyderion.habittracker.database;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.backup.BackupDataOutput;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetFileDescriptor;
 import android.database.sqlite.SQLiteConstraintException;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -35,16 +30,12 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSyntaxException;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.reflect.Type;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -52,10 +43,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static butterknife.ButterKnife.findById;
-
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.OnClick;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
 import ch.isageek.tyderion.habittracker.model.Habit;
@@ -69,11 +58,8 @@ public class DataExportActivity extends Activity {
     static final int REQUEST_PICK_FILE = 1;
 
     private PlaceholderFragment placeholderFragment;
-//    private ParcelFileDescriptor fileDescriptor;
     private Uri fileUri;
-
     private Gson gson;
-
     private Context context;
 
     @Override
@@ -81,13 +67,13 @@ public class DataExportActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_export);
         this.placeholderFragment = new PlaceholderFragment();
+        this.placeholderFragment.activity = this;
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.data_export_container, placeholderFragment)
                     .commit();
         }
         gson = new GsonBuilder()
-//                .setDateFormat("yyyy-MM-dd'T'HH:mmZZZ")
                 .registerTypeAdapter(Date.class, new DateSerializer())
                 .create();
         context = getApplicationContext();
@@ -116,17 +102,12 @@ public class DataExportActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.data_export, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
@@ -134,6 +115,17 @@ public class DataExportActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_PICK_FILE && resultCode == RESULT_OK) {
+            Uri backupFileUri  = data.getData();
+            Toast.makeText(this, backupFileUri.toString(), Toast.LENGTH_SHORT).show();
+            fileUri = backupFileUri;
+
+        }
+    }
+
+    @OnClick(R.id.backup_pick_file_button)
     public void pick(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.setType("text/json");
@@ -141,21 +133,10 @@ public class DataExportActivity extends Activity {
         startActivityForResult(intent, REQUEST_PICK_FILE);
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_PICK_FILE && resultCode == RESULT_OK) {
-            Uri backupFileUri  = data.getData();
-            Toast.makeText(this, backupFileUri.toString(), Toast.LENGTH_SHORT).show();
-            this.fileUri = backupFileUri;
-
-        }
-    }
-
-
+    @OnClick(R.id.backup_import_button)
     public void importData(View view) {
         ParcelFileDescriptor fileDesc = null;
-        ContentResolver resolver = getContentResolver();
+        ContentResolver resolver = context.getContentResolver();
         try {
             fileDesc = resolver.openAssetFileDescriptor(fileUri, "r").getParcelFileDescriptor();
         }catch(FileNotFoundException e){
@@ -220,6 +201,7 @@ public class DataExportActivity extends Activity {
     }
 
 
+    @OnClick(R.id.backup_export_button)
     public void exportData(View view) {
         ParcelFileDescriptor fileDesc = null;
         ContentResolver resolver = getContentResolver();
@@ -269,8 +251,9 @@ public class DataExportActivity extends Activity {
         }
     }
 
-    private static class HabitBackupObject {
 
+
+    private static class HabitBackupObject {
         public HabitBackupObject(Habit habit) {
             this.dateCreated = habit.getDateCreated();
             this.name = habit.getName();
@@ -278,9 +261,9 @@ public class DataExportActivity extends Activity {
             this.description = habit.getDescription();
             this.uuid = habit.getUuid();
 
-            List<Occurrence> occurencesList =  habit.getOccurrenceList();
-            this.occurrences = new ArrayList<Date>(occurencesList.size());
-            for (Occurrence occurrence :occurencesList) {
+            List<Occurrence> occurrencesList =  habit.getOccurrenceList();
+            this.occurrences = new ArrayList<Date>(occurrencesList.size());
+            for (Occurrence occurrence :occurrencesList) {
                 occurrences.add(occurrence.getDate());
             }
         }
@@ -305,12 +288,17 @@ public class DataExportActivity extends Activity {
             }
 
         }
+
+
     }
 
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+
+
+        Activity activity;
 
         public PlaceholderFragment() {
         }
@@ -319,6 +307,7 @@ public class DataExportActivity extends Activity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_data_export, container, false);
+            ButterKnife.inject(activity, rootView);
             return rootView;
         }
     }

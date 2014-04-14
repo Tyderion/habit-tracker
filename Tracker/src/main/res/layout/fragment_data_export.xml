@@ -14,7 +14,6 @@
         android:layout_height="wrap_content"
         android:text="@string/backup_file_picker_title_string"
         android:id="@+id/backup_pick_file_button"
-        android:onClick="pick"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -23,7 +22,6 @@
         android:layout_height="wrap_content"
         android:text="@string/backup_export_button_title"
         android:id="@+id/backup_export_button"
-        android:onClick="exportData"
         android:layout_alignTop="@+id/backup_import_button"
         android:layout_alignParentEnd="true" />
 
@@ -32,7 +30,6 @@
         android:layout_height="wrap_content"
         android:text="@string/backup_import_button_title"
         android:id="@+id/backup_import_button"
-        android:onClick="importData"
         android:layout_below="@+id/backup_pick_file_button"
         android:layout_alignParentStart="true"
         android:layout_marginTop="55dp" />

@@ -123,10 +123,8 @@ public class HabitListActivity extends FragmentActivity
                 return true;
             case R.id.action_habit_add:
                 this.showEditHabit();
-                Toast.makeText(this, "Add Habit", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_export_data:
-                Toast.makeText(this, "Export data...", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, DataExportActivity.class));
                 break;
             default:
