@@ -41,9 +41,15 @@
     <string name="action_export">Export Data</string>
     <string name="title_activity_data_export">DataExportActivity</string>
     <string name="backup_file_picker_title_string">Pick Backup File</string>
-    <string name="bacakup_pick_file_button_title">Pick</string>
+    <string name="backup_pick_file_button_title">Pick</string>
     <string name="backup_button_default_location">Default</string>
     <string name="backup_export_button_title">Export to File</string>
     <string name="backup_import_button_title">Import from File</string>
+    <string name="backup_write_error">Error while writing to backup file</string>
+    <string name="backup_export_complete">Backup complete</string>
+    <string name="backup_export_start">Starting export</string>
+    <string name="backup_import_start">Starting import</string>
+    <string name="backup_import_complete">Import complete</string>
+    <string name="backup_import_error">Error while loading the data</string>
 
 </resources>

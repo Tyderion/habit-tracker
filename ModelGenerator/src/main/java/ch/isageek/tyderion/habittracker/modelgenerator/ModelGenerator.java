@@ -15,10 +15,10 @@ public class ModelGenerator {
         Entity habit = schema.addEntity("Habit");
         habit.addIdProperty();
         habit.addDateProperty("dateCreated");
-        habit.addStringProperty("name").unique();
+        habit.addStringProperty("name");
         habit.addBooleanProperty("isPositive");
         habit.addStringProperty("description");
-        habit.addStringProperty("uuid");
+        habit.addStringProperty("uuid").unique();
 
         Entity occurrence = schema.addEntity("Occurrence");
         occurrence.addIdProperty();

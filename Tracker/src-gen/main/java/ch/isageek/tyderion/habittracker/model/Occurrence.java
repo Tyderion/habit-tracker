@@ -26,6 +26,9 @@ public class Occurrence extends OccurrenceBase  {
     }
 
     // KEEP METHODS - put your custom methods here
+    public Occurrence(java.util.Date date, Long habitID) {
+        super(null, date, habitID);
+    }
 
     @Override
     public String toString() {
