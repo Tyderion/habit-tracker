@@ -132,6 +132,7 @@ public class EditHabitFragment extends Fragment {
         this.mHabit.setDescription(this.descriptionText.getText().toString());
         this.mHabit.setIsPositive(this.positiveBox.isActivated());
         Database.getDaoSession(getActivity()).getHabitDao().insertOrReplace(mHabit);
+        Database.getDevOpenHelper(getActivity()).close();
 
     }
     @Override

@@ -55,7 +55,8 @@ import ch.isageek.tyderion.habittracker.model.OccurrenceDao;
 
 public class DataExportActivity extends Activity {
 
-    static final int REQUEST_PICK_FILE = 1;
+    static final int REQUEST_PICK_IMPORT_FILE = 1;
+    static final int REQUEST_PICK_EXPORT_FILE = 2;
 
     private PlaceholderFragment placeholderFragment;
     private Uri fileUri;
@@ -115,25 +116,37 @@ public class DataExportActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_PICK_FILE && resultCode == RESULT_OK) {
+        if ((requestCode == REQUEST_PICK_IMPORT_FILE || requestCode == REQUEST_PICK_EXPORT_FILE)&& resultCode == RESULT_OK) {
             Uri backupFileUri  = data.getData();
             Toast.makeText(this, backupFileUri.toString(), Toast.LENGTH_SHORT).show();
             fileUri = backupFileUri;
-
+            if (requestCode == REQUEST_PICK_EXPORT_FILE) {
+                this.exportData();
+            } else {
+                this.importData();
+            }
         }
     }
 
-    @OnClick(R.id.backup_pick_file_button)
-    public void pick(View view) {
-        //TODO: User cannot pick existing file.
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.setType("text/json");
+    @OnClick(R.id.backup_import_button)
+    public void pickImportFile(View view) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.setType("text/plain");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        startActivityForResult(intent, REQUEST_PICK_FILE);
+        startActivityForResult(intent, REQUEST_PICK_IMPORT_FILE);
     }
 
-    @OnClick(R.id.backup_import_button)
-    public void importData(View view) {
+
+    @OnClick(R.id.backup_export_button)
+    public void pickExportFiles(View view) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("text/plain");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, REQUEST_PICK_EXPORT_FILE);
+    }
+
+
+    public void importData() {
         ParcelFileDescriptor fileDesc = null;
         ContentResolver resolver = context.getContentResolver();
         try {
@@ -180,6 +193,7 @@ public class DataExportActivity extends Activity {
                         for (HabitBackupObject habit : imported) {
                             habit.insert(habitDao, occurrenceDao);
                         }
+                        Database.getDevOpenHelper(context).close();
                     }
                     return null;
                 }
@@ -196,8 +210,7 @@ public class DataExportActivity extends Activity {
         }
     }
 
-    @OnClick(R.id.backup_export_button)
-    public void exportData(View view) {
+    public void exportData() {
         ParcelFileDescriptor fileDesc = null;
         ContentResolver resolver = getContentResolver();
         try {
@@ -230,11 +243,13 @@ public class DataExportActivity extends Activity {
                         outputFile.write(flat.getBytes());
                         Log.d("TRACKER_BACKUP_EXPORT", flat);
                         outputFile.close();
-
                     } catch (IOException e) {
                         Toast.makeText(context, context.getString(R.string.backup_write_error), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
+
+                    Database.getDevOpenHelper(context).close();
+
                     return null;
                 }
 

@@ -216,6 +216,7 @@ public class HabitListActivity extends FragmentActivity
                         occdao.insert(occ);
                     }
                 }
+                Database.getDevOpenHelper(context).close();
             }
             return null;
         }
