@@ -33,13 +33,6 @@ public class HabitDetailFragment extends Fragment {
      * The dummy content this fragment is presenting.
      */
     private Long mHabitID;
-    private String mItemName;
-
-
-    private EditText descriptionText;
-    private EditText titleText;
-    private CheckBox positiveBox;
-
     private boolean editing;
 
     private OccurrencesFragment occurrencesFragment;
@@ -61,7 +54,6 @@ public class HabitDetailFragment extends Fragment {
             // arguments. In a real-world scenario, use a Loader
             // to load content from a content provider.
             mHabitID = getArguments().getLong(ARG_ITEM_ID);
-            mItemName = getArguments().getString(ARG_ITEM_NAME);
         }
     }
 
@@ -70,19 +62,13 @@ public class HabitDetailFragment extends Fragment {
             Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_habit_detail, container, false);
 
-
-        this.descriptionText = (EditText)view.findViewById(R.id.edit_habit_description_text);
-        this.titleText = (EditText)view.findViewById(R.id.edit_habit_title_text);
-        this.positiveBox = (CheckBox)view.findViewById(R.id.edit_habit_positive);
-
         this.occurrencesFragment = (OccurrencesFragment)getFragmentManager().findFragmentById(R.id.habit_detail_occurences_fragment);
         occurrencesFragment.setHabitId(mHabitID);
 
-
         this.habitFragment = (EditHabitFragment)getFragmentManager().findFragmentById(R.id.habit_detail_edit_fragment);
+        habitFragment.setHabitID(mHabitID);
         habitFragment.setEditing(false);
         this.editing = false;
-        habitFragment.setHabitID(mHabitID);
         return view;
     }
 
@@ -104,6 +90,7 @@ public class HabitDetailFragment extends Fragment {
         detailIntent.putExtra(OccurrenceListFragment.ARG_HABIT_ID, mHabitID);
         startActivity(detailIntent);
     }
+
 
 
 }

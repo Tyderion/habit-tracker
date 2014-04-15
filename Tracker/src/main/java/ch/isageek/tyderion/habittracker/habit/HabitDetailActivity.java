@@ -118,7 +118,6 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
 
         }
         if (id == R.id.action_occurrence_add) {
-            //TODO Start activity/Overlay
                 showDatePicker();
         }
         return super.onOptionsItemSelected(item);

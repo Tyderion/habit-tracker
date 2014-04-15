@@ -11,6 +11,8 @@ import android.widget.EditText;
 
 import java.util.Date;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
@@ -23,20 +25,17 @@ import ch.isageek.tyderion.habittracker.model.Habit;
  *
  */
 public class EditHabitFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_HABIT_ID = "habit_id";
     public static final String ARG_HABIT_NAME = "habit_name";
 
-    // TODO: Rename and change types of parameters
     private Long mHabitID;
     private String mHabitName;
 
     private Habit mHabit;
 
-    private EditText descriptionText;
-    private EditText titleText;
-    private CheckBox positiveBox;
+    @InjectView(R.id.edit_habit_description_text) EditText descriptionText;
+    @InjectView(R.id.edit_habit_title_text) EditText titleText;
+    @InjectView(R.id.edit_habit_positive) CheckBox positiveBox;
 
     private boolean editing;
 
@@ -49,7 +48,6 @@ public class EditHabitFragment extends Fragment {
      * @param habitName the Name of the habit
      * @return A new instance of fragment EditHabitFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EditHabitFragment newInstance(Long habitID, String habitName) {
         EditHabitFragment fragment = new EditHabitFragment();
         Bundle args = new Bundle();
@@ -96,10 +94,7 @@ public class EditHabitFragment extends Fragment {
         // Inflate the layout for this fragment
          View view = inflater.inflate(R.layout.fragment_edit_habit, container, false);
 
-        this.descriptionText = (EditText)view.findViewById(R.id.edit_habit_description_text);
-        this.titleText = (EditText)view.findViewById(R.id.edit_habit_title_text);
-        this.positiveBox = (CheckBox)view.findViewById(R.id.edit_habit_positive);
-
+        ButterKnife.inject(this, view);
         updateDisplay();
 
         return view;
@@ -117,6 +112,8 @@ public class EditHabitFragment extends Fragment {
             this.descriptionText.setText(this.mHabit.getDescription());
             this.titleText.setText(this.mHabit.getName());
             this.positiveBox.setActivated(this.mHabit.getIsPositive());
+        } else if (mHabitName != null) {
+            this.titleText.setText(mHabitName);
         }
     }
 
@@ -135,6 +132,7 @@ public class EditHabitFragment extends Fragment {
         this.mHabit.setDescription(this.descriptionText.getText().toString());
         this.mHabit.setIsPositive(this.positiveBox.isActivated());
         Database.getDaoSession(getActivity()).getHabitDao().insertOrReplace(mHabit);
+        Database.getDevOpenHelper(getActivity()).close();
 
     }
     @Override
@@ -142,5 +140,10 @@ public class EditHabitFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
 
 }

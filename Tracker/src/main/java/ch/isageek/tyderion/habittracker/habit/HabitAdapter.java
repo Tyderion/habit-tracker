@@ -15,6 +15,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
@@ -49,17 +51,13 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
         if (row == null) {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
-            holder = new HabitHolder();
-            holder.title = (TextView) row.findViewById(R.id.habit_item_text_title);
-            holder.description = (TextView) row.findViewById(R.id.habit_item_text_description);
-            holder.image = (ImageView) row.findViewById(R.id.habit_item_image);
-
+            holder = new HabitHolder(row);
             row.setTag(holder);
         } else {
             holder = (HabitHolder) row.getTag();
         }
         Habit habit = data.get(position);
-        holder.title.setText( habit.getName());
+        holder.title.setText(habit.getName());
         holder.description.setText(habit.getDescription());
 //        int color = this.context.getResources().getColor(habit.getIsPositive() ? R.color.green : R.color.red);
 //        holder.image.setBackgroundColor(color);
@@ -81,11 +79,13 @@ public class HabitAdapter extends ArrayAdapter<Habit>{
             return null;
         }
     }
-
-
     static class HabitHolder {
-        TextView title;
-        TextView description;
-        ImageView image;
+        @InjectView(R.id.habit_item_text_title) TextView title;
+        @InjectView(R.id.habit_item_text_description)  TextView description;
+        @InjectView(R.id.habit_item_image) ImageView image;
+
+        public HabitHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
     }
 }

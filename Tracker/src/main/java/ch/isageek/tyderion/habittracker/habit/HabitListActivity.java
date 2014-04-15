@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.Date;
 
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.DataExportActivity;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.DaoMaster;
 import ch.isageek.tyderion.habittracker.model.DaoSession;
@@ -75,8 +76,6 @@ public class HabitListActivity extends FragmentActivity
 
             getFragment().setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
 
@@ -122,10 +121,13 @@ public class HabitListActivity extends FragmentActivity
                 return true;
             case R.id.action_habit_add:
                 this.showEditHabit();
-                Toast.makeText(this, "Add Habit", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_export_data:
+                startActivity(new Intent(this, DataExportActivity.class));
+                break;
             default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showEditHabit() {
@@ -214,6 +216,7 @@ public class HabitListActivity extends FragmentActivity
                         occdao.insert(occ);
                     }
                 }
+                Database.getDevOpenHelper(context).close();
             }
             return null;
         }

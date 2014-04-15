@@ -86,6 +86,7 @@ public class QuickAddOccurrenceActivity extends Activity {
             } else {
                 result = "Could not find Habit associated with this NFC Tag.";
             }
+            Database.getDevOpenHelper(context).close();
             return null;
         }
 

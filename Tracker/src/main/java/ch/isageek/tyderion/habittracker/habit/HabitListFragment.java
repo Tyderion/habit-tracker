@@ -91,7 +91,7 @@ public class HabitListFragment extends ListFragment {
         HabitDao habitDao = session.getHabitDao();
 
         List<Habit> habits = habitDao.loadAll();
-
+        Database.getDevOpenHelper(getActivity()).close();
         this.adapter = new HabitAdapter(getActivity(), R.layout.habit_item_row, habits);
         setListAdapter(adapter);
 
@@ -242,4 +242,5 @@ public class HabitListFragment extends ListFragment {
         });
         alert.show();
     }
+
 }
