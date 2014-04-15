@@ -34,7 +34,8 @@
         </activity>
         <activity
             android:name="ch.isageek.tyderion.habittracker.occurrence.QuickAddOccurrenceActivity"
-            android:label="@string/title_activity_quick_add_occurrence" >
+            android:label="@string/title_activity_quick_add_occurrence"
+            android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
