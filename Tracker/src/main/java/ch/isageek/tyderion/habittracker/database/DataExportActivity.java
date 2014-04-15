@@ -131,7 +131,7 @@ public class DataExportActivity extends Activity {
     @OnClick(R.id.backup_import_button)
     public void pickImportFile(View view) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.setType("text/plain");
+        intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, REQUEST_PICK_IMPORT_FILE);
     }
@@ -140,7 +140,7 @@ public class DataExportActivity extends Activity {
     @OnClick(R.id.backup_export_button)
     public void pickExportFiles(View view) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.setType("text/plain");
+        intent.setType("*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, REQUEST_PICK_EXPORT_FILE);
     }
