@@ -23,7 +23,9 @@ import com.doomonafireball.betterpickers.calendardatepicker.MonthAdapter.Calenda
 import com.nineoldandroids.animation.ObjectAnimator;
 
 import android.app.Activity;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.format.DateUtils;
@@ -107,6 +109,16 @@ public class CalendarDatePickerDialog extends DialogFragment implements
     private String mSelectDay;
     private String mYearPickerDescription;
     private String mSelectYear;
+
+    private boolean mThemeDark;
+
+    public boolean isThemeDark() {
+        return mThemeDark;
+    }
+
+    public void setThemeDark(boolean themeDark) {
+        this.mThemeDark = themeDark;
+    }
 
     /**
      * The callback used to indicate the user is done filling in the date.
@@ -266,6 +278,33 @@ public class CalendarDatePickerDialog extends DialogFragment implements
         }
 
         mHapticFeedbackController = new HapticFeedbackController(activity);
+
+        ColorStateList textColorStateList = res.getColorStateList(mThemeDark ? R.color.calendar_date_holo_dark : R.color.calendar_date_holo_light);
+
+        int lightBackground = res.getColor(mThemeDark ? R.color.light_gray : R.color.white);
+        int darkBackground = res.getColor(mThemeDark ? R.color.dark_gray : R.color.circle_background);
+
+        mYearView.setTextColor(textColorStateList);
+        mYearView.setBackgroundColor(darkBackground);
+
+        mSelectedDayTextView.setTextColor(textColorStateList);
+        mSelectedMonthTextView.setTextColor(textColorStateList);
+
+        mMonthAndDayView.setBackgroundColor(darkBackground);
+        view.setBackgroundColor(darkBackground);
+
+        mYearPickerView.setThemeDark(mThemeDark);
+
+        mDayOfWeekView.setBackgroundColor(darkBackground);
+
+        mDayPickerView.setBackgroundColor(lightBackground);
+        mDayPickerView.setThemeDark(mThemeDark) ;
+        view.findViewById(R.id.calendar_date_picker_line).setBackgroundColor(res.getColor(mThemeDark ? R.color.line_dark : R.color.line_background));
+
+        view.findViewById(R.id.day_picker_selected_date_layout).setBackgroundColor(darkBackground);
+
+        mDoneButton.setBackgroundResource(mThemeDark ? R.drawable.done_background_color_dark : R.drawable.done_background_color);
+
         return view;
     }
 

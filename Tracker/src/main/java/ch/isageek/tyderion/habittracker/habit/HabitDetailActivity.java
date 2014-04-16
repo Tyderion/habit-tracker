@@ -67,12 +67,10 @@ public class HabitDetailActivity extends FragmentActivity implements CalendarDat
         datePickerDialog  = CalendarDatePickerDialog
                 .newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setYearRange(2010, 2030);
-//        datePickerDialog.setVibrate(false);
-//        datePickerDialog.setThemeDark(true);
+        datePickerDialog.setThemeDark(true);
 
         timePickerDialog = RadialTimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), true);
         timePickerDialog.setThemeDark(true);
-//        timePickerDialog.setVibrate(false);
 
 
 

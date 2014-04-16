@@ -1,5 +1,6 @@
 package com.doomonafireball.betterpickers;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -8,9 +9,6 @@ import android.net.Uri;
 import android.os.SystemClock;
 import android.os.Vibrator;
 import android.provider.Settings;
-
-import java.security.Permission;
-import java.security.PermissionCollection;
 
 /**
  * A simple utility class to handle haptic feedback.
@@ -25,7 +23,7 @@ public class HapticFeedbackController {
     }
 
     private static boolean checkAppPermissions(Context context) {
-        return context.checkCallingPermission("VIBRATE") == PackageManager.PERMISSION_GRANTED;
+        return context.checkCallingOrSelfPermission(Manifest.permission.VIBRATE) == PackageManager.PERMISSION_GRANTED;
     }
 
     private final Context mContext;
@@ -33,7 +31,7 @@ public class HapticFeedbackController {
 
     private Vibrator mVibrator;
     private boolean mIsGloballyEnabled;
-    private boolean mCallingAppHasVibratePermission;
+    private boolean mHasPermissions;
     private long mLastVibrate;
 
     public HapticFeedbackController(Context context) {
@@ -54,7 +52,7 @@ public class HapticFeedbackController {
 
         // Setup a listener for changes in haptic feedback settings
         mIsGloballyEnabled = checkGlobalSetting(mContext);
-        mCallingAppHasVibratePermission = checkAppPermissions(mContext);
+        mHasPermissions = checkAppPermissions(mContext);
         Uri uri = Settings.System.getUriFor(Settings.System.HAPTIC_FEEDBACK_ENABLED);
         mContext.getContentResolver().registerContentObserver(uri, false, mContentObserver);
     }
@@ -72,7 +70,7 @@ public class HapticFeedbackController {
      * happen if we have vibrated very recently.
      */
     public void tryVibrate() {
-        if (mVibrator != null && mIsGloballyEnabled && mCallingAppHasVibratePermission) {
+        if (mVibrator != null && mIsGloballyEnabled && mHasPermissions) {
             long now = SystemClock.uptimeMillis();
             // We want to try to vibrate each individual tick discretely.
             if (now - mLastVibrate >= VIBRATE_DELAY_MS) {
