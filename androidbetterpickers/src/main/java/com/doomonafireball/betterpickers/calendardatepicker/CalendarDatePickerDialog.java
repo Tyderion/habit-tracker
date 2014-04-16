@@ -284,8 +284,8 @@ public class CalendarDatePickerDialog extends DialogFragment implements
 
         ColorStateList textColorStateList = res.getColorStateList(mThemeDark ? R.color.calendar_date_holo_dark : R.color.calendar_date_holo_light);
 
-        int lightBackground = res.getColor(mThemeDark ? R.color.light_gray : R.color.white);
-        int darkBackground = res.getColor(mThemeDark ? R.color.dark_gray : R.color.circle_background);
+        int lightBackground = res.getColor(mThemeDark ? R.color.light_gray : R.color.circle_background);
+        int darkBackground = res.getColor(mThemeDark ? R.color.dark_gray : R.color.white);
         int lineBackground = res.getColor(mThemeDark ? R.color.line_dark : R.color.line_background);
         int doneBackgroundDrawable = mThemeDark ? R.drawable.done_background_color_dark : R.drawable.done_background_color;
 
@@ -300,7 +300,9 @@ public class CalendarDatePickerDialog extends DialogFragment implements
         mYearView.setBackgroundColor(darkBackground);
         mMonthAndDayView.setBackgroundColor(darkBackground);
         view.setBackgroundColor(darkBackground);
-        mDayOfWeekView.setBackgroundColor(lightBackground);
+        if (mThemeDark) {
+            mDayOfWeekView.setBackgroundColor(lightBackground);
+        }
         view.findViewById(R.id.day_picker_selected_date_layout).setBackgroundColor(darkBackground);
 
         mYearPickerView.setBackgroundColor(lightBackground);
@@ -308,6 +310,7 @@ public class CalendarDatePickerDialog extends DialogFragment implements
 
         view.findViewById(R.id.calendar_date_picker_line).setBackgroundColor(lineBackground);
         mDoneButton.setBackgroundResource(doneBackgroundDrawable);
+        mDoneButton.setTextColor(res.getColor(mThemeDark ? R.color.done_text_color_dark : R.color.done_text_color));
         return view;
     }
 
