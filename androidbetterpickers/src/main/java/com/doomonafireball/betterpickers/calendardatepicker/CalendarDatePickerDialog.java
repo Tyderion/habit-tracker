@@ -69,6 +69,7 @@ public class CalendarDatePickerDialog extends DialogFragment implements
     private static final String KEY_YEAR_END = "year_end";
     private static final String KEY_CURRENT_VIEW = "current_view";
     private static final String KEY_LIST_POSITION_OFFSET = "list_position_offset";
+    private static final String KEY_THEME_DARK = "theme_dark";
 
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
@@ -191,6 +192,7 @@ public class CalendarDatePickerDialog extends DialogFragment implements
         outState.putInt(KEY_YEAR_START, mMinYear);
         outState.putInt(KEY_YEAR_END, mMaxYear);
         outState.putInt(KEY_CURRENT_VIEW, mCurrentView);
+        outState.putBoolean(KEY_THEME_DARK, mThemeDark);
         int listPosition = -1;
         if (mCurrentView == MONTH_AND_DAY_VIEW) {
             listPosition = mDayPickerView.getMostVisiblePosition();
@@ -227,6 +229,7 @@ public class CalendarDatePickerDialog extends DialogFragment implements
             currentView = savedInstanceState.getInt(KEY_CURRENT_VIEW);
             listPosition = savedInstanceState.getInt(KEY_LIST_POSITION);
             listPositionOffset = savedInstanceState.getInt(KEY_LIST_POSITION_OFFSET);
+            mThemeDark = savedInstanceState.getBoolean(KEY_THEME_DARK);
         }
 
         final Activity activity = getActivity();
@@ -297,7 +300,7 @@ public class CalendarDatePickerDialog extends DialogFragment implements
         mYearView.setBackgroundColor(darkBackground);
         mMonthAndDayView.setBackgroundColor(darkBackground);
         view.setBackgroundColor(darkBackground);
-        mDayOfWeekView.setBackgroundColor(darkBackground);
+        mDayOfWeekView.setBackgroundColor(lightBackground);
         view.findViewById(R.id.day_picker_selected_date_layout).setBackgroundColor(darkBackground);
 
         mYearPickerView.setBackgroundColor(lightBackground);
