@@ -69,7 +69,6 @@ public abstract class DayPickerView extends ListView implements OnScrollListener
     protected Context mContext;
     protected Handler mHandler;
 
-
     // highlighted time
     protected CalendarDay mSelectedDay = new CalendarDay();
     protected MonthAdapter mAdapter;
