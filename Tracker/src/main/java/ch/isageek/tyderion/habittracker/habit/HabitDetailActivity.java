@@ -1,6 +1,7 @@
 package ch.isageek.tyderion.habittracker.habit;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextThemeWrapper;
 import android.view.Menu;
@@ -9,9 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.sleepbot.datetimepicker.time.RadialPickerLayout;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;
+import com.doomonafireball.betterpickers.calendardatepicker.CalendarDatePickerDialog;
+import com.doomonafireball.betterpickers.radialtimepicker.RadialPickerLayout;
+import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -33,11 +34,11 @@ import  com.github.tyderion.nfcwriter.NFCWriter;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link HabitDetailFragment}.
  */
-public class HabitDetailActivity extends FragmentActivity  implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class HabitDetailActivity extends FragmentActivity implements CalendarDatePickerDialog.OnDateSetListener, RadialTimePickerDialog.OnTimeSetListener {
     private HabitDetailFragment detailFragment;
 
-    private DatePickerDialog datePickerDialog;
-    private TimePickerDialog timePickerDialog;
+    private CalendarDatePickerDialog datePickerDialog;
+    private RadialTimePickerDialog timePickerDialog;
 
     public static final String DATEPICKER_TAG = "datepicker";
     public static final String TIMEPICKER_TAG = "timepicker";
@@ -63,9 +64,14 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
         ContextThemeWrapper context = new ContextThemeWrapper(this, android.R.style.Theme_Holo);
 
         Calendar calendar = Calendar.getInstance();
-        datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
-        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), true, false);
+        datePickerDialog  = CalendarDatePickerDialog
+                .newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.setYearRange(2010, 2030);
+        datePickerDialog.setThemeDark(true);
+
+        timePickerDialog = RadialTimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), true);
+        timePickerDialog.setThemeDark(true);
+
 
 
         // savedInstanceState is non-null when there is fragment state
@@ -79,7 +85,7 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
         //
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
-            // using a fragment transaction.
+               // using a fragment transaction.
             Bundle arguments = new Bundle();
             this.habitID = getIntent().getLongExtra(HabitDetailFragment.ARG_ITEM_ID, 0);
             if (habitID != 0L) {
@@ -124,7 +130,6 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
     }
 
     private void showDatePicker() {
-
         datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
     }
     private void showTimePicker() {
@@ -144,7 +149,7 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
     }
 
     @Override
-    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+    public void onDateSet(CalendarDatePickerDialog datePickerDialog, int year, int month, int day) {
         this.year = year;
         this.month = month;
         this.day = day;
@@ -152,7 +157,7 @@ public class HabitDetailActivity extends FragmentActivity  implements DatePicker
     }
 
     @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+    public void onTimeSet(RadialTimePickerDialog view, int hourOfDay, int minute) {
         this.minute = minute;
         this.hour = hourOfDay;
         this.saveOccurrence();

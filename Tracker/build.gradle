@@ -30,8 +30,8 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:19.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.1'
     compile project(':nfc-writer')
     compile 'com.jakewharton:butterknife:4.0.1'
-    compile 'com.google.code.gson:gson:1.7.2'
+    compile 'com.google.code.gson:gson:2.2.+'
+    compile project(':androidbetterpickers')
 }

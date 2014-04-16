@@ -1,1 +1,3 @@
 include ':Tracker', ':ModelGenerator', ':nfc-writer', 'nfc-writer'
+include ':androidbetterpickers'
+include ':androidbetterpickers'
