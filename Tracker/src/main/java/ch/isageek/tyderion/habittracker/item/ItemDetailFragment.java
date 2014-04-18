@@ -55,7 +55,8 @@ public class ItemDetailFragment extends Fragment {
 
         // Show the dummy content as text in a TextView.
         if (mHabit != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mHabit.toString());
+            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mHabit.getName());
+            ((TextView) rootView.findViewById(R.id.item_detail_description)).setText(mHabit.getDescription());
         }
 
         return rootView;
