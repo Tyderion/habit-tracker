@@ -78,6 +78,7 @@ public class ItemListActivity extends FragmentActivity
             // fragment transaction.
             Bundle arguments = new Bundle();
             arguments.putParcelable(ItemDetailFragment.ARG_HABIT, habit);
+            arguments.putBoolean(ItemDetailFragment.ARG_DUALPANE, mTwoPane);
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
@@ -97,6 +98,9 @@ public class ItemListActivity extends FragmentActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.item_menu, menu);
+        if (mTwoPane) {
+            menu.findItem(R.id.action_item_detail_add).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -114,7 +118,7 @@ public class ItemListActivity extends FragmentActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_habit_add:
+            case R.id.action_item_detail_add:
                 Intent detailIntent = new Intent(this, AddItemActivity.class);
                 startActivityForResult(detailIntent, NEW_HABIT_TAG);
                 break;
