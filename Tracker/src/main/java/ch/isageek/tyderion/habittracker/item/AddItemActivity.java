@@ -8,22 +8,9 @@ import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 
-/**
- * An activity representing a single Habit detail screen. This
- * activity is only used on handset devices. On tablet-size devices,
- * item details are presented side-by-side with a list of items
- * in a {@link ch.isageek.tyderion.habittracker.habit.HabitListActivity}.
- * <p>
- * This activity is mostly just a 'shell' activity containing nothing
- * more than a {@link ch.isageek.tyderion.habittracker.habit.HabitDetailFragment}.
- */
 public class AddItemActivity extends FragmentActivity implements AddItemFragment.Callbacks{
 
     public static int RESULT_CODE_OK = 1;
-
-    private boolean edit = false;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +19,6 @@ public class AddItemActivity extends FragmentActivity implements AddItemFragment
         if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey(AddItemFragment.ARG_HABIT)) {
             Habit habit = getIntent().getExtras().getParcelable(AddItemFragment.ARG_HABIT);
             ((AddItemFragment)getSupportFragmentManager().findFragmentById(R.id.add_item_fragment)).setHabit(habit);
-            edit = true;
         }
     }
 

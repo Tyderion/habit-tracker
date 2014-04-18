@@ -75,28 +75,12 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     @InjectView(R.id.item_detail) TextView titleTextView;
     @InjectView(R.id.item_detail_description) TextView descriptionTextView;
 
-    /**
-     * The fragment's current callback object, which is notified of list item
-     * clicks.
-     */
     private Callbacks mCallbacks = sDummyCallbacks;
 
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
     public interface Callbacks {
-        /**
-         * Callback for when an item has been selected.
-         */
         public void finishedHabitEdit(Habit habit);
     }
 
-    /**
-     * A dummy implementation of the {@link Callbacks} interface that does
-     * nothing. Used only when this fragment is not attached to an activity.
-     */
     private static Callbacks sDummyCallbacks = new Callbacks() {
         @Override
         public void finishedHabitEdit(Habit habit) {
