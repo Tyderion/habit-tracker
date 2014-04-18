@@ -70,6 +70,13 @@ public class ItemListFragment extends ListFragment {
     public ItemListFragment() {
     }
 
+    public void addHabit(Habit habit) {
+        mAdapter.add(habit);
+    }
+
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

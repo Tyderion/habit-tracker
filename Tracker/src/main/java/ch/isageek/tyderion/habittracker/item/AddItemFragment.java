@@ -1,5 +1,6 @@
 package ch.isageek.tyderion.habittracker.item;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,6 +36,35 @@ public class AddItemFragment extends Fragment{
 
 
     /**
+     * The fragment's current callback object, which is notified of list item
+     * clicks.
+     */
+    private Callbacks mCallbacks = sDummyCallbacks;
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callbacks {
+        /**
+         * Callback for when an item has been selected.
+         */
+        public void onHabitCreated(Habit habit);
+    }
+
+    /**
+     * A dummy implementation of the {@link Callbacks} interface that does
+     * nothing. Used only when this fragment is not attached to an activity.
+     */
+    private static Callbacks sDummyCallbacks = new Callbacks() {
+        @Override
+        public void onHabitCreated(Habit habit) {
+        }
+    };
+
+
+    /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
@@ -51,6 +81,9 @@ public class AddItemFragment extends Fragment{
     public AddItemFragment() {
         // Required empty public constructor
     }
+
+
+
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
@@ -97,13 +130,26 @@ public class AddItemFragment extends Fragment{
         this.mHabit.setDateCreated(new Date());
         this.mHabit.setDescription(this.descriptionText.getText().toString());
         this.mHabit.setIsPositive(this.positiveBox.isActivated());
-        Database.getDaoSession(getActivity()).getHabitDao().insertOrReplace(mHabit);
+        mHabit.setId(Database.getDaoSession(getActivity()).getHabitDao().insertOrReplace(mHabit));
         Database.getDevOpenHelper(getActivity()).close();
+    }
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // Activities containing this fragment must implement its callbacks.
+        if (!(activity instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+
+        mCallbacks = (Callbacks) activity;
     }
     @Override
     public void onDetach() {
         super.onDetach();
+        mCallbacks = sDummyCallbacks;
     }
 
     @Override
@@ -112,9 +158,9 @@ public class AddItemFragment extends Fragment{
         ButterKnife.reset(this);
     }
 
-    @OnClick(R.id.save_habit_button)
+    @OnClick(R.id.save_item_button)
     public void saveHabit(View view) {
         save();
-        getActivity().finish();
+        mCallbacks.onHabitCreated(mHabit);
     }
 }

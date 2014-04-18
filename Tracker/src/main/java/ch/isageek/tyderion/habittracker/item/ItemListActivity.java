@@ -32,6 +32,11 @@ import ch.isageek.tyderion.habittracker.model.Habit;
 public class ItemListActivity extends Activity
         implements ItemListFragment.Callbacks {
 
+    private static int NEW_HABIT_TAG = 0;
+    public static String NEW_HABIT = "new_habit";
+
+    private ItemListFragment mFragment;
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -42,7 +47,8 @@ public class ItemListActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
-
+        mFragment = (ItemListFragment) getFragmentManager()
+                .findFragmentById(R.id.item_list);
         if (findViewById(R.id.item_detail_container) != null) {
             // The detail container view will be present only in the
             // large-screen layouts (res/values-large and
@@ -52,9 +58,8 @@ public class ItemListActivity extends Activity
 
             // In two-pane mode, list items should be given the
             // 'activated' state when touched.
-            ((ItemListFragment) getFragmentManager()
-                    .findFragmentById(R.id.item_list))
-                    .setActivateOnItemClick(true);
+
+            mFragment.setActivateOnItemClick(true);
         }
 
         // TODO: If exposing deep links into your app, handle intents here.
@@ -95,11 +100,22 @@ public class ItemListActivity extends Activity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == NEW_HABIT_TAG) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null && bundle.containsKey(NEW_HABIT)) {
+                mFragment.addHabit((Habit)bundle.getParcelable(NEW_HABIT));
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_habit_add:
                 Intent detailIntent = new Intent(this, AddItemActivity.class);
-                startActivity(detailIntent);
+                startActivityForResult(detailIntent, NEW_HABIT_TAG);
                 break;
 
             default:
