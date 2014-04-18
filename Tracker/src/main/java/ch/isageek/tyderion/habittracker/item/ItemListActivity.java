@@ -1,9 +1,15 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.item;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
+
+import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.habit.AddHabitActivity;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 
@@ -79,5 +85,25 @@ public class ItemListActivity extends Activity
             detailIntent.putExtra(ItemDetailFragment.ARG_HABIT, habit);
             startActivity(detailIntent);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.item_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_habit_add:
+                Intent detailIntent = new Intent(this, AddItemActivity.class);
+                startActivity(detailIntent);
+                break;
+
+            default:
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

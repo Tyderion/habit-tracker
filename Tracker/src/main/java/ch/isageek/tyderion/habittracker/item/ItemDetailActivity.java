@@ -1,10 +1,12 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.item;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 
 import android.view.MenuItem;
+
+import ch.isageek.tyderion.habittracker.R;
 
 
 /**

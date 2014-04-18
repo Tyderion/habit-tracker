@@ -1,4 +1,4 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.item;
 
 import android.content.ClipData;
 import android.content.Context;

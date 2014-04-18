@@ -1,4 +1,4 @@
-package ch.isageek.tyderion.habittracker;
+package ch.isageek.tyderion.habittracker.item;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -9,7 +9,6 @@ import android.widget.ListView;
 
 
 import ch.isageek.tyderion.habittracker.database.Database;
-import ch.isageek.tyderion.habittracker.dummy.DummyContent;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 /**

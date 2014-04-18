@@ -47,7 +47,7 @@
             android:parentActivityName="ch.isageek.tyderion.habittracker.habit.HabitListActivity" >
         </activity>
         <activity
-            android:name="ch.isageek.tyderion.habittracker.ItemListActivity"
+            android:name=".item.ItemListActivity"
             android:label="@string/title_item_list" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,14 +56,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ch.isageek.tyderion.habittracker.ItemDetailActivity"
+            android:name=".item.ItemDetailActivity"
             android:label="@string/title_item_detail"
-            android:parentActivityName="ch.isageek.tyderion.habittracker.ItemListActivity" >
+            android:parentActivityName=".item.ItemListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.isageek.tyderion.habittracker.ItemListActivity" />
 
 
+        </activity>
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.item.AddItemActivity"
+            android:label="@string/title_activity_edit_habit"
+            android:parentActivityName="ch.isageek.tyderion.habittracker.item.ItemListActivity"
+            android:theme="@style/Theme.Flying" >
         </activity>
     </application>
 
