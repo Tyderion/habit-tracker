@@ -35,7 +35,7 @@ public class Occurrence extends OccurrenceBase  implements Parcelable {
 
     @Override
     public String toString() {
-        return "Occurrence at " + Occurrence.dateFormatter.format(this.date);
+        return "occurrence at " + Occurrence.dateFormatter.format(this.date);
     }
 
     public Occurrence(Parcel parcel) {

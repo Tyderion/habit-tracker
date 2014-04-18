@@ -51,8 +51,8 @@
     <string name="backup_import_start">Starting import</string>
     <string name="backup_import_complete">Import complete</string>
     <string name="backup_import_error">Error while loading the data</string>
-    <string name="title_item_list">Items</string>
-    <string name="title_item_detail">Item Detail</string>
+    <string name="title_item_list">Habits</string>
+    <string name="title_item_detail">Habit Detail</string>
     <string name="save_item_button">Save Item</string>
     <string name="action_item_detail_title">Write NFC Tag</string>
     <string name="placholder">Placeholder</string>
