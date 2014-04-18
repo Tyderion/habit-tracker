@@ -9,4 +9,8 @@
         android:title="@string/action_occurrence_add"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_content_new"/>
+    <item android:id="@+id/edit_habit"
+        android:title="@string/edit_habit"
+        android:icon="@drawable/ic_action_content_edit"
+        android:showAsAction="always" />
 </menu>

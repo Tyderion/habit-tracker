@@ -75,6 +75,10 @@ public class ItemListFragment extends ListFragment {
     }
 
 
+    public void updateHabit(Habit habit) {
+        //TODO: Make a real adapter with an update function
+    }
+
 
 
     @Override

@@ -1,5 +1,7 @@
 package ch.isageek.tyderion.habittracker.item;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,6 +44,8 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     public static final String ARG_HABIT = "habit";
     public static final String ARG_DUALPANE = "dualpane";
 
+    public static final int REQUEST_EDIT_HABIT = 11;
+
     /**
      * The dummy content this fragment is presenting.
      */
@@ -68,6 +72,56 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     private int minute;
 
     @InjectView(R.id.item_detail_occurrences_total) TextView totalTextView;
+    @InjectView(R.id.item_detail) TextView titleTextView;
+    @InjectView(R.id.item_detail_description) TextView descriptionTextView;
+
+    /**
+     * The fragment's current callback object, which is notified of list item
+     * clicks.
+     */
+    private Callbacks mCallbacks = sDummyCallbacks;
+
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callbacks {
+        /**
+         * Callback for when an item has been selected.
+         */
+        public void finishedHabitEdit(Habit habit);
+    }
+
+    /**
+     * A dummy implementation of the {@link Callbacks} interface that does
+     * nothing. Used only when this fragment is not attached to an activity.
+     */
+    private static Callbacks sDummyCallbacks = new Callbacks() {
+        @Override
+        public void finishedHabitEdit(Habit habit) {
+        }
+    };
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        // Activities containing this fragment must implement its callbacks.
+        if (!(activity instanceof Callbacks)) {
+            throw new IllegalStateException("Activity must implement fragment's callbacks.");
+        }
+
+        mCallbacks = (Callbacks) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        // Reset the active callbacks interface to the dummy implementation.
+        mCallbacks = sDummyCallbacks;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,22 +149,29 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         View rootView = inflater.inflate(R.layout.fragment_item_detail, container, false);
         ButterKnife.inject(this, rootView);
         if (mHabit != null) {
-            ((TextView) rootView.findViewById(R.id.item_detail)).setText(mHabit.getName());
-            ((TextView) rootView.findViewById(R.id.item_detail_description)).setText(mHabit.getDescription());
-            reload();
+            reloadOccurencesAndView();
             setHasOptionsMenu(true);
         }
         return rootView;
     }
 
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.item_detail_menu, menu);
         if (mDualpane) {
-            menu.findItem(R.id.action_item_detail_add_occurrence).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-            menu.findItem(R.id.action_item_detail_nfc).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+            setShowWithText(menu.findItem( R.id.edit_habit));
+            setShowWithText(menu.findItem( R.id.action_item_detail_add_occurrence));
+            setShowWithText(menu.findItem(R.id.action_item_detail_nfc));
         }
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void setShowWithText(MenuItem item) {
+        if (item != null) {
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        }
     }
 
     @Override
@@ -128,10 +189,26 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
                     Toast.makeText(getActivity(), getString(R.string.not_valid_habit), Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.edit_habit:
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(AddItemFragment.ARG_HABIT, mHabit);
+                Intent intent = new Intent(getActivity(), AddItemActivity.class);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQUEST_EDIT_HABIT);
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_EDIT_HABIT) {
+            Habit habit= data.getExtras().getParcelable(AddItemFragment.ARG_HABIT);
+            mHabit = habit; //TODO: Make setter to update view
+            mCallbacks.finishedHabitEdit(habit);
+            reloadOccurencesAndView();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public void onDateSet(CalendarDatePickerDialog datePickerDialog, int year, int month, int day) {
@@ -165,8 +242,10 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         Toast.makeText(getActivity(), "New date: " + occ.toString(), Toast.LENGTH_SHORT).show();
     }
 
-    private void reload() {
+    private void reloadOccurencesAndView() {
         if (mHabit != null) {
+            titleTextView.setText(mHabit.getName());
+            descriptionTextView.setText(mHabit.getDescription());
             Database.asyncOccurrences(getActivity(), mHabit.getId(), new Database.DBCallback<List<Occurrence>>() {
                 @Override
                 public void onFinish(List<Occurrence> argument) {

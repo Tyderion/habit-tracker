@@ -114,6 +114,11 @@ public class AddItemFragment extends Fragment{
         return view;
     }
 
+    public void setHabit(Habit habit) {
+        this.mHabit = habit;
+        updateDisplay();
+    }
+
     public void updateDisplay() {
         if (mHabit != null) {
             this.descriptionText.setText(this.mHabit.getDescription());

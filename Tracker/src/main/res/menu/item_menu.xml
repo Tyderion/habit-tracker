@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/action_item_detail_add"
+    <item android:id="@+id/action_item_add"
         android:title="@string/action_habit_add"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_content_new"/>

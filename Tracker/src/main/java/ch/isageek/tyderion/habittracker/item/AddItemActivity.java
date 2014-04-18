@@ -21,10 +21,19 @@ public class AddItemActivity extends FragmentActivity implements AddItemFragment
 
     public static int RESULT_CODE_OK = 1;
 
+    private boolean edit = false;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
+        if (getIntent() != null && getIntent().getExtras() != null && getIntent().getExtras().containsKey(AddItemFragment.ARG_HABIT)) {
+            Habit habit = getIntent().getExtras().getParcelable(AddItemFragment.ARG_HABIT);
+            ((AddItemFragment)getSupportFragmentManager().findFragmentById(R.id.add_item_fragment)).setHabit(habit);
+            edit = true;
+        }
     }
 
     @Override
