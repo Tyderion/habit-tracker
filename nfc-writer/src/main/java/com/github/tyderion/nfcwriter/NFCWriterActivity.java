@@ -94,6 +94,7 @@ public class NFCWriterActivity extends Activity {
             }
         } else {
             Toast.makeText(this, getString(R.string.no_nfc_found), Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
