@@ -17,7 +17,9 @@ import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
@@ -61,10 +63,11 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     private int hour;
     private int minute;
 
+    @InjectView(R.id.item_detail_occurrences_total) TextView totalTextView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Calendar calendar = Calendar.getInstance();
         datePickerDialog  = CalendarDatePickerDialog
                 .newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
@@ -75,9 +78,6 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         timePickerDialog.setThemeDark(true);
 
         if (getArguments().containsKey(ARG_HABIT)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
             mHabit = getArguments().getParcelable(ARG_HABIT);
         }
     }
@@ -86,14 +86,13 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_item_detail, container, false);
-
-        // Show the dummy content as text in a TextView.
+        ButterKnife.inject(this, rootView);
         if (mHabit != null) {
             ((TextView) rootView.findViewById(R.id.item_detail)).setText(mHabit.getName());
             ((TextView) rootView.findViewById(R.id.item_detail_description)).setText(mHabit.getDescription());
+            reload();
+            setHasOptionsMenu(true);
         }
-        setHasOptionsMenu(true);
-
         return rootView;
     }
 
@@ -130,6 +129,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
 
 
     private void showDatePicker() {
+
         datePickerDialog.show(getFragmentManager(), DATEPICKER_TAG);
     }
     private void showTimePicker() {
@@ -143,5 +143,24 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         Date date = calendar.getTime();
         Occurrence occ = Database.createOccurrence(getActivity(), date, mHabit.getId());
         Toast.makeText(getActivity(), "New date: " + occ.toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    private void reload() {
+        if (mHabit != null) {
+            Database.asyncOccurrences(getActivity(), mHabit.getId(), new Database.DBCallback<List<Occurrence>>() {
+                @Override
+                public void onFinish(List<Occurrence> argument) {
+                    int size = argument.size();
+                    updateView(size, size > 0 ? argument.get(0) : null);
+                }
+            });
+        }
+    }
+
+    private void updateView(int size, Occurrence occurrence) {
+        totalTextView.setText(size+"");
+        if (occurrence != null) {
+            totalTextView.setText(size + " ("+occurrence.toString()+")");
+        }
     }
 }

@@ -54,5 +54,8 @@
     <string name="title_item_list">Items</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="save_item_button">Save Item</string>
+    <string name="action_item_detail_title">Write NFC Tag</string>
+    <string name="placholder">Placeholder</string>
+    <string name="item_detail_occurences_title">Occurrences: </string>
 
 </resources>
