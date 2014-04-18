@@ -51,5 +51,7 @@
     <string name="backup_import_start">Starting import</string>
     <string name="backup_import_complete">Import complete</string>
     <string name="backup_import_error">Error while loading the data</string>
+    <string name="title_item_list">Items</string>
+    <string name="title_item_detail">Item Detail</string>
 
 </resources>
