@@ -91,6 +91,12 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         }
     }
 
+    @Override
+    public void add(Habit object) {
+        unfilteredResultList.add(object);
+        notifyDataSetChanged();
+    }
+
     public void updateHabit(Habit habit) {
         int updatePosition = -1;
         Habit oldHabit = null;
