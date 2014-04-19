@@ -3,13 +3,9 @@ package ch.isageek.tyderion.habittracker.item;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ListFragment;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 
 import butterknife.ButterKnife;
@@ -19,7 +15,7 @@ import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 
-public class ItemListFragment extends ListFragment {
+public class ItemListFragment extends ListFragment implements ItemAdapter.AmountChanged{
 
    private static final String STATE_ACTIVATED_POSITION = "activated_position";
    private static final String STATE_QUERY_STRING = "query_string";
@@ -29,6 +25,7 @@ public class ItemListFragment extends ListFragment {
     private Callbacks mCallbacks = sDummyCallbacks;
 
    private int mActivatedPosition = ListView.INVALID_POSITION;
+   private Habit selectedHabit;
 
     private View headerView;
     @InjectView(R.id.item_search_view) SearchView searchView;
@@ -81,12 +78,20 @@ public class ItemListFragment extends ListFragment {
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                Database.getDaoSession(getActivity()).getHabitDao().loadAll());
-        // TODO: replace with a real list adapter.
+                Database.getDaoSession(getActivity()).getHabitDao().loadAll(), this);
 
         setListAdapter(mAdapter);
     }
 
+    @Override
+    public void onAmountChanged(int newAmount) {
+        if (selectedHabit != null) {
+            int newPos = mAdapter.getPosition(selectedHabit);
+            if (newPos != ListView.INVALID_POSITION) {
+                setActivatedPosition(newPos+1);
+            }
+        }
+    }
 
     private void filter(String string) {
         mAdapter.getFilter().filter(string);
@@ -127,7 +132,11 @@ public class ItemListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        mCallbacks.onItemSelected(mAdapter.getItem(position-1));
+        if (position > 0) {
+            setActivatedPosition(position);
+            selectedHabit = mAdapter.getItem(position - 1);
+            mCallbacks.onItemSelected(mAdapter.getItem(position - 1));
+        }
     }
 
     @Override
@@ -157,6 +166,7 @@ public class ItemListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+
     }
 
 

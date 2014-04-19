@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,6 +27,13 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
 
     private String filterString = "";
 
+    private AmountChanged amountChanged;
+
+    public interface AmountChanged {
+        public void onAmountChanged(int newAmount);
+    }
+
+
 
     private boolean isFiltering() {
         return !filterString.equals("");
@@ -35,11 +43,12 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         return isFiltering() ? filteredResultList : unfilteredResultList;
     }
 
-    public ItemAdapter(Context context, int resource, int textViewResourceId, List<Habit> objects) {
+    public ItemAdapter(Context context, int resource, int textViewResourceId, List<Habit> objects, AmountChanged amountChanged) {
         super(context,resource, textViewResourceId, objects);
         this.myContext = context;
         this.layoutResourceId = resource;
         this.textViewResourceID = textViewResourceId;
+        this.amountChanged = amountChanged;
 
         this.unfilteredResultList = new ArrayList<Habit>(objects);
         this.filteredResultList = new ArrayList<Habit>(objects);
@@ -72,6 +81,16 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         return getCurrentData().size();
     }
 
+    @Override
+    public int getPosition(Habit habit) {
+        List<Habit> habits= getCurrentData();
+        if (habits.contains(habit)) {
+            return habits.indexOf(habit);
+        } else {
+            return ListView.INVALID_POSITION;
+        }
+    }
+
     private class ResultFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -102,6 +121,7 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
             }
             filterString = charSequence != null ? charSequence.toString() : "";
             notifyDataSetChanged();
+            amountChanged.onAmountChanged(getCurrentData().size());
         }
     }
 }
