@@ -16,8 +16,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 19
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.2"
     }
     buildTypes {
         release {
@@ -30,6 +30,8 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:19.+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.1'
     compile project(':nfc-writer')
+    compile 'com.jakewharton:butterknife:4.0.1'
+    compile 'com.google.code.gson:gson:2.2.+'
+    compile project(':androidbetterpickers')
 }

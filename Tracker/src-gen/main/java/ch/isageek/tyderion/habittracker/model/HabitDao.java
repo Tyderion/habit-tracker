@@ -49,10 +49,10 @@ public class HabitDao extends AbstractDao<Habit, Long> {
         db.execSQL("CREATE TABLE " + constraint + "'HABIT' (" + //
                 "'_id' INTEGER PRIMARY KEY ," + // 0: id
                 "'DATE_CREATED' INTEGER," + // 1: dateCreated
-                "'NAME' TEXT UNIQUE ," + // 2: name
+                "'NAME' TEXT," + // 2: name
                 "'IS_POSITIVE' INTEGER," + // 3: isPositive
                 "'DESCRIPTION' TEXT," + // 4: description
-                "'UUID' TEXT);"); // 5: uuid
+                "'UUID' TEXT UNIQUE );"); // 5: uuid
     }
 
     /** Drops the underlying database table. */

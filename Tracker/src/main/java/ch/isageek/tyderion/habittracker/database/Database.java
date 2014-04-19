@@ -1,6 +1,7 @@
 package ch.isageek.tyderion.habittracker.database;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 
 
@@ -27,13 +28,17 @@ public class Database {
         return new DaoMaster(getDevOpenHelper(context).getWritableDatabase()).newSession();
     }
 
-    public static void asyncDeleteHabit(Context context, Long id, DBCallback<Habit> cb) {
+    public static void asyncDeleteHabit(Context context, Long id, DBDeleteHabitCallback cb) {
         new HabitDeleter(context, cb).execute(id);
     }
 
 
     public static void asyncHabit(Context context, Long id, DBCallback<Habit> cb) {
         new HabitLoader(context, cb).execute(id);
+    }
+
+    public static void asyncHabits(Context context, DBCallback<List<Habit>> cb) {
+        new HabitsLoader(context, cb).execute();
     }
 
     public static void asyncOccurrences(Context context, Long habiId, DBCallback<List<Occurrence>> cb) {
@@ -49,9 +54,19 @@ public class Database {
         return null;
     }
 
+    public static void export(Context context) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.setType("text/json");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+    }
+
 
     public static interface DBCallback<T> {
         public void onFinish(T argument);
+    }
+
+    public static interface DBDeleteHabitCallback {
+        public void onFinish(Habit argument, int deletedOccurrences);
     }
 
 
@@ -96,9 +111,10 @@ public class Database {
 
     private static class HabitDeleter extends AsyncTask<Long, Void, Habit> {
         private Context context;
-        private DBCallback<Habit> cb;
+        private DBDeleteHabitCallback cb;
+        private int deletedOccurrences = 0;
 
-        public HabitDeleter(Context context, DBCallback<Habit> cb) {
+        public HabitDeleter(Context context, DBDeleteHabitCallback cb) {
             this.context = context;
             this.cb = cb;
         }
@@ -108,6 +124,7 @@ public class Database {
             Habit habit = Database.getDaoSession(context).getHabitDao().load(longs[0]);
             List<Occurrence> list = habit.getOccurrenceList();
             for (Occurrence occ : list) {
+                deletedOccurrences++;
                 occ.delete();
             }
             habit.delete();
@@ -116,7 +133,7 @@ public class Database {
 
         @Override
         protected void onPostExecute(Habit habit) {
-            cb.onFinish(habit);
+            cb.onFinish(habit, deletedOccurrences);
         }
     }
 
@@ -138,6 +155,26 @@ public class Database {
         @Override
         protected void onPostExecute(Habit habit) {
             cb.onFinish(habit);
+        }
+    }
+
+    private static class HabitsLoader extends AsyncTask<Void, Void, List<Habit>> {
+        private Context context;
+        private DBCallback<List<Habit>> cb;
+
+        public HabitsLoader(Context context, DBCallback<List<Habit>> cb) {
+            this.context = context;
+            this.cb = cb;
+        }
+
+        @Override
+        protected List<Habit> doInBackground(Void... longs) {
+            return Database.getDaoSession(context).getHabitDao().loadAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<Habit> habits) {
+            cb.onFinish(habits);
         }
     }
 }

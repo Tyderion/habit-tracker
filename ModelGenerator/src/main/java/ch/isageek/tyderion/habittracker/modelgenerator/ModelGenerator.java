@@ -6,21 +6,23 @@ import de.greenrobot.daogenerator.Property;
 import de.greenrobot.daogenerator.Schema;
 import de.greenrobot.daogenerator.ToMany;
 
-public class ModelGenerator {
+public class ModelGenerator  {
     public static void main(String args[]) throws Exception {
         Schema schema = new Schema(5, "ch.isageek.tyderion.habittracker.model");
         schema.enableKeepSectionsByDefault();
 
 
         Entity habit = schema.addEntity("Habit");
+        habit.implementsInterface("Parcelable");
         habit.addIdProperty();
         habit.addDateProperty("dateCreated");
-        habit.addStringProperty("name").unique();
+        habit.addStringProperty("name");
         habit.addBooleanProperty("isPositive");
         habit.addStringProperty("description");
-        habit.addStringProperty("uuid");
+        habit.addStringProperty("uuid").unique();
 
         Entity occurrence = schema.addEntity("Occurrence");
+        occurrence.implementsInterface("Parcelable");
         occurrence.addIdProperty();
         Property dateProperty = occurrence.addDateProperty("date").getProperty();
         Property habitID = occurrence.addLongProperty("habitID").getProperty();
