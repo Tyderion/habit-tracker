@@ -92,6 +92,7 @@ public class ItemListActivity extends FragmentActivity
                 startActivityForResult(detailIntent, NEW_HABIT_TAG);
                 break;
             case R.id.action_export_data:
+                //TODO: Reload all habits after returning from this activity
                 startActivity(new Intent(this, DataExportActivity.class));
             default:
         }
