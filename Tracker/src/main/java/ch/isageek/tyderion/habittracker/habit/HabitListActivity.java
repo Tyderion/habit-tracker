@@ -209,7 +209,7 @@ public class HabitListActivity extends FragmentActivity
                     Habit curHabit = new Habit(null, new Date(nowmilis-(maxOccurences+1)*millisInADay), "Habit " + i, i % 2 == 0, "Description for Habit " + i);
                     habit.insert(curHabit);
                     for (int j = 0; j < maxOccurences; j++) {
-                        Occurrence occ = new Occurrence(null);
+                        Occurrence occ = new Occurrence();
                         occ.setHabit(curHabit);
                         Date date = new Date(nowmilis-j*millisInADay);
                         occ.setDate(date);

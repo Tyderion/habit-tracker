@@ -57,5 +57,6 @@
     <string name="action_item_detail_title">Write NFC Tag</string>
     <string name="placholder">Placeholder</string>
     <string name="item_detail_occurences_title">Occurrences: </string>
+    <string name="edit_habit">Edit Habit</string>
 
 </resources>
