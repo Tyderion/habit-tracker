@@ -29,7 +29,7 @@ public class Database {
         return new DaoMaster(getDevOpenHelper(context).getWritableDatabase()).newSession();
     }
 
-    public static void asyncDeleteHabit(Context context, Long id, DBCallback<Habit> cb) {
+    public static void asyncDeleteHabit(Context context, Long id, DBDeleteHabitCallback cb) {
         new HabitDeleter(context, cb).execute(id);
     }
 
@@ -60,6 +60,10 @@ public class Database {
 
     public static interface DBCallback<T> {
         public void onFinish(T argument);
+    }
+
+    public static interface DBDeleteHabitCallback {
+        public void onFinish(Habit argument, int deletedOccurrences);
     }
 
 
@@ -104,9 +108,10 @@ public class Database {
 
     private static class HabitDeleter extends AsyncTask<Long, Void, Habit> {
         private Context context;
-        private DBCallback<Habit> cb;
+        private DBDeleteHabitCallback cb;
+        private int deletedOccurrences = 0;
 
-        public HabitDeleter(Context context, DBCallback<Habit> cb) {
+        public HabitDeleter(Context context, DBDeleteHabitCallback cb) {
             this.context = context;
             this.cb = cb;
         }
@@ -116,6 +121,7 @@ public class Database {
             Habit habit = Database.getDaoSession(context).getHabitDao().load(longs[0]);
             List<Occurrence> list = habit.getOccurrenceList();
             for (Occurrence occ : list) {
+                deletedOccurrences++;
                 occ.delete();
             }
             habit.delete();
@@ -124,7 +130,7 @@ public class Database {
 
         @Override
         protected void onPostExecute(Habit habit) {
-            cb.onFinish(habit);
+            cb.onFinish(habit, deletedOccurrences);
         }
     }
 

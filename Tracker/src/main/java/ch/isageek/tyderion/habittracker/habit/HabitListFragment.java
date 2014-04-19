@@ -226,9 +226,9 @@ public class HabitListFragment extends ListFragment {
                 Habit removed = adapter.data.remove(deletePosition);
                 adapter.notifyDataSetChanged();
                 adapter.notifyDataSetInvalidated();
-                Database.asyncDeleteHabit(getActivity(), removed.getId(), new Database.DBCallback<Habit>() {
+                Database.asyncDeleteHabit(getActivity(), removed.getId(),new Database.DBDeleteHabitCallback() {
                     @Override
-                    public void onFinish(Habit argument) {
+                    public void onFinish(Habit argument, int deletedOccurrences) {
                         Toast.makeText(getActivity(), "Deleted Habit " + argument.getName() + " and all occurrences", Toast.LENGTH_SHORT).show();
                     }
                 });

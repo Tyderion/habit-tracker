@@ -7,11 +7,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 /**
@@ -110,14 +113,31 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         if (updatePosition > -1 && oldHabit != null){
             unfilteredResultList.remove(updatePosition);
             unfilteredResultList.add(updatePosition, habit);
-            if (filterString.length() > 0) {
-                this.getFilter().filter(filterString);
-            }
             notifyDataSetChanged();
         }
     }
 
+    @Override
+    public void remove(Habit object) {
+        this.unfilteredResultList.remove(object);
+        Database.asyncDeleteHabit(myContext, object.getId(),new Database.DBDeleteHabitCallback() {
+            @Override
+            public void onFinish(Habit argument, int deletedOccurrences) {
+                Toast.makeText(myContext, "Deleted Habit " + argument.getName() + " and all " + deletedOccurrences + " occurrences", Toast.LENGTH_SHORT).show();
+            }
+        });
+        notifyDataSetChanged();
+    }
 
+
+
+    @Override
+    public void notifyDataSetChanged() {
+        if (filterString.length() > 0) {
+            this.getFilter().filter(filterString);
+        }
+        super.notifyDataSetChanged();
+    }
 
     private class ResultFilter extends Filter {
         @Override

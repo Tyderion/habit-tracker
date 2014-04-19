@@ -1,11 +1,15 @@
 package ch.isageek.tyderion.habittracker.item;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 
 import butterknife.ButterKnife;
@@ -168,6 +172,46 @@ public class ItemListFragment extends ListFragment implements ItemAdapter.Amount
 
         mActivatedPosition = position;
 
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ListView view = getListView();
+        if (view != null) {
+            view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+                    if (position > 0) {
+                        removeItemFromList(position-1);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+    }
+    protected void removeItemFromList(int position) {
+        final int deletePosition = position;
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+
+        alert.setTitle(getResources().getString(R.string.delete));
+        alert.setMessage(getResources().getString(R.string.delete_habit_dialog));
+        alert.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Habit toRemove = mAdapter.getItem(deletePosition);
+                mAdapter.remove(toRemove);
+            }
+        });
+        alert.setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alert.show();
     }
 
 
