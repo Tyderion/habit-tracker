@@ -71,7 +71,6 @@ public class DataExportActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_export);
         this.placeholderFragment = new PlaceholderFragment();
-        this.placeholderFragment.activity = this;
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.data_export_container, placeholderFragment)
@@ -292,14 +291,13 @@ public class DataExportActivity extends Activity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-        Activity activity;
         public PlaceholderFragment() {
         }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_data_export, container, false);
-            ButterKnife.inject(activity, rootView);
+            ButterKnife.inject(getActivity(), rootView);
             return rootView;
         }
     }
