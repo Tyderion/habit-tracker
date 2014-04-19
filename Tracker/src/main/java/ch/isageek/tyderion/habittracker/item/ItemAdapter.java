@@ -91,6 +91,25 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         }
     }
 
+    public void updateHabit(Habit habit) {
+        int updatePosition = -1;
+        Habit oldHabit = null;
+        for (Habit h : unfilteredResultList) {
+            updatePosition++;
+            if (h.getId() == habit.getId()) {
+                oldHabit = h;
+                break;
+            }
+        }
+        if (updatePosition > -1 && oldHabit != null){
+            unfilteredResultList.remove(updatePosition);
+            unfilteredResultList.add(updatePosition, habit);
+            notifyDataSetChanged();
+        }
+    }
+
+
+
     private class ResultFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
@@ -123,5 +142,7 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
             notifyDataSetChanged();
             amountChanged.onAmountChanged(getCurrentData().size());
         }
+
+
     }
 }

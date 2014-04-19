@@ -187,7 +187,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_EDIT_HABIT && data != null && data.getExtras() != null) {
             Habit habit= data.getExtras().getParcelable(AddItemFragment.ARG_HABIT);
-            mHabit = habit; //TODO: Make setter to update view
+            mHabit = habit;
             mCallbacks.finishedHabitEdit(habit);
             reloadOccurencesAndView();
         }

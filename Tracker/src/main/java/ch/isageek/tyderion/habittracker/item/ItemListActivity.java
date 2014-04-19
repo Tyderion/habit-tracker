@@ -14,7 +14,6 @@ public class ItemListActivity extends FragmentActivity
         implements ItemListFragment.Callbacks, ItemDetailFragment.Callbacks {
 
     private static int NEW_HABIT_TAG = 0;
-    public static String NEW_HABIT = "new_habit";
 
     private ItemListFragment mFragment;
 
@@ -65,8 +64,9 @@ public class ItemListActivity extends FragmentActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null && requestCode == NEW_HABIT_TAG) {
             Bundle bundle = data.getExtras();
-            if (bundle != null && bundle.containsKey(NEW_HABIT)) {
-                mFragment.addHabit((Habit) bundle.getParcelable(NEW_HABIT));
+            if (bundle != null && bundle.containsKey(AddItemFragment.ARG_HABIT)) {
+                Habit h = bundle.getParcelable(AddItemFragment.ARG_HABIT);
+                mFragment.addHabit(h);
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

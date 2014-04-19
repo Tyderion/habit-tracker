@@ -50,6 +50,7 @@ public class ItemListFragment extends ListFragment implements ItemAdapter.Amount
 
     public void updateHabit(Habit habit) {
         //TODO: Make a real adapter with an update function
+        mAdapter.updateHabit(habit);
     }
 
     @Override
