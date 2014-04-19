@@ -3,6 +3,7 @@ package ch.isageek.tyderion.habittracker.item;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ import ch.isageek.tyderion.habittracker.model.Habit;
  * {@link ItemListFragment.Callbacks} interface
  * to listen for item selections.
  */
-public class ItemListActivity extends Activity
+public class ItemListActivity extends FragmentActivity
         implements ItemListFragment.Callbacks {
 
     private static int NEW_HABIT_TAG = 0;
@@ -79,7 +80,7 @@ public class ItemListActivity extends Activity
             arguments.putParcelable(ItemDetailFragment.ARG_HABIT, habit);
             ItemDetailFragment fragment = new ItemDetailFragment();
             fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(R.id.item_detail_container, fragment)
                     .commit();
 
@@ -101,10 +102,10 @@ public class ItemListActivity extends Activity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NEW_HABIT_TAG) {
+        if (data != null && requestCode == NEW_HABIT_TAG) {
             Bundle bundle = data.getExtras();
             if (bundle != null && bundle.containsKey(NEW_HABIT)) {
-                mFragment.addHabit((Habit)bundle.getParcelable(NEW_HABIT));
+                mFragment.addHabit((Habit) bundle.getParcelable(NEW_HABIT));
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
