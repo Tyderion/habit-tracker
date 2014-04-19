@@ -3,11 +3,18 @@ package ch.isageek.tyderion.habittracker.item;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.ListFragment;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
@@ -16,11 +23,14 @@ public class ItemListFragment extends ListFragment {
 
    private static final String STATE_ACTIVATED_POSITION = "activated_position";
 
-    public ArrayAdapter<Habit> mAdapter;
+    public ItemAdapter mAdapter;
 
     private Callbacks mCallbacks = sDummyCallbacks;
 
    private int mActivatedPosition = ListView.INVALID_POSITION;
+
+    private View headerView;
+    @InjectView(R.id.item_search_view) SearchView searchView;
 
     public interface Callbacks {
         public void onItemSelected(Habit habit);
@@ -47,19 +57,47 @@ public class ItemListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        headerView = getActivity().getLayoutInflater().inflate(R.layout.item_search_header, null);
+        ButterKnife.inject(this, headerView);
 
-        mAdapter = new ArrayAdapter<Habit>(
+        if (searchView != null) {
+            searchView.setIconifiedByDefault(false);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    filter(s);
+                    return true;
+                }
+            });
+        }
+
+        mAdapter = new ItemAdapter(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 Database.getDaoSession(getActivity()).getHabitDao().loadAll());
         // TODO: replace with a real list adapter.
+
         setListAdapter(mAdapter);
+    }
+
+
+    private void filter(String string) {
+        mAdapter.getFilter().filter(string);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
+        if (headerView != null) {
+            getListView().addHeaderView(headerView);
+        }
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
             setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
@@ -84,7 +122,7 @@ public class ItemListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        mCallbacks.onItemSelected(mAdapter.getItem(position));
+        mCallbacks.onItemSelected(mAdapter.getItem(position-1));
     }
 
     @Override
@@ -112,4 +150,7 @@ public class ItemListFragment extends ListFragment {
 
         mActivatedPosition = position;
     }
+
+
+
 }
