@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HabitTracker</string>
+    <string name="app_name">Habit Tracker</string>
     <string name="title_habit_detail">Habit Detail</string>
     <string name="habits_title">Habits</string>
     <string name="action_search">Search</string>
