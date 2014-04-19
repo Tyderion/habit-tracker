@@ -22,6 +22,7 @@ import ch.isageek.tyderion.habittracker.model.Habit;
 public class ItemListFragment extends ListFragment {
 
    private static final String STATE_ACTIVATED_POSITION = "activated_position";
+   private static final String STATE_QUERY_STRING = "query_string";
 
     public ItemAdapter mAdapter;
 
@@ -98,9 +99,13 @@ public class ItemListFragment extends ListFragment {
         if (headerView != null) {
             getListView().addHeaderView(headerView);
         }
-        if (savedInstanceState != null
-                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+                setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+            }
+            if (savedInstanceState.containsKey(STATE_QUERY_STRING)) {
+                searchView.setQuery(savedInstanceState.getString(STATE_QUERY_STRING), true);
+            }
         }
     }
 
@@ -130,6 +135,9 @@ public class ItemListFragment extends ListFragment {
         super.onSaveInstanceState(outState);
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+        }
+        if (searchView.getQuery().length() > 0) {
+            outState.putString(STATE_QUERY_STRING, searchView.getQuery().toString());
         }
     }
 
