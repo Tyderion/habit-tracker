@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.app.Activity;
 
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.model.Habit;
 
 
 /**
@@ -19,7 +21,11 @@ import ch.isageek.tyderion.habittracker.R;
  * This activity is mostly just a 'shell' activity containing nothing
  * more than a {@link ItemDetailFragment}.
  */
-public class ItemDetailActivity extends FragmentActivity {
+public class ItemDetailActivity extends FragmentActivity implements ItemDetailFragment.Callbacks{
+
+    public final static String ARG_POTENTIAL_HABIT_EDIT = "potential_habit_edit";
+    private ItemDetailFragment detailFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +37,10 @@ public class ItemDetailActivity extends FragmentActivity {
             Bundle arguments = new Bundle();
             arguments.putParcelable(ItemDetailFragment.ARG_HABIT,
                     getIntent().getParcelableExtra(ItemDetailFragment.ARG_HABIT));
-            ItemDetailFragment fragment = new ItemDetailFragment();
-            fragment.setArguments(arguments);
+            detailFragment = new ItemDetailFragment();
+            detailFragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.item_detail_container, fragment)
+                    .add(R.id.item_detail_container, detailFragment)
                     .commit();
         }
     }
@@ -43,9 +49,18 @@ public class ItemDetailActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            navigateUpTo(new Intent(this, ItemListActivity.class));
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(ARG_POTENTIAL_HABIT_EDIT,detailFragment.getHabit() );
+            intent.putExtras(bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            NavUtils.navigateUpTo(this, intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finishedHabitEdit(Habit habit) {
     }
 }
