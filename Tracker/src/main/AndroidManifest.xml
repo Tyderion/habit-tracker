@@ -20,7 +20,8 @@
 
         <activity
             android:name="ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity"
-            android:label="@string/title_activity_occurrence_list" >
+            android:label="@string/title_activity_occurrence_list"
+            android:theme="@style/Theme.Flying">
         </activity>
         <activity
             android:name="ch.isageek.tyderion.habittracker.occurrence.QuickAddOccurrenceActivity"

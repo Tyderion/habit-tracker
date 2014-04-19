@@ -263,6 +263,8 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     private void updateView(int size, Occurrence occurrence) {
         if (occurrence != null) {
             totalTextView.setText(size + " (Last "+occurrence.toString()+")");
+        } else {
+            totalTextView.setText("0");
         }
     }
 
