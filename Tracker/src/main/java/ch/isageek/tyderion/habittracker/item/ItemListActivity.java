@@ -14,7 +14,7 @@ import ch.isageek.tyderion.habittracker.model.Habit;
 public class ItemListActivity extends FragmentActivity
         implements ItemListFragment.Callbacks, ItemDetailFragment.Callbacks {
 
-    private static int NEW_HABIT_TAG = 0;
+    private static int REQUEST_CODE_NEW_HABIT_TAG = 0;
 
     private ItemListFragment mFragment;
 
@@ -30,7 +30,6 @@ public class ItemListActivity extends FragmentActivity
             mTwoPane = true;
             mFragment.setActivateOnItemClick(true);
         }
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     @Override
@@ -74,11 +73,17 @@ public class ItemListActivity extends FragmentActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data != null && requestCode == NEW_HABIT_TAG) {
+        if (data != null && requestCode == REQUEST_CODE_NEW_HABIT_TAG) {
             Bundle bundle = data.getExtras();
             if (bundle != null && bundle.containsKey(AddItemFragment.ARG_HABIT)) {
                 Habit h = bundle.getParcelable(AddItemFragment.ARG_HABIT);
                 mFragment.addHabit(h);
+            }
+        }
+        if (data != null && requestCode == DataExportActivity.REQUEST_CODE_EXPORT_IMPORT) {
+            Bundle bundle = data.getExtras();
+            if (bundle != null && bundle.containsKey(DataExportActivity.ARG_DID_IMPORT)) {
+               mFragment.mAdapter.reload();
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -89,11 +94,11 @@ public class ItemListActivity extends FragmentActivity
         switch (item.getItemId()) {
             case R.id.action_item_add:
                 Intent detailIntent = new Intent(this, AddItemActivity.class);
-                startActivityForResult(detailIntent, NEW_HABIT_TAG);
+                startActivityForResult(detailIntent, REQUEST_CODE_NEW_HABIT_TAG);
                 break;
             case R.id.action_export_data:
                 //TODO: Make the return of this activity restart this activity (e.g. no singleTOp or whatever)
-                startActivity(new Intent(this, DataExportActivity.class));
+                startActivityForResult(new Intent(this, DataExportActivity.class),DataExportActivity.REQUEST_CODE_EXPORT_IMPORT);
             default:
         }
         return super.onOptionsItemSelected(item);
