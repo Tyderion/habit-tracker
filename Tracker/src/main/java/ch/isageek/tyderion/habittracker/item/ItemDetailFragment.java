@@ -46,9 +46,6 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
 
     public static final int REQUEST_EDIT_HABIT = 11;
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private Habit mHabit;
     private boolean mDualpane;
 
@@ -76,6 +73,11 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     @InjectView(R.id.item_detail_description) TextView descriptionTextView;
 
     private Callbacks mCallbacks = sDummyCallbacks;
+
+    private void setHabit(Habit mHabit) {
+        this.mHabit = mHabit;
+        reloadOccurencesAndView();
+    }
 
     public interface Callbacks {
         public void finishedHabitEdit(Habit habit);
@@ -120,7 +122,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         timePickerDialog.setThemeDark(true);
 
         if (getArguments().containsKey(ARG_HABIT)) {
-            mHabit = getArguments().getParcelable(ARG_HABIT);
+            setHabit((Habit) getArguments().getParcelable(ARG_HABIT));
         }
         if (getArguments().containsKey(ARG_DUALPANE)) {
             mDualpane = getArguments().getBoolean(ARG_DUALPANE);
@@ -187,9 +189,8 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_EDIT_HABIT && data != null && data.getExtras() != null) {
             Habit habit= data.getExtras().getParcelable(AddItemFragment.ARG_HABIT);
-            mHabit = habit; //TODO: Make setter to update view
+            setHabit(habit);
             mCallbacks.finishedHabitEdit(habit);
-            reloadOccurencesAndView();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -227,7 +228,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     }
 
     private void reloadOccurencesAndView() {
-        if (mHabit != null) {
+        if (mHabit != null && titleTextView != null) {
             titleTextView.setText(mHabit.getName());
             descriptionTextView.setText(mHabit.getDescription());
             Database.asyncOccurrences(getActivity(), mHabit.getId(), new Database.DBCallback<List<Occurrence>>() {

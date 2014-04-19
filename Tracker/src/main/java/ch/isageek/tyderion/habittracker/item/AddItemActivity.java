@@ -25,7 +25,7 @@ public class AddItemActivity extends FragmentActivity implements AddItemFragment
     @Override
     public void onHabitCreated(Habit habit) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable(ItemListActivity.NEW_HABIT, habit);
+        bundle.putParcelable(AddItemFragment.ARG_HABIT, habit);
         Intent intent = new Intent();
         intent.putExtras(bundle);
         setResult(RESULT_CODE_OK, intent);
