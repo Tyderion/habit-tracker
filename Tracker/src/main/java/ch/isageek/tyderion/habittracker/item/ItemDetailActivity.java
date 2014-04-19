@@ -42,6 +42,8 @@ public class ItemDetailActivity extends FragmentActivity implements ItemDetailFr
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.item_detail_container, detailFragment)
                     .commit();
+        } else {
+            detailFragment = (ItemDetailFragment)getSupportFragmentManager().findFragmentById(R.id.item_detail_container);
         }
     }
 
