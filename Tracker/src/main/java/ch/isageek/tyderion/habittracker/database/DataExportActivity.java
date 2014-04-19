@@ -57,6 +57,9 @@ public class DataExportActivity extends Activity {
 
     static final int REQUEST_PICK_IMPORT_FILE = 1;
     static final int REQUEST_PICK_EXPORT_FILE = 2;
+    public final static String ARG_DID_IMPORT = "imported_data";
+
+    public final static int REQUEST_CODE_EXPORT_IMPORT = 1;
 
     private PlaceholderFragment placeholderFragment;
     private Uri fileUri;
@@ -100,21 +103,6 @@ public class DataExportActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.data_export, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if ((requestCode == REQUEST_PICK_IMPORT_FILE || requestCode == REQUEST_PICK_EXPORT_FILE)&& resultCode == RESULT_OK) {
             Uri backupFileUri  = data.getData();
@@ -122,7 +110,7 @@ public class DataExportActivity extends Activity {
             fileUri = backupFileUri;
             if (requestCode == REQUEST_PICK_EXPORT_FILE) {
                 this.exportData();
-            } else {
+            } else if (requestCode == REQUEST_PICK_IMPORT_FILE) {
                 this.importData();
             }
         }
@@ -203,6 +191,7 @@ public class DataExportActivity extends Activity {
                     if (error) {
                         Toast.makeText(context, getString(R.string.backup_import_error), Toast.LENGTH_SHORT).show();
                     } else {
+                        setResult(REQUEST_CODE_EXPORT_IMPORT, new Intent().putExtra(ARG_DID_IMPORT, true));
                         Toast.makeText(context, getString(R.string.backup_import_complete), Toast.LENGTH_SHORT).show();
                     }
                 }

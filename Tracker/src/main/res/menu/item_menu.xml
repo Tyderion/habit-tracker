@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/action_item_add"
+        android:title="@string/action_habit_add"
+        android:showAsAction="always"
+        android:icon="@drawable/ic_action_content_new"/>
+    <item android:id="@+id/action_export_data"
+        android:title="@string/action_export"
+        android:showAsAction="never" />
+    <item android:id="@+id/action_refresh_item_list"
+        android:title="@string/item_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:showAsAction="ifRoom"/>
+</menu>
