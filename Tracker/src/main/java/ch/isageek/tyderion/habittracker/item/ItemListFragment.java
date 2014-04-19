@@ -4,23 +4,31 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.app.ListFragment;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 
-public class ItemListFragment extends ListFragment {
+public class ItemListFragment extends ListFragment implements ItemAdapter.AmountChanged{
 
    private static final String STATE_ACTIVATED_POSITION = "activated_position";
+   private static final String STATE_QUERY_STRING = "query_string";
 
-    public ArrayAdapter<Habit> mAdapter;
+    public ItemAdapter mAdapter;
 
     private Callbacks mCallbacks = sDummyCallbacks;
 
    private int mActivatedPosition = ListView.INVALID_POSITION;
+   private Habit selectedHabit;
+
+    private View headerView;
+    @InjectView(R.id.item_search_view) SearchView searchView;
 
     public interface Callbacks {
         public void onItemSelected(Habit habit);
@@ -47,22 +55,62 @@ public class ItemListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        headerView = getActivity().getLayoutInflater().inflate(R.layout.item_search_header, null);
+        ButterKnife.inject(this, headerView);
 
-        mAdapter = new ArrayAdapter<Habit>(
+        if (searchView != null) {
+            searchView.setIconifiedByDefault(false);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    filter(s);
+                    return true;
+                }
+            });
+        }
+
+        mAdapter = new ItemAdapter(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                Database.getDaoSession(getActivity()).getHabitDao().loadAll());
-        // TODO: replace with a real list adapter.
+                Database.getDaoSession(getActivity()).getHabitDao().loadAll(), this);
+
         setListAdapter(mAdapter);
+    }
+
+    @Override
+    public void onAmountChanged(int newAmount) {
+        if (selectedHabit != null) {
+            int newPos = mAdapter.getPosition(selectedHabit);
+            if (newPos != ListView.INVALID_POSITION) {
+                setActivatedPosition(newPos+1);
+            }
+        }
+    }
+
+    private void filter(String string) {
+        mAdapter.getFilter().filter(string);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (savedInstanceState != null
-                && savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
-            setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+        setHasOptionsMenu(true);
+        if (headerView != null) {
+            getListView().addHeaderView(headerView);
+        }
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {
+                setActivatedPosition(savedInstanceState.getInt(STATE_ACTIVATED_POSITION));
+            }
+            if (savedInstanceState.containsKey(STATE_QUERY_STRING)) {
+                searchView.setQuery(savedInstanceState.getString(STATE_QUERY_STRING), true);
+            }
         }
     }
 
@@ -84,7 +132,11 @@ public class ItemListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView listView, View view, int position, long id) {
         super.onListItemClick(listView, view, position, id);
-        mCallbacks.onItemSelected(mAdapter.getItem(position));
+        if (position > 0) {
+            setActivatedPosition(position);
+            selectedHabit = mAdapter.getItem(position - 1);
+            mCallbacks.onItemSelected(mAdapter.getItem(position - 1));
+        }
     }
 
     @Override
@@ -92,6 +144,9 @@ public class ItemListFragment extends ListFragment {
         super.onSaveInstanceState(outState);
         if (mActivatedPosition != ListView.INVALID_POSITION) {
             outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
+        }
+        if (searchView.getQuery().length() > 0) {
+            outState.putString(STATE_QUERY_STRING, searchView.getQuery().toString());
         }
     }
 
@@ -111,5 +166,9 @@ public class ItemListFragment extends ListFragment {
         }
 
         mActivatedPosition = position;
+
     }
+
+
+
 }

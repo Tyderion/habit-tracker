@@ -58,5 +58,8 @@
     <string name="placholder">Placeholder</string>
     <string name="item_detail_occurences_title">Occurrences: </string>
     <string name="edit_habit">Edit Habit</string>
+    <string name="action_item_search">Search Habits</string>
+    <string name="item_search_hint">Type to filter habits</string>
+
 
 </resources>
