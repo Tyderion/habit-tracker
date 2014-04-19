@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 
 import butterknife.ButterKnife;
@@ -19,7 +18,7 @@ import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 
-public class ItemListFragment extends ListFragment implements ItemAdapter.AmountChanged{
+public class ItemListFragment extends ListFragment implements ItemAdapter.AmountChangedCallback {
 
    private static final String STATE_ACTIVATED_POSITION = "activated_position";
    private static final String STATE_QUERY_STRING = "query_string";
@@ -81,8 +80,7 @@ public class ItemListFragment extends ListFragment implements ItemAdapter.Amount
         mAdapter = new ItemAdapter(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                Database.getDaoSession(getActivity()).getHabitDao().loadAll(), this);
+                android.R.id.text1, this);
 
         setListAdapter(mAdapter);
     }

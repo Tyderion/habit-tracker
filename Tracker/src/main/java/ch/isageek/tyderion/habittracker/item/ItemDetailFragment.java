@@ -228,6 +228,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         calendar.set(year, month, day, hour, minute);
         Date date = calendar.getTime();
         Occurrence occ = Database.createOccurrence(getActivity(), date, mHabit.getId());
+        reloadOccurencesAndView();
         Toast.makeText(getActivity(), "New date: " + occ.toString(), Toast.LENGTH_SHORT).show();
     }
 

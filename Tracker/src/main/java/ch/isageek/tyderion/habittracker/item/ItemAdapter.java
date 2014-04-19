@@ -10,10 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
@@ -30,9 +28,9 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
 
     private String filterString = "";
 
-    private AmountChanged amountChanged;
+    private AmountChangedCallback amountChanged;
 
-    public interface AmountChanged {
+    public interface AmountChangedCallback {
         public void onAmountChanged(int newAmount);
     }
 
@@ -46,15 +44,26 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         return isFiltering() ? filteredResultList : unfilteredResultList;
     }
 
-    public ItemAdapter(Context context, int resource, int textViewResourceId, List<Habit> objects, AmountChanged amountChanged) {
-        super(context,resource, textViewResourceId, objects);
+    public ItemAdapter(Context context, int resource, int textViewResourceId, AmountChangedCallback amountChanged) {
+        super(context,resource, textViewResourceId, new ArrayList<Habit>());
         this.myContext = context;
         this.layoutResourceId = resource;
         this.textViewResourceID = textViewResourceId;
         this.amountChanged = amountChanged;
 
-        this.unfilteredResultList = new ArrayList<Habit>(objects);
-        this.filteredResultList = new ArrayList<Habit>(objects);
+        this.unfilteredResultList = new ArrayList<Habit>();
+        this.filteredResultList = new ArrayList<Habit>();
+        reload();
+    }
+
+    public void reload() {
+        Database.asyncHabits(myContext, new Database.DBCallback<List<Habit>>() {
+            @Override
+            public void onFinish(List<Habit> argument) {
+                unfilteredResultList = new ArrayList<Habit>(argument);
+                notifyDataSetChanged();
+            }
+        });
     }
 
 
@@ -128,6 +137,8 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         });
         notifyDataSetChanged();
     }
+
+
 
 
 

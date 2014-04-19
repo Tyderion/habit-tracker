@@ -38,6 +38,10 @@ public class Database {
         new HabitLoader(context, cb).execute(id);
     }
 
+    public static void asyncHabits(Context context, DBCallback<List<Habit>> cb) {
+        new HabitsLoader(context, cb).execute();
+    }
+
     public static void asyncOccurrences(Context context, Long habiId, DBCallback<List<Occurrence>> cb) {
         new OccurenceLoader(context, cb).execute(habiId);
     }
@@ -152,6 +156,26 @@ public class Database {
         @Override
         protected void onPostExecute(Habit habit) {
             cb.onFinish(habit);
+        }
+    }
+
+    private static class HabitsLoader extends AsyncTask<Void, Void, List<Habit>> {
+        private Context context;
+        private DBCallback<List<Habit>> cb;
+
+        public HabitsLoader(Context context, DBCallback<List<Habit>> cb) {
+            this.context = context;
+            this.cb = cb;
+        }
+
+        @Override
+        protected List<Habit> doInBackground(Void... longs) {
+            return Database.getDaoSession(context).getHabitDao().loadAll();
+        }
+
+        @Override
+        protected void onPostExecute(List<Habit> habits) {
+            cb.onFinish(habits);
         }
     }
 }
