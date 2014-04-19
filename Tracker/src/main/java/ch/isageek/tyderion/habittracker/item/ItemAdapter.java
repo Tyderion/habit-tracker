@@ -110,6 +110,9 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         if (updatePosition > -1 && oldHabit != null){
             unfilteredResultList.remove(updatePosition);
             unfilteredResultList.add(updatePosition, habit);
+            if (filterString.length() > 0) {
+                this.getFilter().filter(filterString);
+            }
             notifyDataSetChanged();
         }
     }
