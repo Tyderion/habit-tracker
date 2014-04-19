@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:text="@string/item_detail_show_occurrences_list"
         android:id="@+id/item_detail_open_occurrences_list"
-        android:layout_below="@+id/item_detail_occurrences_title"
+        android:layout_below="@+id/item_detail_occurrences_total"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp" />
 
