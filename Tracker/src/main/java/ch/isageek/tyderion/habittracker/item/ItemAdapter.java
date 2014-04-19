@@ -25,10 +25,16 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
     ArrayList<Habit> unfilteredResultList = null;
     ArrayList<Habit> filteredResultList = null;
     private Filter filter;
-
-    private String filterString = "";
-
+    private FilterProvider provider;
     private AmountChangedCallback amountChanged;
+
+    public String getFilterString() {
+        return provider.getFilterString();
+    }
+
+    public interface FilterProvider {
+        public String getFilterString();
+    }
 
     public interface AmountChangedCallback {
         public void onAmountChanged(int newAmount);
@@ -37,18 +43,19 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
 
 
     private boolean isFiltering() {
-        return !filterString.equals("");
+        return !getFilterString().equals("");
     }
 
     private ArrayList<Habit> getCurrentData() {
         return isFiltering() ? filteredResultList : unfilteredResultList;
     }
 
-    public ItemAdapter(Context context, int resource, int textViewResourceId, AmountChangedCallback amountChanged) {
+    public ItemAdapter(Context context, int resource, int textViewResourceId, FilterProvider provider, AmountChangedCallback amountChanged) {
         super(context,resource, textViewResourceId, new ArrayList<Habit>());
         this.myContext = context;
         this.layoutResourceId = resource;
         this.textViewResourceID = textViewResourceId;
+        this.provider = provider;
         this.amountChanged = amountChanged;
 
         this.unfilteredResultList = new ArrayList<Habit>();
@@ -62,6 +69,7 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
             public void onFinish(List<Habit> argument) {
                 unfilteredResultList = new ArrayList<Habit>(argument);
                 notifyDataSetChanged();
+                Database.getDevOpenHelper(myContext).close();
             }
         });
     }
@@ -138,14 +146,10 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
         notifyDataSetChanged();
     }
 
-
-
-
-
     @Override
     public void notifyDataSetChanged() {
-        if (filterString.length() > 0) {
-            this.getFilter().filter(filterString);
+        if (getFilterString().length() > 0) {
+            this.getFilter().filter(getFilterString());
         }
         super.notifyDataSetChanged();
     }
@@ -178,11 +182,8 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
             if (charSequence != null && charSequence.length() > 0) {
                 filteredResultList = list;
             }
-            filterString = charSequence != null ? charSequence.toString() : "";
             notifyDataSetChanged();
             amountChanged.onAmountChanged(getCurrentData().size());
         }
-
-
     }
 }

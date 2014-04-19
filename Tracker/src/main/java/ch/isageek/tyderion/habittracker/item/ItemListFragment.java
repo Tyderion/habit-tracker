@@ -14,11 +14,10 @@ import android.widget.SearchView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ch.isageek.tyderion.habittracker.R;
-import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 
-public class ItemListFragment extends ListFragment implements ItemAdapter.AmountChangedCallback {
+public class ItemListFragment extends ListFragment implements ItemAdapter.AmountChangedCallback, ItemAdapter.FilterProvider {
 
    private static final String STATE_ACTIVATED_POSITION = "activated_position";
    private static final String STATE_QUERY_STRING = "query_string";
@@ -80,9 +79,14 @@ public class ItemListFragment extends ListFragment implements ItemAdapter.Amount
         mAdapter = new ItemAdapter(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1, this);
+                android.R.id.text1, this, this);
 
         setListAdapter(mAdapter);
+    }
+
+    @Override
+    public String getFilterString() {
+        return searchView.getQuery().toString();
     }
 
     @Override
