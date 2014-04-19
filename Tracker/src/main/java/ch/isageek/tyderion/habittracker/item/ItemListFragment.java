@@ -66,7 +66,7 @@ public class ItemListFragment extends ListFragment implements ItemAdapter.Amount
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    return false;
+                    return true;
                 }
 
                 @Override
