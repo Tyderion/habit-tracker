@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +26,13 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.Occurrence;
+import ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity;
+import ch.isageek.tyderion.habittracker.occurrence.OccurrenceListFragment;
 
 /**
  * A fragment representing a single Item detail screen.
@@ -215,6 +219,16 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     }
 
 
+    @OnClick(R.id.item_detail_open_occurrences_list)
+    public void showOccurrencesList(Button button) {
+        Intent detailIntent = new Intent(getActivity(), OccurrenceListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(OccurrenceListFragment.ARG_HABIT, mHabit);
+        detailIntent.putExtras(bundle);
+        startActivity(detailIntent);
+    }
+
+
     private void showDatePicker() {
         datePickerDialog.show(getFragmentManager(), DATEPICKER_TAG);
     }
@@ -250,5 +264,11 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         if (occurrence != null) {
             totalTextView.setText(size + " (Last "+occurrence.toString()+")");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        reloadOccurencesAndView();
     }
 }

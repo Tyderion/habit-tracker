@@ -47,4 +47,15 @@
         android:layout_alignTop="@+id/item_detail_occurrences_title"
         android:layout_toRightOf="@+id/item_detail_occurrences_title"
         android:layout_marginLeft="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_detail_show_occurrences_list"
+        android:id="@+id/item_detail_open_occurrences_list"
+        android:layout_below="@+id/item_detail_occurrences_title"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp" />
+
+
 </RelativeLayout>
