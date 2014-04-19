@@ -26,7 +26,7 @@
     <string name="mimeTypeNdef">application/ch.isageek.tyderion.habittracker.occurrence.add</string>
     <string name="not_valid_habit">Not a valid habit</string>
     <string name="action_export">Export / Import</string>
-    <string name="title_activity_data_export">DataExportActivity</string>
+    <string name="title_activity_data_export">Export / Import</string>
     <string name="backup_export_button_title">Export to File</string>
     <string name="backup_import_button_title">Import from File</string>
     <string name="backup_write_error">Error while writing to backup file</string>
