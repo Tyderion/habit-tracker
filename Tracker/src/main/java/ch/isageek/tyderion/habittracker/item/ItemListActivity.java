@@ -97,8 +97,11 @@ public class ItemListActivity extends FragmentActivity
                 startActivityForResult(detailIntent, REQUEST_CODE_NEW_HABIT_TAG);
                 break;
             case R.id.action_export_data:
-                //TODO: Make the return of this activity restart this activity (e.g. no singleTOp or whatever)
                 startActivityForResult(new Intent(this, DataExportActivity.class),DataExportActivity.REQUEST_CODE_EXPORT_IMPORT);
+                break;
+            case R.id.action_refresh_item_list:
+                mFragment.mAdapter.reload();
+                break;
             default:
         }
         return super.onOptionsItemSelected(item);

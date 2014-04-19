@@ -60,6 +60,7 @@
     <string name="edit_habit">Edit Habit</string>
     <string name="action_item_search">Search Habits</string>
     <string name="item_search_hint">Type to filter habits</string>
+    <string name="item_refresh">Refresh</string>
 
 
 </resources>
