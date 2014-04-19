@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import ch.isageek.tyderion.habittracker.R;
+import ch.isageek.tyderion.habittracker.database.DataExportActivity;
 import ch.isageek.tyderion.habittracker.model.Habit;
 
 public class ItemListActivity extends FragmentActivity
@@ -90,7 +91,8 @@ public class ItemListActivity extends FragmentActivity
                 Intent detailIntent = new Intent(this, AddItemActivity.class);
                 startActivityForResult(detailIntent, NEW_HABIT_TAG);
                 break;
-
+            case R.id.action_export_data:
+                startActivity(new Intent(this, DataExportActivity.class));
             default:
         }
         return super.onOptionsItemSelected(item);
