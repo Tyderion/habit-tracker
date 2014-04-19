@@ -17,7 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="ch.isageek.tyderion.habittracker.database.DataExportActivity"
+            android:label="@string/title_activity_data_export"
+            android:parentActivityName="ch.isageek.tyderion.habittracker.item.ItemListActivity" >
+        </activity>
         <activity
             android:name="ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity"
             android:label="@string/title_activity_occurrence_list"
