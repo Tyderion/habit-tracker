@@ -79,6 +79,10 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         reloadOccurencesAndView();
     }
 
+    public Habit getHabit() {
+        return mHabit;
+    }
+
     public interface Callbacks {
         public void finishedHabitEdit(Habit habit);
     }

@@ -33,6 +33,17 @@ public class ItemListActivity extends FragmentActivity
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey(ItemDetailActivity.ARG_POTENTIAL_HABIT_EDIT)){
+                mFragment.updateHabit((Habit)extras.getParcelable(ItemDetailActivity.ARG_POTENTIAL_HABIT_EDIT));
+            }
+        }
+    }
+
+    @Override
     public void onItemSelected(Habit habit) {
         if (mTwoPane) {
             Bundle arguments = new Bundle();
