@@ -63,7 +63,7 @@ public class SalesStackedBarChart extends AbstractDemoChart {
         values.add(maximum);
         values.add(average);
         values.add(minimum);
-        int[] colors = new int[]{Color.BLUE, Color.CYAN, Color.GREEN};
+        int[] colors = new int[]{Color.CYAN, Color.BLUE, Color.GREEN};
         XYMultipleSeriesRenderer renderer = buildBarRenderer(colors);
         setChartSettings(renderer, "Daily Min/Max/Median Occurrences", "Weekday", "No. Occurrences", 0.5,
                 7.5, 0, ((int)completeMax)+1, Color.GRAY, Color.LTGRAY);
