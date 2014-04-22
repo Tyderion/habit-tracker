@@ -73,6 +73,7 @@ public class SalesStackedBarChart extends AbstractDemoChart {
 //        renderer.getSeriesRendererAt(0).setDisplayBoundingPoints(false);
 //        renderer.getSeriesRendererAt(1).setDisplayBoundingPoints(false);
         renderer.setXLabels(7);
+        renderer.setXLabels(0);
         renderer.addXTextLabel(1, "Mon");
         renderer.addXTextLabel(2, "Tue");
         renderer.addXTextLabel(3, "Wen");
@@ -81,10 +82,10 @@ public class SalesStackedBarChart extends AbstractDemoChart {
         renderer.addXTextLabel(6, "Sat");
         renderer.addXTextLabel(7, "Sun");
         renderer.setYLabels(10);
-        renderer.setXLabelsAlign(Align.LEFT);
+        renderer.setXLabelsAlign(Align.CENTER);
         renderer.setYLabelsAlign(Align.LEFT);
-        renderer.setPanEnabled(true, false);
-        // renderer.setZoomEnabled(false);
+        renderer.setPanEnabled(true, true);
+        renderer.setPanLimits(new double[]{0.5,7.5,0,completeMax+1});
         renderer.setZoomRate(1.1f);
         renderer.setBarSpacing(0.5f);
         return  ChartFactory.getBarChartView(context,buildBarDataset(titles, values) ,renderer,
