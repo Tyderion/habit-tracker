@@ -71,6 +71,7 @@ public class DataExportActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_export);
         this.placeholderFragment = new PlaceholderFragment();
+
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.data_export_container, placeholderFragment)

@@ -1,7 +1,9 @@
 package ch.isageek.tyderion.habittracker.item;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,15 +23,20 @@ import com.doomonafireball.betterpickers.radialtimepicker.RadialTimePickerDialog
 import com.github.tyderion.nfcwriter.NFCRecordHelper;
 import com.github.tyderion.nfcwriter.NFCWriter;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.Database;
+import ch.isageek.tyderion.habittracker.graphrender.SalesStackedBarChart;
 import ch.isageek.tyderion.habittracker.model.Habit;
 import ch.isageek.tyderion.habittracker.model.Occurrence;
 import ch.isageek.tyderion.habittracker.occurrence.OccurrenceListActivity;
@@ -75,6 +83,9 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     @InjectView(R.id.item_detail_occurrences_total) TextView totalTextView;
     @InjectView(R.id.item_detail) TextView titleTextView;
     @InjectView(R.id.item_detail_description) TextView descriptionTextView;
+    @InjectView(R.id.chart) LinearLayout chartLayout;
+    View chart;
+
 
     private Callbacks mCallbacks = sDummyCallbacks;
 
@@ -141,6 +152,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_item_detail, container, false);
+        //TODO add bar-chart with max/min/median values for each weekday
         ButterKnife.inject(this, rootView);
         if (mHabit != null) {
             reloadOccurencesAndView();
@@ -149,6 +161,109 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
         return rootView;
     }
 
+    private void createChart() {
+
+        final SimpleDateFormat dateFormatter = new SimpleDateFormat("dd.MM.yyyy");
+        final Context context = getActivity();
+        new AsyncTask<Void, Void, ChartData>() {
+            @Override
+            protected ChartData doInBackground(Void... voids) {
+                List<Occurrence> list= Database.getDaoSession(context).getHabitDao().load(mHabit.getId()).getOccurrenceList();
+                Map<String,DayData> dayMap = new HashMap<String, DayData>();
+                for (Occurrence occurrence : list) {
+                    String day = dateFormatter.format(occurrence.getDate());
+                    if (dayMap.containsKey(day)) {
+                        dayMap.get(day).incr();
+                    } else {
+                        DayData data = new DayData(occurrence.getDate());
+                        dayMap.put(day, data);
+                    }
+                }
+                WeekdayData[] weekList = new WeekdayData[7];
+                for (int i = 0; i < 7; i++) {
+                    weekList[i] = new WeekdayData();
+                }
+                for (DayData data : dayMap.values()) {
+                    weekList[data.date.getDay()].add(data);
+                }
+                ChartData data = new ChartData();
+                for (int i = 0; i < 7; i++) {
+                    WeekdayData weekdayData = weekList[i];
+                    data.avg[i] = weekdayData.getAvg();
+                    data.max[i] = weekdayData.getMax();
+                    data.min[i] = weekdayData.getMin();
+                }
+                for (int i = 0; i < 7; i++) {
+                    data.maxmax = (data.maxmax > weekList[i].max) ? data.maxmax : weekList[i].max;
+                }
+                return data;
+            }
+
+            @Override
+            protected void onPostExecute(ChartData chartData) {
+                chart = new SalesStackedBarChart().getView(getActivity(),chartData.max,chartData.avg,chartData.min, chartData.maxmax);
+                chartLayout.addView(chart, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            }
+        }.execute();
+
+    }
+
+    private class DayData {
+        Date date;
+        int occurrences;
+        public DayData(Date date) {
+            this.date = date;
+            occurrences = 1;
+        }
+        public void incr() {
+            occurrences++;
+        }
+    }
+
+    private class WeekdayData {
+        private double max;
+        private double min;
+        private double avg;
+        private int count;
+        public WeekdayData() {
+            max  = avg = count = 0;
+            min = Integer.MAX_VALUE;
+        }
+        public void add(DayData data) {
+            this.min = Math.min(data.occurrences, this.min);
+            this.max = Math.max(data.occurrences, this.max);
+            this.avg += data.occurrences;
+            this.count++;
+        }
+
+        public double getMax() {
+            return max;
+        }
+
+        public double getMin() {
+            return min == Integer.MAX_VALUE ? 0 : min;
+        }
+
+        public double getAvg() {
+            return count > 0 ? avg / count : 0;
+        }
+
+        public int getCount() {
+            return count;
+        }
+    }
+
+    private class ChartData {
+        double[] max;
+        double[] min;
+        double[] avg;
+        double maxmax;
+        public ChartData() {
+            max = new double[7];
+            min = new double[7];
+            avg = new double[7];
+        }
+    }
 
 
     @Override
@@ -255,6 +370,9 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
                 public void onFinish(List<Occurrence> argument) {
                     int size = argument.size();
                     updateView(size, size > 0 ? argument.get(0) : null);
+                    if (size > 0) {
+                        createChart();
+                    }
                 }
             });
         }

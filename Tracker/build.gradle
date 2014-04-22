@@ -1,5 +1,12 @@
 apply plugin: 'android'
 
+repositories {
+    mavenCentral()
+    maven {
+        url "https://repository-achartengine.forge.cloudbees.com/snapshot/"
+    }
+}
+
 android {
     compileSdkVersion 19
     buildToolsVersion '19.0.3'
@@ -34,4 +41,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:4.0.1'
     compile 'com.google.code.gson:gson:2.2.+'
     compile project(':androidbetterpickers')
+    compile 'org.achartengine:achartengine:1.1.0'
+
 }

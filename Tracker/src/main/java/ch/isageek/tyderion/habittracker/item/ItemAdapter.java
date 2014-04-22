@@ -137,7 +137,7 @@ public class ItemAdapter extends ArrayAdapter<Habit> {
     @Override
     public void remove(Habit object) {
         this.unfilteredResultList.remove(object);
-        Database.asyncDeleteHabit(myContext, object.getId(),new Database.DBDeleteHabitCallback() {
+        Database.asyncDeleteHabit(myContext, object.getId(), new Database.DBDeleteHabitCallback() {
             @Override
             public void onFinish(Habit argument, int deletedOccurrences) {
                 Toast.makeText(myContext, "Deleted Habit " + argument.getName() + " and all " + deletedOccurrences + " occurrences", Toast.LENGTH_SHORT).show();
