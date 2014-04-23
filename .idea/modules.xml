@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/ModelGenerator/ModelGenerator.iml" filepath="$PROJECT_DIR$/ModelGenerator/ModelGenerator.iml" />
       <module fileurl="file://$PROJECT_DIR$/Tracker/Tracker.iml" filepath="$PROJECT_DIR$/Tracker/Tracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/androidbetterpickers/androidbetterpickers.iml" filepath="$PROJECT_DIR$/androidbetterpickers/androidbetterpickers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/habit-tracker.iml" filepath="$PROJECT_DIR$/habit-tracker.iml" />
       <module fileurl="file://$PROJECT_DIR$/nfc-writer/nfc-writer.iml" filepath="$PROJECT_DIR$/nfc-writer/nfc-writer.iml" />
     </modules>
   </component>

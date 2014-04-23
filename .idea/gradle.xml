@@ -7,11 +7,11 @@
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
-            <option value="C:\Users\Archie\AndroidStudioProjects\HabitTracker" />
-            <option value="C:\Users\Archie\AndroidStudioProjects\HabitTracker\ModelGenerator" />
-            <option value="C:\Users\Archie\AndroidStudioProjects\HabitTracker\Tracker" />
-            <option value="C:\Users\Archie\AndroidStudioProjects\HabitTracker\androidbetterpickers" />
-            <option value="C:\Users\Archie\AndroidStudioProjects\HabitTracker\nfc-writer" />
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/ModelGenerator" />
+            <option value="$PROJECT_DIR$/Tracker" />
+            <option value="$PROJECT_DIR$/androidbetterpickers" />
+            <option value="$PROJECT_DIR$/nfc-writer" />
           </set>
         </option>
       </GradleProjectSettings>

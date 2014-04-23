@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.DataExportActivity;
 import ch.isageek.tyderion.habittracker.model.Habit;
+import ch.isageek.tyderion.habittracker.settings.SettingsActivity;
 
 public class ItemListActivity extends FragmentActivity
         implements ItemListFragment.Callbacks, ItemDetailFragment.Callbacks {
@@ -95,6 +96,9 @@ public class ItemListActivity extends FragmentActivity
             case R.id.action_item_add:
                 Intent detailIntent = new Intent(this, AddItemActivity.class);
                 startActivityForResult(detailIntent, REQUEST_CODE_NEW_HABIT_TAG);
+                break;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.action_export_data:
                 startActivityForResult(new Intent(this, DataExportActivity.class),DataExportActivity.REQUEST_CODE_EXPORT_IMPORT);
