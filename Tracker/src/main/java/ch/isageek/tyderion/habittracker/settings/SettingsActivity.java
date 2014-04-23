@@ -1,6 +1,9 @@
 package ch.isageek.tyderion.habittracker.settings;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
@@ -16,15 +19,6 @@ import ch.isageek.tyderion.habittracker.R;
  */
 public class SettingsActivity extends PreferenceActivity {
 
-    static boolean showingSubScreen = false;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
@@ -32,16 +26,15 @@ public class SettingsActivity extends PreferenceActivity {
 
     @Override
     protected boolean isValidFragment(String fragmentName) {
-        return true;
+        return SettingsFragment.class.getName().equals(fragmentName);
     }
 
     @Override
          public boolean onOptionsItemSelected(MenuItem item) {
-        if (!showingSubScreen && item.getItemId() == android.R.id.home) {
-            Intent intent = getParentActivityIntent();
-            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            NavUtils.navigateUpTo(this, intent);
-            return true;
+        ActionBar bar = getActionBar();
+        if (bar != null && bar.getTitle().toString().equals(getString(R.string.settings))) {
+            NavUtils.navigateUpFromSameTask(this);
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -53,7 +46,6 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            showingSubScreen = true;
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
             setHasOptionsMenu(true);
             String settings = getArguments().getString("settings");
@@ -70,7 +62,6 @@ public class SettingsActivity extends PreferenceActivity {
                 Intent intent = new Intent(getActivity(), SettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 NavUtils.navigateUpTo(getActivity(), intent);
-                showingSubScreen = false;
                 return true;
             }
             return super.onOptionsItemSelected(item);
