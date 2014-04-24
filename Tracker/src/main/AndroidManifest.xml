@@ -10,7 +10,8 @@
 
         <activity android:name=".settings.SettingsActivity"
             android:parentActivityName=".item.ItemListActivity"
-            android:label="@string/settings"/>
+            android:label="@string/settings" >
+        </activity>
         <activity
             android:name=".item.ItemListActivity"
             android:label="@string/app_name"
@@ -59,12 +60,32 @@
             android:parentActivityName="ch.isageek.tyderion.habittracker.item.ItemListActivity"
             android:theme="@style/Theme.Flying" >
         </activity>
+        <activity android:name="com.dropbox.sync.android.DbxAuthActivity" />
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <data android:scheme="db-46phyj7lzjwosim" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name="com.dropbox.sync.android.DbxSyncService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="Dropbox Sync" />
+
+
     </application>
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-feature
         android:name="android.hardware.nfc"
         android:required="true" />

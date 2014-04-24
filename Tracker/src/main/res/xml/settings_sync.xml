@@ -17,5 +17,7 @@
 
     <ch.isageek.tyderion.habittracker.settings.DropboxConnectorPreference
         android:key="pref_dropbox"
-        android:title="@string/dropbox_title" />
+        android:title="@string/dropbox_title"
+        dropboxAppKey="46phyj7lzjwosim"
+        dropboxAppSecret="8s3w9vfh5nizvam"/>
 </PreferenceScreen>

@@ -1,12 +1,14 @@
 package ch.isageek.tyderion.habittracker.settings;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -35,6 +37,20 @@ public class SettingsActivity extends PreferenceActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DropboxConnectorPreference.REQUEST_LINK_TO_DBX) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(this, "Connection established", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
+            }
+            DropboxConnectorPreference.getInstance().init();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public static class SettingsFragment extends PreferenceFragment {
