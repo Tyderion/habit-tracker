@@ -2,8 +2,6 @@ package ch.isageek.tyderion.habittracker.settings;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;

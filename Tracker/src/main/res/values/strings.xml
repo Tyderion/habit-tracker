@@ -53,6 +53,9 @@
     <string name="action_settings">Settings</string>
     <string name="pref_syncConnectionTypes_default">NO</string>
     <string name="settings">Settings</string>
+    <string name="dropbox_title">Dropbox Connection</string>
+    <string name="dropbox_disconnected">Disconnected</string>
+    <string name="dropbox_connected">Connected to account %1%s</string>
 
 
 </resources>
