@@ -51,7 +51,6 @@
     <string name="prefs_category_two">Sync</string>
     <string name="prefs_summ_category_two">Sync Options</string>
     <string name="action_settings">Settings</string>
-    <string name="pref_syncConnectionTypes_default">NO</string>
     <string name="settings">Settings</string>
     <string name="dropbox_title">Dropbox Connection</string>
     <string name="dropbox_disconnected">Disconnected</string>

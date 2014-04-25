@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.preference.DialogPreference;
+import android.content.Intent;
 import android.preference.Preference;
-import android.support.v4.app.Fragment;
+import android.preference.TwoStatePreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.dropbox.sync.android.DbxAccount;
 import com.dropbox.sync.android.DbxAccountInfo;
-import com.dropbox.sync.android.DbxAccountManager;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -24,17 +23,14 @@ import ch.isageek.tyderion.habittracker.R;
 /**
  * Created by tzhnaga1 on 24/04/14.
  */
-public class DropboxConnectorPreference extends Preference {
+public class DropboxConnectorPreference extends TwoStatePreference implements DbxAccount.Listener {
 
     @InjectView(R.id.dropbox_status) TextView statusView;
 
-    static final int REQUEST_LINK_TO_DBX = 0;  // This value is up to you
+    static final int REQUEST_LINK_TO_DBX = 6668;  // This value is up to you
 
-    private String APP_KEY = "";
-    private String APP_SECRET = "";
 
-    private DbxAccountManager mAccountManager;
-    private DbxAccount mAccount;
+    private DropboxHelper helper;
 
     private String currentStatus;
 
@@ -43,50 +39,66 @@ public class DropboxConnectorPreference extends Preference {
 
     private static DropboxConnectorPreference instance;
 
-    public static DropboxConnectorPreference getInstance() {
-        return instance;
-    }
-
-
 
     public DropboxConnectorPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         instance = this;
         mContext = context;
-        APP_KEY = attrs.getAttributeValue(null, "dropboxAppKey");
-        APP_SECRET = attrs.getAttributeValue(null, "dropboxAppSecret");
-        setLayoutResource(R.layout.dropbox_preference);
-        init();
+        DropboxHelper.APP_KEY = attrs.getAttributeValue(null, "dropboxAppKey");
+        DropboxHelper.APP_SECRET = attrs.getAttributeValue(null, "dropboxAppSecret");
+
+//        setLayoutResource(R.layout.dropbox_preference);
+        setTitle(R.string.dropbox_title);
+        helper = DropboxHelper.getInstance(context);
+        setDisableDependentsState(true);
     }
 
-    public void init() {
-        if (APP_KEY.length() > 0 && APP_SECRET.length() > 0) {
-            mAccountManager = DbxAccountManager.getInstance(mContext.getApplicationContext(), APP_KEY, APP_SECRET);
-            if (mAccountManager.hasLinkedAccount()) {
-                mAccount = mAccountManager.getLinkedAccount();
+    public static DropboxConnectorPreference getInstance() {
+        return instance;
+    }
+
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_LINK_TO_DBX) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(mContext, "Dropbox Link established", Toast.LENGTH_SHORT).show();
+                helper.addAccountChangeListener(this);
+                updateDisplay();
+            } else {
+                Toast.makeText(mContext, "Dropbox Link failed", Toast.LENGTH_SHORT).show();
             }
+            init();
         }
+    }
+
+    @Override
+    public void onAccountChange(DbxAccount dbxAccount) {
         updateDisplay();
     }
 
+    public void init() {
+       helper.addAccountChangeListener(this);
+       updateDisplay();
+    }
+
     private void updateDisplay() {
-        if (mAccount != null) {
-            DbxAccountInfo info = mAccount.getAccountInfo();
+        if (helper.getAccount() != null) {
+            DbxAccountInfo info = helper.getAccount().getAccountInfo();
             String account = info != null ? info.displayName : "";
             currentStatus = mContext.getResources().getString(R.string.dropbox_connected, account);
         } else {
             currentStatus = mContext.getResources().getString(R.string.dropbox_disconnected);
         }
-        if (statusView != null) {
-            statusView.setText(currentStatus);
-        }
+        setChecked(helper.getAccount() == null);
+        setSummary(currentStatus);
+        notifyChanged();
     }
+
+
+
 
     @Override
     protected View onCreateView(ViewGroup parent) {
         View superView = super.onCreateView(parent);
-        ButterKnife.inject(this, superView);
-
         setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -94,13 +106,15 @@ public class DropboxConnectorPreference extends Preference {
                 return true;
             }
         });
+        init();
         updateDisplay();
-        statusView.setText("BLABLABLALBALBALBJALBJAå");
-        return super.onCreateView(parent);
+        return superView;
     }
 
+
+
     public void onClick(Preference v) {
-        if (mAccount != null) {
+        if (helper.getAccount() != null) {
 
             AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
 
@@ -109,7 +123,8 @@ public class DropboxConnectorPreference extends Preference {
             alert.setPositiveButton(mContext.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mAccount.unlink();
+                    helper.unlink();
+                    updateDisplay();
                 }
             });
             alert.setNegativeButton(mContext.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -121,16 +136,18 @@ public class DropboxConnectorPreference extends Preference {
 
             alert.show();
         } else {
-            mAccountManager.startLink((Activity)mContext, REQUEST_LINK_TO_DBX);
+            helper.getAccountManager().startLink((Activity) mContext, REQUEST_LINK_TO_DBX);
         }
     }
-
 
 
     @Override
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         updateDisplay();;
     }
+
+
+
 
 
 

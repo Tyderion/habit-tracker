@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="pref_syncConnectionTypes_entries">
-        <item>NO</item>
-        <item>MOBILE</item>
-        <item>WIFI</item>
+    <string-array name="pref_dropboxSyncSchedule">
+        <item>After each Change</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Never</item>
     </string-array>
-    <string-array name="pref_syncConnectionTypes_values">
+    <array name="pref_dropboxSyncSchedule_values">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
-    </string-array>
+    </array>
 </resources>

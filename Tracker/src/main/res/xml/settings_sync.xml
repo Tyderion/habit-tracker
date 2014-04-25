@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="pref_test"
-        android:title="Enable Setting"
-        android:summary="Select connection type."
-        android:defaultValue="true" />
-    <ListPreference
-        android:dependency="pref_test"
-        android:key="pref_syncConnectionType"
-        android:title="Connection Type"
-        android:dialogTitle="Select connection type"
-        android:entries="@array/pref_syncConnectionTypes_entries"
-        android:entryValues="@array/pref_syncConnectionTypes_values"
-        android:defaultValue="@string/pref_syncConnectionTypes_default" />
-
     <ch.isageek.tyderion.habittracker.settings.DropboxConnectorPreference
         android:key="pref_dropbox"
+        android:defaultValue="false"
         android:title="@string/dropbox_title"
         dropboxAppKey="46phyj7lzjwosim"
         dropboxAppSecret="8s3w9vfh5nizvam"/>
+
 </PreferenceScreen>
