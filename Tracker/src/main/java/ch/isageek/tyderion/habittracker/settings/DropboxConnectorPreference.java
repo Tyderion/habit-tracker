@@ -57,6 +57,7 @@ public class DropboxConnectorPreference extends TwoStatePreference implements Db
         return instance;
     }
 
+
     public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_LINK_TO_DBX) {
             if (resultCode == Activity.RESULT_OK) {

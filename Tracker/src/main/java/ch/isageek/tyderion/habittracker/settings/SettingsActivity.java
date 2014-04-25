@@ -2,9 +2,13 @@ package ch.isageek.tyderion.habittracker.settings;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.support.v4.app.NavUtils;
 import android.view.MenuItem;
 
@@ -37,6 +41,8 @@ public class SettingsActivity extends PreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DropboxConnectorPreference.REQUEST_LINK_TO_DBX) {
@@ -49,19 +55,34 @@ public class SettingsActivity extends PreferenceActivity {
     public static class SettingsFragment extends PreferenceFragment {
 
 
+
+
+        private String settings;
+
         public SettingsFragment() {}
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
             setHasOptionsMenu(true);
-            String settings = getArguments().getString("settings");
+            settings = getArguments().getString("settings");
             if ("notifications".equals(settings)) {
                 addPreferencesFromResource(R.xml.settings_wifi);
             } else if ("sync".equals(settings)) {
                 addPreferencesFromResource(R.xml.settings_sync);
+                ListPreference pref = (ListPreference) findPreference("pref_dropboxSyncSchedule");
+                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        ListPreference pref = (ListPreference)preference;
+                        pref.setSummary(pref.getEntries()[Integer.valueOf((String)newValue)]);
+                        return true;
+                    }
+                });
             }
         }
+
+
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
