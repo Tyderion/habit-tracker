@@ -79,6 +79,7 @@ public class SettingsActivity extends PreferenceActivity {
                         return true;
                     }
                 });
+                pref.setSummary(pref.getEntry());
             }
         }
 

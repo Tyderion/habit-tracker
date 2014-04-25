@@ -3,11 +3,21 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ch.isageek.tyderion.habittracker.settings.DropboxConnectorPreference
         android:key="pref_dropbox"
-        android:defaultValue="false"
         android:title="@string/dropbox_title"
+        android:icon="@null"
         dropboxAppKey="46phyj7lzjwosim"
+
         dropboxAppSecret="8s3w9vfh5nizvam"/>
+    <Preference
+        android:icon="@null"
+
+        android:key="test"
+        android:title="Blablabla"
+        android:summary="Test summary"
+        />
     <ListPreference
+        android:icon="@null"
+
         android:dependency="pref_dropbox"
         android:key="pref_dropboxSyncSchedule"
         android:title="@string/connection_type"

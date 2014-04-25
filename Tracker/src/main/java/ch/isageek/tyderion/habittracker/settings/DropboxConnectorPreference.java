@@ -18,6 +18,7 @@ import com.dropbox.sync.android.DbxAccountInfo;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.Optional;
 import ch.isageek.tyderion.habittracker.R;
 
 /**
@@ -25,7 +26,8 @@ import ch.isageek.tyderion.habittracker.R;
  */
 public class DropboxConnectorPreference extends TwoStatePreference implements DbxAccount.Listener {
 
-    @InjectView(R.id.dropbox_status) TextView statusView;
+    @Optional @InjectView(R.id.dropbox_title) TextView titleView;
+    @Optional @InjectView(R.id.dropbox_title) TextView statusView ;
 
     static final int REQUEST_LINK_TO_DBX = 6668;  // This value is up to you
 
@@ -46,10 +48,10 @@ public class DropboxConnectorPreference extends TwoStatePreference implements Db
         mContext = context;
         DropboxHelper.APP_KEY = attrs.getAttributeValue(null, "dropboxAppKey");
         DropboxHelper.APP_SECRET = attrs.getAttributeValue(null, "dropboxAppSecret");
-
 //        setLayoutResource(R.layout.dropbox_preference);
         setTitle(R.string.dropbox_title);
         helper = DropboxHelper.getInstance(context);
+
         setDisableDependentsState(true);
     }
 
@@ -95,11 +97,26 @@ public class DropboxConnectorPreference extends TwoStatePreference implements Db
     }
 
 
+    @Override
+    public void setSummary(CharSequence summary) {
+        super.setSummary(summary);
+        if (statusView != null) {
+            statusView.setText(summary);
+        }
+    }
 
+    @Override
+    public void setTitle(CharSequence title) {
+        super.setTitle(title);
+        if (titleView != null) {
+            titleView.setText(title);
+        }
+    }
 
     @Override
     protected View onCreateView(ViewGroup parent) {
         View superView = super.onCreateView(parent);
+        ButterKnife.inject(this, superView);
         setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
