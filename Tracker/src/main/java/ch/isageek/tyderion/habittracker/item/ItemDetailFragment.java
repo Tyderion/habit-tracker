@@ -178,7 +178,7 @@ public class ItemDetailFragment extends Fragment implements CalendarDatePickerDi
                 break;
             case R.id.action_item_detail_nfc:
                 if (this.mHabit != null) {
-                    NFCWriter.writeRecords(getActivity(), NFCRecordHelper.createMime(getString(R.string.mimeTypeNdef), mHabit.getUuid()));
+                    NFCWriter.writeRecords(getActivity(),true, NFCRecordHelper.createMime(getString(R.string.mimeTypeNdef), mHabit.getUuid()));
                 } else {
                     Toast.makeText(getActivity(), getString(R.string.not_valid_habit), Toast.LENGTH_SHORT).show();
                 }
