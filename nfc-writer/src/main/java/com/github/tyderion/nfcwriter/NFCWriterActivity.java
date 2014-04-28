@@ -17,31 +17,47 @@ import android.widget.Toast;
 public class NFCWriterActivity extends Activity {
     private NfcAdapter mNfcAdapter;
     private static NFCWriter writer;
+    public static int REQUEST_NFC_WRITE = 555;
+    public static String NFC_WRITE_STATUS = "nfc_write_status";
+    private static boolean showToasts;
+    private NFCWriter.Notifier toastNotifier = new NFCWriter.Notifier() {
+        @Override
+        public void notifiy(NFCWriter.NFCWriteStatus status, String msg) {
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+    private NFCWriter.Notifier emptyNotifier = new NFCWriter.Notifier() {
+        @Override
+        public void notifiy(NFCWriter.NFCWriteStatus status, String message) {
+            /* do nothing */
+        }
+    };
 
     /**
      * Simple way to write protected NFC Records
-     * @param context the current context (used to launch intent)
+     * @param context the current context (used to launch intent), needs to implement NFCWriter.Notifier Interface
      * @param records the records to write.
      */
-    public static void writeProtectedRecords(Context context, NdefRecord... records) {
-        writeRecords(context, true, records);
+    public static void writeProtectedRecords(Activity context,boolean showToasts, NdefRecord... records) {
+        writeRecords(context, true,showToasts, records);
     }
 
     /**
      * Simple way to write NFC Records
-     * @param context the current context (used to launch intent)
+     * @param context the current context (used to launch intent), needs to implement NFCWriter.Notifier Interface
      * @param records the records to write.
      */
-    public static void writeRecords(Context context, NdefRecord... records) {
-        writeRecords(context, false, records);
+    public static void writeRecords(Activity context,boolean showToasts, NdefRecord... records) {
+        writeRecords(context, false,showToasts, records);
     }
 
-    private static void writeRecords(Context context, boolean writeProtection,  NdefRecord... records) {
+    private static void writeRecords(Activity context, boolean writeProtection,boolean showToast,  NdefRecord... records) {
         if (records.length == 0) {
             notifyNoRecords(context);
         }
+        showToasts = showToast;
         writer = new NFCWriter(writeProtection, new NdefMessage(records));
-        context.startActivity(new Intent(context, NFCWriterActivity.class));
+        context.startActivityForResult(new Intent(context, NFCWriterActivity.class), REQUEST_NFC_WRITE);
     }
 
     private static void notifyNoRecords(Context context) {
@@ -55,15 +71,14 @@ public class NFCWriterActivity extends Activity {
             notifyNoRecords(this);
             finish();
         }
-        writer.configure(this,new NFCWriter.Notifier() {
-            @Override
-            public void notifiy(String msg) {
-                Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        writer.configure(this, showToasts ? toastNotifier : emptyNotifier);
         writer.onTagWritten = new NFCWriter.OnTagWrittenCallback() {
             @Override
-            public void tagWritten() {
+            public void tagWritten(NFCWriter.NFCWriteStatus status) {
+                int resultStatus = status == NFCWriter.NFCWriteStatus.WRITE_SUCCESSFUL ? RESULT_OK : RESULT_CANCELED;
+                Intent result = new Intent();
+                result.putExtra(NFC_WRITE_STATUS, status);
+                setResult(resultStatus, result);
                 finish();
             }
         };

@@ -9,6 +9,7 @@
     <string name="tag_write_success">Wrote message to pre-formatted tag.</string>
     <string name="tag_format_and_write_success">Formatted tag and wrote message</string>
     <string name="tag_format_fail">Failed to format tag.</string>
+    <string name="tag_connect_fail">Failed to connect tag.</string>
     <string name="tag_no_ndef">Tag doesn\'t support NDEF.</string>
     <string name="tag_write_failed">Failed to write tag</string>
     <string name="tag_read_failed">Failed to read tag</string>
