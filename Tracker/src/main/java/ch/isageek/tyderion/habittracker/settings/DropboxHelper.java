@@ -1,9 +1,13 @@
 package ch.isageek.tyderion.habittracker.settings;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dropbox.sync.android.DbxAccount;
 import com.dropbox.sync.android.DbxAccountManager;
+import com.dropbox.sync.android.DbxDatastore;
+import com.dropbox.sync.android.DbxException;
+import com.dropbox.sync.android.DbxTable;
 
 /**
  * Created by tzhnaga1 on 25/04/14.
@@ -12,6 +16,8 @@ public class DropboxHelper {
 
     public static String APP_KEY = "";
     public static String APP_SECRET = "";
+
+    public static String TABLE_NAME_HABIT = "habits";
 
     private DbxAccountManager mAccountManager;
     private DbxAccount mAccount;
@@ -32,6 +38,30 @@ public class DropboxHelper {
             mAccount = null;
         }
         return mAccount;
+    }
+
+    public DbxDatastore getDataStore(){
+        if (getAccount() != null) {
+            DbxDatastore store = null;
+            try {
+                store = DbxDatastore.openDefault(getAccount());
+            } catch (DbxException e) {
+                e.printStackTrace();
+            }
+            return store;
+        } else {
+            return null;
+        }
+    }
+
+    public DbxTable getHabitTable() {
+        DbxDatastore store = getDataStore();
+        if (store != null) {
+            return store.getTable(TABLE_NAME_HABIT);
+        }   else {
+            Log.e(this.toString(), "Could not get Datastore");
+            return null;
+        }
     }
 
     public DbxAccountManager getAccountManager() {

@@ -59,4 +59,8 @@
     <string name="preference_sync_schedule_dialog_title">Select a schedule type.</string>
 
 
+    <string name="dropbox_app_key">46phyj7lzjwosim</string>
+    <string name="dropbox_app_secret">8s3w9vfh5nizvam</string>
+
+
 </resources>

@@ -1,15 +1,20 @@
 package ch.isageek.tyderion.habittracker.item;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.dropbox.sync.android.DbxDatastore;
+import com.dropbox.sync.android.DbxException;
+
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.database.DataExportActivity;
 import ch.isageek.tyderion.habittracker.model.Habit;
+import ch.isageek.tyderion.habittracker.settings.DropboxHelper;
 import ch.isageek.tyderion.habittracker.settings.SettingsActivity;
 
 public class ItemListActivity extends FragmentActivity
@@ -31,6 +36,9 @@ public class ItemListActivity extends FragmentActivity
             mTwoPane = true;
             mFragment.setActivateOnItemClick(true);
         }
+
+        DropboxHelper.APP_KEY = getString(R.string.dropbox_app_key);
+        DropboxHelper.APP_SECRET = getString(R.string.dropbox_app_secret);
     }
 
     @Override
@@ -79,6 +87,9 @@ public class ItemListActivity extends FragmentActivity
             if (bundle != null && bundle.containsKey(AddItemFragment.ARG_HABIT)) {
                 Habit h = bundle.getParcelable(AddItemFragment.ARG_HABIT);
                 mFragment.addHabit(h);
+                if (h!= null) {
+                    h.saveToDropbox(getApplicationContext());
+                }
             }
         }
         if (data != null && requestCode == DataExportActivity.REQUEST_CODE_EXPORT_IMPORT) {
@@ -104,7 +115,19 @@ public class ItemListActivity extends FragmentActivity
                 startActivityForResult(new Intent(this, DataExportActivity.class),DataExportActivity.REQUEST_CODE_EXPORT_IMPORT);
                 break;
             case R.id.action_refresh_item_list:
-                mFragment.mAdapter.reload();
+                new AsyncTask<Void,Void,Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        DbxDatastore store = DropboxHelper.getInstance(getApplicationContext()).getDataStore();
+                        try {
+                            store.sync();
+                        } catch (DbxException e) {
+                            e.printStackTrace();
+                        }
+                        store.close();
+                        return null;
+                    }
+                }.execute();
                 break;
             default:
         }

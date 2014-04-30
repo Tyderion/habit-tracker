@@ -46,8 +46,6 @@ public class DropboxConnectorPreference extends TwoStatePreference implements Db
         super(context, attrs);
         instance = this;
         mContext = context;
-        DropboxHelper.APP_KEY = attrs.getAttributeValue(null, "dropboxAppKey");
-        DropboxHelper.APP_SECRET = attrs.getAttributeValue(null, "dropboxAppSecret");
         setTitle(R.string.dropbox_title);
         helper = DropboxHelper.getInstance(context);
 
