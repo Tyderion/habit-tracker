@@ -6,22 +6,13 @@
         android:title="@string/dropbox_title"
         android:icon="@null"
         dropboxAppKey="46phyj7lzjwosim"
-
         dropboxAppSecret="8s3w9vfh5nizvam"/>
-    <Preference
-        android:icon="@null"
 
-        android:key="test"
-        android:title="Blablabla"
-        android:summary="Test summary"
-        />
     <ListPreference
-        android:icon="@null"
-
         android:dependency="pref_dropbox"
         android:key="pref_dropboxSyncSchedule"
         android:title="@string/connection_type"
-        android:dialogTitle="Select connection type"
+        android:dialogTitle="@string/preference_sync_schedule_dialog_title"
         android:entries="@array/pref_dropboxSyncSchedule"
         android:entryValues="@array/pref_dropboxSyncSchedule_values"
         android:defaultValue="Never" />

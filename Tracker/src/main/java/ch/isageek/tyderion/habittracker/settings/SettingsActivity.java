@@ -66,9 +66,7 @@ public class SettingsActivity extends PreferenceActivity {
             getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
             setHasOptionsMenu(true);
             settings = getArguments().getString("settings");
-            if ("notifications".equals(settings)) {
-                addPreferencesFromResource(R.xml.settings_wifi);
-            } else if ("sync".equals(settings)) {
+            if ("sync".equals(settings)) {
                 addPreferencesFromResource(R.xml.settings_sync);
                 ListPreference pref = (ListPreference) findPreference("pref_dropboxSyncSchedule");
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

@@ -55,7 +55,8 @@
     <string name="dropbox_title">Dropbox Connection</string>
     <string name="dropbox_disconnected">Disconnected</string>
     <string name="dropbox_connected">Connected to account %1$s</string>
-    <string name="connection_type">Connection Type</string>
+    <string name="connection_type">Synchronization Schedule</string>
+    <string name="preference_sync_schedule_dialog_title">Select a schedule type.</string>
 
 
 </resources>

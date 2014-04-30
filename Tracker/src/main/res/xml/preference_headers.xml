@@ -3,12 +3,6 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
     <header
         android:fragment="ch.isageek.tyderion.habittracker.settings.SettingsActivity$SettingsFragment"
-        android:title="@string/prefs_category_one"
-        android:summary="@string/prefs_summ_category_one" >
-        <extra android:name="settings" android:value="notifications"/>
-    </header>
-    <header
-        android:fragment="ch.isageek.tyderion.habittracker.settings.SettingsActivity$SettingsFragment"
         android:title="@string/prefs_category_two"
         android:summary="@string/prefs_summ_category_two" >
         <extra android:name="settings" android:value="sync" />

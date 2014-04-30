@@ -48,7 +48,6 @@ public class DropboxConnectorPreference extends TwoStatePreference implements Db
         mContext = context;
         DropboxHelper.APP_KEY = attrs.getAttributeValue(null, "dropboxAppKey");
         DropboxHelper.APP_SECRET = attrs.getAttributeValue(null, "dropboxAppSecret");
-//        setLayoutResource(R.layout.dropbox_preference);
         setTitle(R.string.dropbox_title);
         helper = DropboxHelper.getInstance(context);
 
@@ -124,6 +123,11 @@ public class DropboxConnectorPreference extends TwoStatePreference implements Db
                 return true;
             }
         });
+
+
+        float leftPadding = getContext().getResources().getDimension(R.dimen.preference_padding_left);
+        superView.setPadding(Math.round(leftPadding),superView.getPaddingTop(), superView.getPaddingRight(), superView.getPaddingBottom());
+
         init();
         updateDisplay();
         return superView;
