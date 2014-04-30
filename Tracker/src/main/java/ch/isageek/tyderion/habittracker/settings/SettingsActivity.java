@@ -1,6 +1,7 @@
 package ch.isageek.tyderion.habittracker.settings;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,16 @@ import ch.isageek.tyderion.habittracker.R;
  */
 public class SettingsActivity extends PreferenceActivity {
 
+    public static void start(Activity context) {
+        context.startActivity(new Intent(context, SettingsActivity.class));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
     @Override
     public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.preference_headers, target);
@@ -35,8 +46,7 @@ public class SettingsActivity extends PreferenceActivity {
          public boolean onOptionsItemSelected(MenuItem item) {
         ActionBar bar = getActionBar();
         if (bar != null && bar.getTitle().toString().equals(getString(R.string.settings))) {
-            NavUtils.navigateUpFromSameTask(this);
-
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }

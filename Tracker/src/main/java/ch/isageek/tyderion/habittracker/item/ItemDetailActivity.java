@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import ch.isageek.tyderion.habittracker.R;
 import ch.isageek.tyderion.habittracker.model.Habit;
+import ch.isageek.tyderion.habittracker.settings.SettingsActivity;
 
 
 /**
@@ -49,15 +50,20 @@ public class ItemDetailActivity extends FragmentActivity implements ItemDetailFr
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            Intent intent = NavUtils.getParentActivityIntent(this);
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(ARG_POTENTIAL_HABIT_EDIT,detailFragment.getHabit() );
-            intent.putExtras(bundle);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            NavUtils.navigateUpTo(this, intent);
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = NavUtils.getParentActivityIntent(this);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ARG_POTENTIAL_HABIT_EDIT, detailFragment.getHabit());
+                intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                NavUtils.navigateUpTo(this, intent);
+                return true;
+            case R.id.action_settings:
+                SettingsActivity.start(this);
+                return true;
+            default:
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

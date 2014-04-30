@@ -9,7 +9,6 @@
         android:theme="@style/AppTheme.Holo" >
 
         <activity android:name=".settings.SettingsActivity"
-            android:parentActivityName=".item.ItemListActivity"
             android:label="@string/settings" >
         </activity>
         <activity

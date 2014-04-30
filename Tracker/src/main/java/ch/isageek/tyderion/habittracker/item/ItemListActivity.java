@@ -98,7 +98,7 @@ public class ItemListActivity extends FragmentActivity
                 startActivityForResult(detailIntent, REQUEST_CODE_NEW_HABIT_TAG);
                 break;
             case R.id.action_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                SettingsActivity.start(this);
                 break;
             case R.id.action_export_data:
                 startActivityForResult(new Intent(this, DataExportActivity.class),DataExportActivity.REQUEST_CODE_EXPORT_IMPORT);

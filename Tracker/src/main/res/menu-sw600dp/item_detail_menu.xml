@@ -13,8 +13,4 @@
         android:title="@string/edit_habit"
         android:icon="@drawable/ic_action_content_edit"
         android:showAsAction="always" />
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never" />
 </menu>
